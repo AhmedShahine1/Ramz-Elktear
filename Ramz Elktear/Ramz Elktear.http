@@ -1,0 +1,6 @@
+@Ramz_Elktear_HostAddress = http://localhost:5109
+
+GET {{Ramz_Elktear_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
