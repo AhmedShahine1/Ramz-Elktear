@@ -1,0 +1,88 @@
+﻿@model BankDetails
+
+<div class="row">
+    <div class="col-xxl">
+        <div class="card mb-6">
+            <div class="card-header d-flex align-items-center justify-content-between">
+                <h5 class="mb-0">Edit Bank</h5>
+            </div>
+            <div class="card-body">
+                <form asp-action="Create" method="post">
+                    <div class="row mb-6">
+                        <label class="col-sm-2 col-form-label" for="name">Name</label>
+                        <div class="col-sm-10">
+                            <div class="input-group input-group-merge">
+                                <span id="name-icon" class="input-group-text">
+                                    <i class="bx bx-user"></i>
+                                </span>
+                                <input type="text"
+                                       class="form-control"
+                                       id="name"
+                                       name="Name"
+                                       placeholder="Bank Name"
+                                       value="@Model?.Name"
+                                       required />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mb-6">
+                        <label class="col-sm-2 col-form-label" for="address">Address</label>
+                        <div class="col-sm-10">
+                            <div class="input-group input-group-merge">
+                                <span id="address-icon" class="input-group-text">
+                                    <i class="bx bx-buildings"></i>
+                                </span>
+                                <input type="text"
+                                       id="address"
+                                       name="Address"
+                                       class="form-control"
+                                       placeholder="Bank Address"
+                                       value="@Model?.Address"
+                                       required />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mb-6">
+                        <label class="col-sm-2 col-form-label" for="swiftCode">Swift Code</label>
+                        <div class="col-sm-10">
+                            <div class="input-group input-group-merge">
+                                <span id="swiftCode-icon" class="input-group-text">
+                                    <i class="bx bx-code"></i>
+                                </span>
+                                <input type="text"
+                                       id="swiftCode"
+                                       name="SwiftCode"
+                                       class="form-control"
+                                       placeholder="SWIFT Code"
+                                       value="@Model?.SwiftCode"
+                                       required />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mb-6">
+                        <label class="col-sm-2 col-form-label" for="iban">IBAN</label>
+                        <div class="col-sm-10">
+                            <div class="input-group input-group-merge">
+                                <span id="iban-icon" class="input-group-text">
+                                    <i class="bx bx-credit-card"></i>
+                                </span>
+                                <input type="text"
+                                       id="iban"
+                                       name="IBAN"
+                                       class="form-control"
+                                       placeholder="IBAN"
+                                       value="@Model?.IBAN"
+                                       required />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row justify-content-end">
+                        <div class="col-sm-10">
+                            <button type="submit" class="btn btn-primary">Add Bank</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,57 @@
+﻿@model IEnumerable<BranchDetails>
+
+<div class="card">
+    <h5 class="card-header">Branch List</h5>
+    <div class="table-responsive text-nowrap">
+        <table class="table">
+            <thead class="table-light">
+                <tr>
+                    <th>#</th>
+                    <th>Branch Name</th>
+                    <th>Address</th>
+                    <th>Email</th>
+                    <th>Phone Numbers</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody class="table-border-bottom-0">
+                @if (Model != null && Model.Any())
+                {
+                    int index = 1;
+                    foreach (var branch in Model)
+                    {
+                        <tr>
+                            <td>@index</td>
+                            <td>@branch.Name</td>
+                            <td>@branch.Address</td>
+                            <td>@branch.Email</td>
+                            <td>@string.Join(", ", branch.PhoneNumber)</td>
+                            <td>
+                                <div class="dropdown">
+                                    <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
+                                        <i class="bx bx-dots-vertical-rounded"></i>
+                                    </button>
+                                    <div class="dropdown-menu">
+                                        <a class="dropdown-item" href="@Url.Action("Edit", "Branch", new { id = branch.Id })">
+                                            <i class="bx bx-edit-alt me-1"></i> Edit
+                                        </a>
+                                        <a class="dropdown-item" href="@Url.Action("Delete", "Branch", new { id = branch.Id })">
+                                            <i class="bx bx-trash me-1"></i> Delete
+                                        </a>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        index++;
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="6" class="text-center">No branches found.</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

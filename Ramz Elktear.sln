@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.12.35514.174 d17.12
+VisualStudioVersion = 17.12.35514.174
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ramz Elktear", "Ramz Elktear\Ramz Elktear.csproj", "{AFB1B9CB-9F83-433A-9CC4-85B57F783CF1}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -10,14 +10,14 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ramz Elktear", "Ramz Elktea
 		{D490F465-A207-4E4B-B93A-CB17F080307C} = {D490F465-A207-4E4B-B93A-CB17F080307C}
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ramz Elktear.core", "Ramz Elktear.core\Ramz Elktear.core.csproj", "{CC57CC4D-DCC4-4F76-8034-741F0C30893A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ramz_Elktear.core", "Ramz Elktear.core\Ramz_Elktear.core.csproj", "{CC57CC4D-DCC4-4F76-8034-741F0C30893A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ramz Elktear.RepositoryLayer", "Ramz Elktear.RepositoryLayer\Ramz Elktear.RepositoryLayer.csproj", "{D490F465-A207-4E4B-B93A-CB17F080307C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ramz_Elktear.RepositoryLayer", "Ramz Elktear.RepositoryLayer\Ramz_Elktear.RepositoryLayer.csproj", "{D490F465-A207-4E4B-B93A-CB17F080307C}"
 	ProjectSection(ProjectDependencies) = postProject
 		{CC57CC4D-DCC4-4F76-8034-741F0C30893A} = {CC57CC4D-DCC4-4F76-8034-741F0C30893A}
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ramz Elktear.BusinessLayer", "Ramz Elktear.BusinessLayer\Ramz Elktear.BusinessLayer.csproj", "{12E9FE7F-386D-442F-87EF-456827202B89}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ramz_Elktear.BusinessLayer", "Ramz Elktear.BusinessLayer\Ramz_Elktear.BusinessLayer.csproj", "{12E9FE7F-386D-442F-87EF-456827202B89}"
 	ProjectSection(ProjectDependencies) = postProject
 		{CC57CC4D-DCC4-4F76-8034-741F0C30893A} = {CC57CC4D-DCC4-4F76-8034-741F0C30893A}
 		{D490F465-A207-4E4B-B93A-CB17F080307C} = {D490F465-A207-4E4B-B93A-CB17F080307C}

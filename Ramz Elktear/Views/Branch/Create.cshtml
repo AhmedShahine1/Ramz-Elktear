@@ -1,0 +1,62 @@
+﻿@model AddBranch
+
+<div class="row">
+    <div class="col-xxl">
+        <div class="card mb-6">
+            <div class="card-header d-flex align-items-center justify-content-between">
+                <h5 class="mb-0">Add/Edit Branch</h5>
+            </div>
+            <div class="card-body">
+                <form asp-action="Create" method="post" enctype="multipart/form-data">
+                    <div class="row mb-6">
+                        <label class="col-sm-2 col-form-label" for="name">Name</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="name" name="Name" placeholder="Branch Name" value="@Model?.Name" required />
+                        </div>
+                    </div>
+                    <div class="row mb-6">
+                        <label class="col-sm-2 col-form-label" for="address">Address</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="address" name="Address" placeholder="Branch Address" value="@Model?.Address" required />
+                        </div>
+                    </div>
+                    <div class="row mb-6">
+                        <label class="col-sm-2 col-form-label" for="email">Email</label>
+                        <div class="col-sm-10">
+                            <input type="email" class="form-control" id="email" name="Email" placeholder="Branch Email" value="@Model?.Email" required />
+                        </div>
+                    </div>
+                    <div class="row mb-6">
+                        <label class="col-sm-2 col-form-label" for="startWork">Start Work</label>
+                        <div class="col-sm-10">
+                            <input type="time" class="form-control" id="startWork" name="StartWork" value="@Model?.StartWork" required />
+                        </div>
+                    </div>
+                    <div class="row mb-6">
+                        <label class="col-sm-2 col-form-label" for="endWork">End Work</label>
+                        <div class="col-sm-10">
+                            <input type="time" class="form-control" id="endWork" name="EndWork" value="@Model?.EndWork" required />
+                        </div>
+                    </div>
+                    <div class="row mb-6">
+                        <label class="col-sm-2 col-form-label" for="phoneNumber">Phone Numbers</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="phoneNumber" name="PhoneNumber" placeholder="Separate numbers with commas" value="@string.Join(", ", Model?.PhoneNumber)" required />
+                        </div>
+                    </div>
+                    <div class="row mb-6">
+                        <label class="col-sm-2 col-form-label" for="image">Image</label>
+                        <div class="col-sm-10">
+                            <input type="file" class="form-control" id="image" name="Image" />
+                        </div>
+                    </div>
+                    <div class="row justify-content-end">
+                        <div class="col-sm-10">
+                            <button type="submit" class="btn btn-primary">Save Branch</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
