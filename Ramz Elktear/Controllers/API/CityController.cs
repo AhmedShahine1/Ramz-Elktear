@@ -85,5 +85,46 @@ namespace Ramz_Elktear.API.Controllers
                 return StatusCode(500, response);
             }
         }
+
+        // Add City
+        [HttpPost("City")]
+        public async Task<IActionResult> AddCity([FromBody] AddCityDto addCityDto)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    var response = new BaseResponse
+                    {
+                        status = false,
+                        Data = null,
+                        ErrorCode = 400,
+                        ErrorMessage = "Invalid data"
+                    };
+                    return BadRequest(response);
+                }
+
+                var newCity = await _cityService.AddCityAsync(addCityDto);
+                var successResponse = new BaseResponse
+                {
+                    status = true,
+                    Data = newCity,
+                    ErrorCode = 0,
+                    ErrorMessage = string.Empty
+                };
+                return Created("", successResponse);
+            }
+            catch (Exception ex)
+            {
+                var response = new BaseResponse
+                {
+                    status = false,
+                    Data = null,
+                    ErrorCode = 500,
+                    ErrorMessage = $"Internal Server Error: {ex.Message}"
+                };
+                return StatusCode(500, response);
+            }
+        }
     }
 }

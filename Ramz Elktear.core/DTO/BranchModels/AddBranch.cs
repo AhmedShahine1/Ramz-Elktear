@@ -9,10 +9,7 @@ namespace Ramz_Elktear.core.DTO.BranchModels
         public string Email { get; set; }
         public string StartWork { get; set; }
         public string EndWork { get; set; }
-        public List<string>? PhoneNumber { get; set; }
+        public List<string> PhoneNumber { get; set; }
         public IFormFile Image { get; set; }
-        public string Latitude { get; set; }  // Add Latitude
-        public string Longitude { get; set; } // Add Longitude
     }
-
 }

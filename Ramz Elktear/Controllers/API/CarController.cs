@@ -1,7 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Ramz_Elktear.BusinessLayer.Interfaces;
 using Ramz_Elktear.core.DTO.CarModels;
 using Ramz_Elktear.core.DTO;
+using Ramz_Elktear.core.DTO.OfferModels;
+using Ramz_Elktear.core.Entities.Cars;
 
 namespace Ramz_Elktear.Controllers.API
 {
@@ -44,40 +47,12 @@ namespace Ramz_Elktear.Controllers.API
             }
         }
 
-        [HttpGet("find")]
-        public async Task<IActionResult> find([FromQuery] int size)
-        {
-            try
-            {
-                var cars = await _carService.GetAllCarsAsync(size);
-                var response = new BaseResponse
-                {
-                    status = true,
-                    Data = cars,
-                    ErrorCode = 0,
-                    ErrorMessage = string.Empty
-                };
-                return Ok(response);
-            }
-            catch (Exception ex)
-            {
-                var response = new BaseResponse
-                {
-                    status = false,
-                    Data = null,
-                    ErrorCode = 500,
-                    ErrorMessage = $"An error occurred while retrieving cars: {ex.Message}"
-                };
-                return StatusCode(500, response);
-            }
-        }
-
         [HttpGet("CarsByBrand")]
         public async Task<IActionResult> GetCarsByBrand([FromQuery] string BrandId)
         {
             try
             {
-                var cars = await _carService.GetCarsByBrandIdAsync(BrandId);
+                var cars = await _carService.GetCarsByBrandAsync(BrandId);
                 var response = new BaseResponse
                 {
                     status = true,
@@ -208,6 +183,164 @@ namespace Ramz_Elktear.Controllers.API
             }
         }
 
+        [HttpPost("AddCarModel")]
+        public async Task<IActionResult> AddCarModel([FromBody] CarModel model)
+        {
+            try
+            {
+                if (model == null)
+                    return BadRequest("Car model data is invalid.");
+
+                var result = await _carService.AddCarModelAsync(model);
+                if (result)
+                    return Ok("Car model added successfully.");
+                return StatusCode(500, "An error occurred while adding the car model.");
+            }
+            catch (Exception ex)
+            {
+                var response = new BaseResponse
+                {
+                    status = false,
+                    Data = null,
+                    ErrorCode = 500,
+                    ErrorMessage = $"An error occurred while adding the car model: {ex.Message}"
+                };
+                return StatusCode(500, response);
+            }
+        }
+
+        [HttpPost("AddCarColor")]
+        public async Task<IActionResult> AddCarColor([FromBody] CarColor color)
+        {
+            try
+            {
+                if (color == null)
+                    return BadRequest("Car color data is invalid.");
+
+                var result = await _carService.AddCarColorAsync(color);
+                if (result)
+                    return Ok("Car color added successfully.");
+                return StatusCode(500, "An error occurred while adding the car color.");
+            }
+            catch (Exception ex)
+            {
+                var response = new BaseResponse
+                {
+                    status = false,
+                    Data = null,
+                    ErrorCode = 500,
+                    ErrorMessage = $"An error occurred while adding the car color: {ex.Message}"
+                };
+                return StatusCode(500, response);
+            }
+        }
+
+        [HttpPost("AddCarCategory")]
+        public async Task<IActionResult> AddCarCategory([FromBody] CarCategory category)
+        {
+            try
+            {
+                if (category == null)
+                    return BadRequest("Car category data is invalid.");
+
+                var result = await _carService.AddCarCategoryAsync(category);
+                if (result)
+                    return Ok("Car category added successfully.");
+                return StatusCode(500, "An error occurred while adding the car category.");
+            }
+            catch (Exception ex)
+            {
+                var response = new BaseResponse
+                {
+                    status = false,
+                    Data = null,
+                    ErrorCode = 500,
+                    ErrorMessage = $"An error occurred while adding the car category: {ex.Message}"
+                };
+                return StatusCode(500, response);
+            }
+        }
+
+        [HttpPost("car")]
+        public async Task<IActionResult> AddCar([FromForm] AddCar carDto)
+        {
+            try
+            {
+                if (carDto == null)
+                {
+                    var response = new BaseResponse
+                    {
+                        status = false,
+                        Data = null,
+                        ErrorCode = 400,
+                        ErrorMessage = "Invalid data."
+                    };
+                    return BadRequest(response);
+                }
+
+                var newCar = await _carService.AddCarAsync(carDto);
+                var successResponse = new BaseResponse
+                {
+                    status = true,
+                    Data = newCar,
+                    ErrorCode = 0,
+                    ErrorMessage = string.Empty
+                };
+                return CreatedAtAction(nameof(GetCarById), new { id = newCar.Id }, successResponse);
+            }
+            catch (Exception ex)
+            {
+                var response = new BaseResponse
+                {
+                    status = false,
+                    Data = null,
+                    ErrorCode = 500,
+                    ErrorMessage = $"An error occurred while adding the car: {ex.Message}"
+                };
+                return StatusCode(500, response);
+            }
+        }
+
+        [HttpPost("Offer")]
+        public async Task<IActionResult> AddOffer([FromForm] AddOffer offerDto)
+        {
+            try
+            {
+                if (offerDto == null)
+                {
+                    var response = new BaseResponse
+                    {
+                        status = false,
+                        Data = null,
+                        ErrorCode = 400,
+                        ErrorMessage = "Invalid data."
+                    };
+                    return BadRequest(response);
+                }
+
+                var newOffer = await _offerService.AddOfferAsync(offerDto);
+                var successResponse = new BaseResponse
+                {
+                    status = true,
+                    Data = newOffer,
+                    ErrorCode = 0,
+                    ErrorMessage = string.Empty
+                };
+                return CreatedAtAction(nameof(GetOfferById), new { id = newOffer.Id }, successResponse);
+            }
+            catch (Exception ex)
+            {
+                var response = new BaseResponse
+                {
+                    status = false,
+                    Data = null,
+                    ErrorCode = 500,
+                    ErrorMessage = $"An error occurred while adding the offer: {ex.Message}"
+                };
+                return StatusCode(500, response);
+            }
+        }
+
         [HttpPost("CompareCars")]
         public async Task<IActionResult> CompareCars([FromBody] CompareCarsRequest request)
         {
@@ -229,6 +362,32 @@ namespace Ramz_Elktear.Controllers.API
                     Data = null,
                     ErrorCode = 500,
                     ErrorMessage = $"An error occurred while comparing cars: {ex.Message}"
+                };
+                return StatusCode(500, response);
+            }
+        }
+
+        [HttpGet("CompareCarsData")]
+        public async Task<IActionResult> GetCarComparisonData()
+        {
+            try
+            {
+                var result = await _carService.GetCarComparisonDataWithBrandAsync();
+                var response = new BaseResponse
+                {
+                    status = true,
+                    Data = result,
+                };
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                var response = new BaseResponse
+                {
+                    status = false,
+                    Data = null,
+                    ErrorCode = 500,
+                    ErrorMessage = $"An error occurred while retrieving comparison data: {ex.Message}"
                 };
                 return StatusCode(500, response);
             }
@@ -259,62 +418,5 @@ namespace Ramz_Elktear.Controllers.API
                 return StatusCode(500, response);
             }
         }
-
-        [HttpGet("search")]
-        public async Task<IActionResult> SearchCars([FromQuery] string brandId, [FromQuery] string categoryId, [FromQuery] decimal? minPrice, [FromQuery] decimal? maxPrice, [FromQuery] int size = 20)
-        {
-            try
-            {
-                var cars = await _carService.SearchCarsAsync(brandId, categoryId, minPrice, maxPrice, size);
-                var response = new BaseResponse
-                {
-                    status = true,
-                    Data = cars,
-                    ErrorCode = 0,
-                    ErrorMessage = string.Empty
-                };
-                return Ok(response);
-            }
-            catch (Exception ex)
-            {
-                var response = new BaseResponse
-                {
-                    status = false,
-                    Data = null,
-                    ErrorCode = 500,
-                    ErrorMessage = $"An error occurred while searching cars: {ex.Message}"
-                };
-                return StatusCode(500, response);
-            }
-        }
-
-        [HttpGet("Find/{brandId}/{catId}/{modelId}/{page}/{size}")]
-        public async Task<IActionResult> FindCars(string brandId, string catId, string modelId, int page, int size)
-        {
-            try
-            {
-                var cars = await _carService.SearchCarsbyPageAsync(brandId, catId, modelId, page, size);
-                var response = new BaseResponse
-                {
-                    status = true,
-                    Data = cars,
-                    ErrorCode = 0,
-                    ErrorMessage = string.Empty
-                };
-                return Ok(response);
-            }
-            catch (Exception ex)
-            {
-                var response = new BaseResponse
-                {
-                    status = false,
-                    Data = null,
-                    ErrorCode = 500,
-                    ErrorMessage = $"An error occurred while finding cars: {ex.Message}"
-                };
-                return StatusCode(500, response);
-            }
-        }
-
     }
 }

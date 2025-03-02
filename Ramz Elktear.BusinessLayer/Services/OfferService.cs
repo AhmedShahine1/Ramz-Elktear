@@ -1,109 +1,123 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using Ramz_Elktear.BusinessLayer.Interfaces;
 using Ramz_Elktear.core.DTO.OfferModels;
 using Ramz_Elktear.core.Entities.Files;
 using Ramz_Elktear.core.Entities.Offer;
 using Ramz_Elktear.RepositoryLayer.Interfaces;
 
-public class OfferService : IOfferService
+namespace Ramz_Elktear.BusinessLayer.Services
 {
-    private readonly IUnitOfWork _unitOfWork;
-    private readonly IMapper _mapper;
-    private readonly IFileHandling _fileHandling;
-    private readonly ICarService _carService;
-
-    public OfferService(IUnitOfWork unitOfWork, IMapper mapper, IFileHandling fileHandling, ICarService carService)
+    public class OfferService : IOfferService
     {
-        _unitOfWork = unitOfWork;
-        _mapper = mapper;
-        _fileHandling = fileHandling;
-        _carService = carService;
-    }
+        private readonly IUnitOfWork _unitOfWork;
+        private readonly ICarService _carService;
+        private readonly IFileHandling _fileHandling;
+        private readonly IMapper _mapper;
 
-    public async Task<IEnumerable<OfferDTO>> GetAllOffersAsync()
-    {
-        var offers = await _unitOfWork.OffersRepository.GetAllAsync();
-
-        var offerDTOs = offers.Select(offer =>
+        public OfferService(IUnitOfWork unitOfWork, IMapper mapper, IFileHandling fileHandling, ICarService carService)
         {
-            var offerDto = _mapper.Map<OfferDTO>(offer);
-            offerDto.ImageUrl = _fileHandling.GetFile(offer.ImageId).Result;
-            offerDto.CarDetails = _carService.GetCarsByOfferIdAsync(offer.Id).Result.ToList().FirstOrDefault();
-            return offerDto;
-        });
-
-        return offerDTOs;
-    }
-
-    public async Task<OfferDTO> GetOfferByIdAsync(string offerId)
-    {
-        var offer = await _unitOfWork.OffersRepository.GetByIdAsync(offerId);
-        if (offer == null) throw new ArgumentException("Offer not found");
-
-        var offerDto = _mapper.Map<OfferDTO>(offer);
-        offerDto.ImageUrl = await _fileHandling.GetFile(offer.ImageId);
-        offerDto.CarDetails = _carService.GetCarsByOfferIdAsync(offerId).Result.ToList().FirstOrDefault();
-        return offerDto;
-    }
-
-    public async Task<OfferDTO> AddOfferAsync(AddOffer offerDto)
-    {
-        var offer = _mapper.Map<Offers>(offerDto);
-        if (offerDto.Image != null)
-        {
-            await SetOfferImage(offer, offerDto.Image);
+            _unitOfWork = unitOfWork;
+            _mapper = mapper;
+            _fileHandling = fileHandling;
+            _carService = carService;
         }
 
-        await _unitOfWork.OffersRepository.AddAsync(offer);
-        await _unitOfWork.SaveChangesAsync();
-
-        return await GetOfferByIdAsync(offer.Id);
-    }
-
-    public async Task<bool> UpdateOfferAsync(UpdateOffer offerDto)
-    {
-        var offer = await _unitOfWork.OffersRepository.GetByIdAsync(offerDto.Id);
-        if (offer == null) throw new ArgumentException("Offer not found");
-
-        _mapper.Map(offerDto, offer);
-
-        if (offerDto.Image != null)
+        public async Task<IEnumerable<OfferDetails>> GetAllOffersAsync()
         {
-            await UpdateOfferImage(offer, offerDto.Image);
+            var offers = await _unitOfWork.OfferRepository.GetAllAsync(include: q => q.Include(o => o.Car));
+            var offerDTO = new List<OfferDetails>();
+            foreach (var offer in offers)
+            {
+                offerDTO.Add(new OfferDetails()
+                {
+                    Id = offer.Id,
+                    carDetails = await _carService.GetCarByIdAsync(offer.CarId),
+                    ExpiryDate = offer.ExpiryDate,
+                    CreatedAt = offer.CreatedAt,
+                    NewPrice = offer.NewPrice,
+                    ImageUrl = await GetOfferImage(offer.ImageId),
+                });
+            }
+            return offerDTO;
         }
 
-        _unitOfWork.OffersRepository.Update(offer);
-        await _unitOfWork.SaveChangesAsync();
-        return true;
-    }
+        public async Task<OfferDetails> GetOfferByIdAsync(string offerId)
+        {
+            var offer = await _unitOfWork.OfferRepository.FindAsync(a => a.Id == offerId, include: q => q.Include(o => o.Car));
+            if (offer == null) throw new ArgumentException("Offer not found");
+            var offerDTO = new OfferDetails()
+            {
+                Id = offer.Id,
+                carDetails = await _carService.GetCarByIdAsync(offer.CarId),
+                ExpiryDate = offer.ExpiryDate,
+                CreatedAt = offer.CreatedAt,
+                NewPrice = offer.NewPrice,
+                ImageUrl =await GetOfferImage(offer.ImageId),
+            };
+            return offerDTO;
+        }
 
-    public async Task<bool> DeleteOfferAsync(string offerId)
-    {
-        var offer = await _unitOfWork.OffersRepository.GetByIdAsync(offerId);
-        if (offer == null) throw new ArgumentException("Offer not found");
+        public async Task<OfferDetails> AddOfferAsync(AddOffer offerDto)
+        {
+            var offer = new Offer()
+            {
+                NewPrice = offerDto.NewPrice,
+                CarId = offerDto.CarId,
+                ExpiryDate = offerDto.ExpiryDate,
+            };
+            await SetOfferImage(offer,offerDto.Image);
+            await _unitOfWork.OfferRepository.AddAsync(offer);
+            await _unitOfWork.SaveChangesAsync();
+            return await GetOfferByIdAsync(offer.Id);
+        }
 
-        _unitOfWork.OffersRepository.Delete(offer);
-        await _unitOfWork.SaveChangesAsync();
-        return true;
-    }
+        public async Task<bool> DeleteOfferAsync(string offerId)
+        {
+            var offer = await _unitOfWork.OfferRepository.GetByIdAsync(offerId);
+            if (offer == null) throw new ArgumentException("Offer not found");
 
-    private async Task SetOfferImage(Offers offer, IFormFile image)
-    {
-        var path = await GetPathByName("OfferImages");
-        offer.ImageId = await _fileHandling.UploadFile(image, path);
-    }
+            _unitOfWork.OfferRepository.Delete(offer);
+            try
+            {
+                await _unitOfWork.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("An error occurred while deleting the offer: " + ex.Message, ex);
+            }
+        }
 
-    private async Task UpdateOfferImage(Offers offer, IFormFile newImage)
-    {
-        var path = await GetPathByName("OfferImages");
-        offer.ImageId = await _fileHandling.UpdateFile(newImage, path, offer.ImageId);
-    }
+        public async Task<Paths> GetPathByName(string name)
+        {
+            var path = await _unitOfWork.PathsRepository.FindAsync(x => x.Name == name);
+            if (path == null) throw new ArgumentException("Path not found");
+            return path;
+        }
 
-    private async Task<Paths> GetPathByName(string name)
-    {
-        var path = await _unitOfWork.PathsRepository.FindAsync(x => x.Name == name);
-        if (path == null) throw new ArgumentException("Path not found");
-        return path;
+        private async Task SetOfferImage(Offer offer, IFormFile imageProfile)
+        {
+            var path = await GetPathByName("ImageOffer");
+            offer.ImageId = await _fileHandling.UploadFile(imageProfile, path);
+        }
+
+        private async Task UpdateOfferImage(Offer offer, IFormFile imageProfile)
+        {
+            var path = await GetPathByName("ImageOffer");
+            offer.ImageId = await _fileHandling.UpdateFile(imageProfile, path, offer.ImageId);
+        }
+
+        public async Task<string> GetOfferImage(string offerId)
+        {
+            if (string.IsNullOrEmpty(offerId))
+            {
+                return null;
+            }
+
+            var offerImage = await _fileHandling.GetFile(offerId);
+            return offerImage;
+        }
     }
 }

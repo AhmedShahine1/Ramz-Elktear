@@ -8,8 +8,6 @@
         public string Email { get; set; }
         public string StartWork { get; set; }
         public string EndWork { get; set; }
-        public double latitude { get; set; }
-        public double longitude { get; set; }
         public string ImageId { get; set; }
         public List<string> PhoneNumber { get; set; }
     }

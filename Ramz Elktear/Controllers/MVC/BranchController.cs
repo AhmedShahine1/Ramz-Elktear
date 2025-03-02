@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Ramz_Elktear.BusinessLayer.Interfaces;
 using Ramz_Elktear.core.DTO.BranchModels;
 
@@ -7,7 +6,6 @@ namespace Ramz_Elktear.Controllers.MVC
 {
     namespace Ramz_Elktear.Controllers
     {
-        [Authorize(Policy = "Admin")]
         public class BranchController : Controller
         {
             private readonly IBranchService _branchService;

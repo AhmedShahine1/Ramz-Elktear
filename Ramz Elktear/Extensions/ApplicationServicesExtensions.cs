@@ -28,25 +28,8 @@ namespace Ramz_Elktear.Extensions
             services.AddTransient<IBankService, BankService>();
             services.AddTransient<IBranchService, BranchService>();
             services.AddTransient<IJobService, JobService>();
+            services.AddTransient<ICityService, CityService>();
             services.AddTransient<IBookingService, BookingService>();
-            services.AddTransient<ICarColorService, CarColorService>();
-            services.AddTransient<ICarOfferService, CarOfferService>();
-            services.AddTransient<ICarSpecificationService, CarSpecificationService>();
-            services.AddTransient<ICategoryService, CategoryService>();
-            services.AddTransient<IColorService, ColorService>();
-            services.AddTransient<IEnginePositionService, EnginePositionService>();
-            services.AddTransient<IEngineSizeService, EngineSizeService>();
-            services.AddTransient<IFuelTypeService, FuelTypeService>();
-            services.AddTransient<IImageCarService, ImageCarService>();
-            services.AddTransient<IModelYearService, ModelYearService>();
-            services.AddTransient<IOptionService, OptionService>();
-            services.AddTransient<IOriginService, OriginService>();
-            services.AddTransient<ISpecificationService, SpecificationService>();
-            services.AddTransient<ISubCategoryService, SubCategoryService>();
-            services.AddTransient<ITransmissionTypeService, TransmissionTypeService>();
-            services.AddTransient<IDashboardService, DashboardService>();
-            services.AddTransient<IFirebaseNotificationService, FirebaseNotificationService>();
-            services.AddTransient<IPromotionService, PromotionService>();
 
             services.AddHttpClient();
             services.AddAutoMapper(typeof(MappingProfile));

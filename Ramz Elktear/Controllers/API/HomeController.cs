@@ -8,28 +8,31 @@ namespace Ramz_Elktear.Controllers.API
     public class HomeController : BaseController
     {
         private readonly ICarService _carService;
-        private readonly IPromotionService _promotionService;
+        private readonly IOfferService _offerService;
+        private readonly IBrandService _brandService;
 
-        public HomeController(ICarService carService, IPromotionService promotionService)
+        public HomeController(ICarService carService, IOfferService offerService, IBrandService brandService)
         {
             _carService = carService;
-            _promotionService = promotionService;
+            _offerService = offerService;
+            _brandService = brandService;
         }
 
         [HttpGet("HomePage")]
         public async Task<IActionResult> GetAllCars()
         {
             var cars = await _carService.GetAllCarsAsync();
-            var promotion = await _promotionService.GetAllPromotionsAsync();
+            var offers = await _offerService.GetAllOffersAsync();
+            var Brands = await _brandService.GetAllBrandsAsync();
+
             var response = new BaseResponse
             {
                 status = true,
                 Data = new
                 {
                     Cars = cars,
-                    promotion = promotion,
-                    Support = "https://rec.sa/",
-                    PhoneNumber = "966560256655"
+                    Offers = offers,
+                    Brands = Brands
                 },
                 ErrorCode = 0,
                 ErrorMessage = string.Empty

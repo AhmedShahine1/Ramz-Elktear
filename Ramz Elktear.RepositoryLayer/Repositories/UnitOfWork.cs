@@ -9,10 +9,6 @@ using Ramz_Elktear.core.Entities.Offer;
 using Ramz_Elktear.core.Entities.Branchs;
 using Ramz_Elktear.core.Entities.Installment;
 using Ramz_Elktear.core.Entities.Booking;
-using Ramz_Elktear.core.Entities.Color;
-using Ramz_Elktear.core.Entities.Categories;
-using Ramz_Elktear.core.Entities.Specificate;
-using Ramz_Elktear.core.Entities.Promotion;
 
 namespace Ramz_Elktear.RepositoryLayer.Repositories
 {
@@ -31,25 +27,13 @@ namespace Ramz_Elktear.RepositoryLayer.Repositories
         public IBaseRepository<Car> CarRepository { get; set; }
         public IBaseRepository<CarColor> CarColorRepository { get; set; }
         public IBaseRepository<CarCategory> CarCategoryRepository { get; set; }
+        public IBaseRepository<CarModel> CarModelRepository { get; set; }
         public IBaseRepository<ImageCar> ImageCarRepository { get; set; }
+        public IBaseRepository<Offer> OfferRepository { get; set; }
         public IBaseRepository<Job> JobRepository { get; set; }
         public IBaseRepository<Bank> BankRepository { get; set; }
+        public IBaseRepository<City> CityRepository { get; set; }
         public IBaseRepository<Booking> BookingRepository { get; set; }
-        public IBaseRepository<Category> CategoryRepository { get; set; }
-        public IBaseRepository<SubCategory> SubCategoryRepository { get; set; }
-        public IBaseRepository<Option> OptionRepository { get; set; }
-        public IBaseRepository<Offers> OffersRepository { get; set; }
-        public IBaseRepository<TransmissionType> TransmissionTypeRepository { get; set; }
-        public IBaseRepository<FuelType> FuelTypeRepository { get; set; }
-        public IBaseRepository<EngineSize> EngineSizeRepository { get; set; }
-        public IBaseRepository<Origin> OriginRepository { get; set; }
-        public IBaseRepository<ModelYear> ModelYearRepository { get; set; }
-        public IBaseRepository<EnginePosition> EnginePositionRepository { get; set; }
-        public IBaseRepository<Colors> ColorsRepository { get; set; }
-        public IBaseRepository<CarOffer> CarOfferRepository { get; set; }
-        public IBaseRepository<CarSpecification> CarSpecificationRepository { get; set; }
-        public IBaseRepository<Specification> SpecificationRepository { get; set; }
-        public IBaseRepository<Promotion> PromotionRepository { get; set; }
 
         public UnitOfWork(ApplicationDbContext context)
         {
@@ -62,27 +46,15 @@ namespace Ramz_Elktear.RepositoryLayer.Repositories
             BrandRepository = new BaseRepository<Brand>(context);
             BranchRepository = new BaseRepository<Branch>(context);
             CarRepository = new BaseRepository<Car>(context);
+            CarModelRepository = new BaseRepository<CarModel>(context);
             CarCategoryRepository = new BaseRepository<CarCategory>(context);
             CarColorRepository = new BaseRepository<CarColor>(context);
             ImageCarRepository = new BaseRepository<ImageCar>(context);
+            OfferRepository = new BaseRepository<Offer>(context);
             JobRepository = new BaseRepository<Job>(context);
             BankRepository = new BaseRepository<Bank>(context);
+            CityRepository = new BaseRepository<City>(context);
             BookingRepository = new BaseRepository<Booking>(context);
-            CategoryRepository = new BaseRepository<Category>(context);
-            SubCategoryRepository = new BaseRepository<SubCategory>(context);
-            OptionRepository = new BaseRepository<Option>(context);
-            TransmissionTypeRepository = new BaseRepository<TransmissionType>(context);
-            FuelTypeRepository = new BaseRepository<FuelType>(context);
-            EngineSizeRepository = new BaseRepository<EngineSize>(context);
-            OriginRepository = new BaseRepository<Origin>(context);
-            OffersRepository = new BaseRepository<Offers>(context);
-            ModelYearRepository = new BaseRepository<ModelYear>(context);
-            EnginePositionRepository = new BaseRepository<EnginePosition>(context);
-            ColorsRepository = new BaseRepository<Colors>(context);
-            CarOfferRepository = new BaseRepository<CarOffer>(context);
-            CarSpecificationRepository = new BaseRepository<CarSpecification>(context);
-            SpecificationRepository = new BaseRepository<Specification>(context);
-            PromotionRepository = new BaseRepository<Promotion>(context);
         }
 
         public int SaveChanges()

@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Mvc;
 using Ramz_Elktear.BusinessLayer.Interfaces;
 using Ramz_Elktear.core.DTO;
 using Ramz_Elktear.core.DTO.AuthModels;
-using Ramz_Elktear.core.DTO.NotificationModels;
 using Ramz_Elktear.core.DTO.RegisterModels;
 
 namespace Ramz_Elktear.Controllers.API
@@ -376,23 +375,6 @@ namespace Ramz_Elktear.Controllers.API
                     Data = ex.Message
                 });
             }
-        }
-
-        [HttpPost("UpdateDeviceToken")]
-        public async Task<IActionResult> SetDeviceToken([FromBody] SetDeviceTokenRequest request)
-        {
-            if (string.IsNullOrEmpty(request.UserId) || string.IsNullOrEmpty(request.DeviceToken))
-            {
-                return BadRequest("UserId and DeviceToken are required.");
-            }
-
-            var success = await _accountService.SetDeviceTokenAsync(request.UserId, request.DeviceToken);
-            if (!success)
-            {
-                return NotFound("User not found.");
-            }
-
-            return Ok(new { Message = "Device token updated successfully." });
         }
     }
 

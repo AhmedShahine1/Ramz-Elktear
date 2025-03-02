@@ -6,6 +6,6 @@ namespace Ramz_Elktear.core.DTO.CompareModels
     {
         public string ModelId { get; set; }
         public string ModelName { get; set; }
-        public List<CarDTO> carDetails { get; set; }
+        public List<CarDetails> carDetails { get; set; }
     }
 }

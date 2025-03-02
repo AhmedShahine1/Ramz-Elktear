@@ -1,27 +1,13 @@
 ﻿using AutoMapper;
-using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Ramz_Elktear.BusinessLayer.Interfaces;
 using Ramz_Elktear.core.DTO.BrandModels;
-using Ramz_Elktear.core.DTO.CarColorModels;
 using Ramz_Elktear.core.DTO.CarModels;
-using Ramz_Elktear.core.DTO.CarOfferModels;
-using Ramz_Elktear.core.DTO.CarSpecificationModels;
-using Ramz_Elktear.core.DTO.CategoryModels;
 using Ramz_Elktear.core.DTO.CityModels;
-using Ramz_Elktear.core.DTO.ColorModels;
 using Ramz_Elktear.core.DTO.CompareModels;
-using Ramz_Elktear.core.DTO.EnginePositionModels;
-using Ramz_Elktear.core.DTO.EngineSizeModels;
-using Ramz_Elktear.core.DTO.FuelTypeModels;
-using Ramz_Elktear.core.DTO.ImageCarModels;
 using Ramz_Elktear.core.DTO.InstallmentModels;
-using Ramz_Elktear.core.DTO.ModelYearModels;
-using Ramz_Elktear.core.DTO.OfferModels;
-using Ramz_Elktear.core.DTO.OptionModels;
-using Ramz_Elktear.core.DTO.OriginModels;
-using Ramz_Elktear.core.DTO.SpecificationModels;
-using Ramz_Elktear.core.DTO.TransmissionTypeModels;
+using Ramz_Elktear.core.Entities.Brands;
+using Ramz_Elktear.core.Entities.Cars;
 using Ramz_Elktear.core.Entities.Files;
 using Ramz_Elktear.RepositoryLayer.Interfaces;
 
@@ -30,293 +16,287 @@ namespace Ramz_Elktear.BusinessLayer.Services
     public class CarService : ICarService
     {
         private readonly IUnitOfWork _unitOfWork;
-        private readonly IMapper _mapper;
         private readonly IFileHandling _fileHandling;
-        private readonly ICarColorService _carColorService;
-        private readonly IImageCarService _imageCarService;
-        private readonly ICarOfferService _carOfferService;
-        private readonly ICarSpecificationService _carSpecificationService;
-        private readonly IBrandService _brandService;
-        private readonly IOptionService _optionService;
-        private readonly ISubCategoryService _subCategoryService;
-        private readonly ITransmissionTypeService _transmissionTypeService;
-        private readonly IFuelTypeService _fuelTypeService;
-        private readonly IOriginService _originService;
-        private readonly IEnginePositionService _enginePositionService;
-        private readonly IEngineSizeService _engineSizeService;
-        private readonly IModelYearService _modelYearService;
+        private readonly IMapper _mapper;
 
-        public CarService(IUnitOfWork unitOfWork, IMapper mapper, IFileHandling fileHandling,
-            ICarColorService carColorService, IImageCarService imageCarService,
-            ICarOfferService carOfferService, ICarSpecificationService carSpecificationService, IBrandService brandService, IOptionService optionService,
-            ISubCategoryService subCategoryService, ITransmissionTypeService transmissionTypeService, IFuelTypeService fuelTypeService, IModelYearService modelYearService,
-            IEngineSizeService engineSizeService, IEnginePositionService enginePositionService, IOriginService originService)
+        public CarService(IUnitOfWork unitOfWork, IMapper mapper, IFileHandling fileHandling)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
             _fileHandling = fileHandling;
-            _carColorService = carColorService;
-            _imageCarService = imageCarService;
-            _carOfferService = carOfferService;
-            _carSpecificationService = carSpecificationService;
-            _brandService = brandService;
-            _optionService = optionService;
-            _subCategoryService = subCategoryService;
-            _transmissionTypeService = transmissionTypeService;
-            _fuelTypeService = fuelTypeService;
-            _modelYearService = modelYearService;
-            _engineSizeService = engineSizeService;
-            _enginePositionService = enginePositionService;
-            _originService = originService;
         }
 
-        public async Task<CarDTO> GetCarByIdAsync(string carId)
+        public async Task<IEnumerable<CarDetails>> GetAllCarsAsync()
         {
-            var car = await _unitOfWork.CarRepository.GetByIdAsync(carId);
+            var cars = await _unitOfWork.CarRepository.GetAllAsync(
+                include: q => q.Include(c => c.Brands)
+                               .Include(c => c.Category)
+                               .Include(c => c.Model)
+                               .Include(c => c.AvailableColors)
+            );
+
+            var carsDto = _mapper.Map<IEnumerable<CarDetails>>(cars);
+            foreach (var carDTO in carsDto)
+            {
+                var imagecar = await _unitOfWork.ImageCarRepository.FindAllAsync(q => q.CarId == carDTO.Id);
+                carDTO.ImageUrls = await GetImageUrls(imagecar);
+            }
+            return carsDto;
+        }
+
+        public async Task<CarDetails> GetCarByIdAsync(string carId)
+        {
+            var car = await _unitOfWork.CarRepository.FindAsync(
+                q => q.Id == carId,
+                include: q => q.Include(c => c.Brands)
+                               .Include(c => c.Category)
+                               .Include(c => c.Model)
+                               .Include(c => c.AvailableColors)
+            );
+
             if (car == null) throw new ArgumentException("Car not found");
 
-            return await PopulateCarDtoAsync(car);
+            var carDTO = _mapper.Map<CarDetails>(car);
+            var imagecar = await _unitOfWork.ImageCarRepository.FindAllAsync(q => q.CarId == car.Id);
+            carDTO.ImageUrls = await GetImageUrls(imagecar);
+            return carDTO;
         }
 
-        public async Task<IEnumerable<CarDTO>> GetAllCarsAsync()
+        public async Task<CarDetails> AddCarAsync(AddCar carDto)
         {
-            var cars = await _unitOfWork.CarRepository.GetAllAsync();
-            var carDtos = new List<CarDTO>();
-
-            foreach (var car in cars)
+            // Validate the input
+            if (string.IsNullOrEmpty(carDto.Type))
             {
-                carDtos.Add(await PopulateCarDtoAsync(car));
+                throw new ArgumentException("Car type is required.");
             }
 
-            return carDtos;
-        }
-
-        public async Task<IEnumerable<CarDTO>> GetCarsByBrandIdAsync(string brandId)
-        {
-            var cars = await _unitOfWork.CarRepository.FindAllAsync(x => x.BrandId == brandId && !x.IsDeleted && x.IsActive);
-            if (!cars.Any()) return Enumerable.Empty<CarDTO>();
-
-            var carDtos = new List<CarDTO>();
-            foreach (var car in cars)
-            {
-                carDtos.Add(await PopulateCarDtoAsync(car));
-            }
-
-            return carDtos;
-        }
-
-        public async Task<CarComparisonResult> CompareCarsAsync(CompareCarsRequest request)
-        {
-            var car1 = await _unitOfWork.CarRepository.FindAsync(x => x.NameEn == request.CarModel1
-                                                                      && x.SubCategory.NameEn == request.CarCategory1
-                                                                      && x.Option.NameEn == request.CarType1
-                                                                      && !x.IsDeleted && x.IsActive);
-
-            var car2 = await _unitOfWork.CarRepository.FindAsync(x => x.NameEn == request.CarModel2
-                                                                      && x.SubCategory.NameEn == request.CarCategory2
-                                                                      && x.Option.NameEn == request.CarType2
-                                                                      && !x.IsDeleted && x.IsActive);
-
-            if (car1 == null) throw new ArgumentException("Car 1 not found");
-            if (car2 == null) throw new ArgumentException("Car 2 not found");
-
-            var car1DTO = await PopulateCarDtoAsync(car1);
-            var car2DTO = await PopulateCarDtoAsync(car2);
-
-            return new CarComparisonResult
-            {
-                Car1 = car1DTO,
-                Car2 = car2DTO,
-                ComparisonSummary = $"Result compare between {car1DTO.NameEn} and {car2DTO.NameEn}"
-            };
-        }
-
-        public async Task<CarDTO> AddCarAsync(AddCar carDto)
-        {
             var car = _mapper.Map<Car>(carDto);
 
-            // Handle main car image
-            if (carDto.Image != null)
+            // Ensure all necessary entities are present
+            car.Brands = await _unitOfWork.BrandRepository.GetByIdAsync(carDto.BrandId);
+            car.Category = await _unitOfWork.CarCategoryRepository.GetByIdAsync(carDto.Category);
+            car.Model = await _unitOfWork.CarModelRepository.GetByIdAsync(carDto.ModelId);
+
+            // Add available colors
+            car.AvailableColors = new List<CarColor>();
+            foreach (var colorId in carDto.AvailableColors)
             {
-                await SetCarImage(car, carDto.Image);
+                var color = await _unitOfWork.CarColorRepository.GetByIdAsync(colorId);
+                if (color != null)
+                {
+                    car.AvailableColors.Add(color);
+                }
+                else
+                {
+                    throw new ArgumentException($"Color with Id {colorId} does not exist.");
+                }
             }
 
-            // Add car to database first
+            // Add the car entity to the repository
             await _unitOfWork.CarRepository.AddAsync(car);
+
+            // Handle images if provided
+            if (carDto.Images.Count > 0)
+            {
+                foreach (var file in carDto.Images)
+                {
+                    if (file != null)
+                    {
+                        var path = await GetPathByName("ImagesCar");
+                        var imageCar = new ImageCar
+                        {
+                            CarId = car.Id,
+                            ImageId = await _fileHandling.UploadFile(file, path)
+                        };
+                        await _unitOfWork.ImageCarRepository.AddAsync(imageCar);
+                    }
+                }
+            }
+
+            // Save the changes and return the car details
             await _unitOfWork.SaveChangesAsync();
-            await _imageCarService.AddCarImageAsync(new AddImageCar { CarId = car.Id, Image = carDto.ImageWithoutBackground, paths = await GetPathByName("ImageWithoutBackground") });
-
-            // Add additional images
-            foreach (var color in carDto.ColorId)
-            {
-                await _carColorService.AddCarColorAsync(new AddCarColor { CarId = car.Id, ColorId = color, IsActive = true });
-            }
-            foreach (var Offer in carDto.OfferId)
-            {
-                await _carOfferService.AddCarOfferAsync(new AddCarOffer { CarId = car.Id, OfferId = Offer });
-            }
-            foreach (var Image in carDto.Images)
-            {
-                await _imageCarService.AddCarImageAsync(new AddImageCar { CarId = car.Id, Image = Image, paths = await GetPathByName("CarImages") });
-            }
-            foreach (var Image in carDto.InsideCarImages)
-            {
-                await _imageCarService.AddCarImageAsync(new AddImageCar { CarId = car.Id, Image = Image, paths = await GetPathByName("InsideCarImages") });
-            }
-            foreach (var Specifications in carDto.SpecificationsId)
-            {
-                await _carSpecificationService.AddCarSpecificationAsync(new AddCarSpecification { CarId = car.Id, SpecificationId = Specifications });
-            }
-            await _unitOfWork.SaveChangesAsync();
-
-            return _mapper.Map<CarDTO>(car);
+            return await GetCarByIdAsync(car.Id);
         }
 
-        public async Task<CarDTO> UpdateCarAsync(UpdateCarDTO carDto)
+        private async Task<List<string>> GetImageUrls(IEnumerable<ImageCar> imageCars)
         {
-            var car = await _unitOfWork.CarRepository.GetByIdAsync(carDto.Id);
-            if (car == null) throw new ArgumentException("Car not found");
-
-            // Map updated properties
-            _mapper.Map(carDto, car);
-
-            // Handle updating main car image
-            if (carDto.Image != null)
+            var imageUrls = new List<string>();
+            foreach (var image in imageCars)
             {
-                await UpdateCarImage(car, carDto.Image);
+                var url = await GetcarImage(image.ImageId);
+                if (!string.IsNullOrEmpty(url))
+                {
+                    imageUrls.Add(url);
+                }
             }
-
-            // Handle updating main car Image Without Background
-            if (carDto.ImageWithoutBackground != null)
-            {
-                await _imageCarService.AddCarImageAsync(new AddImageCar { CarId = car.Id, Image = carDto.ImageWithoutBackground, paths = await GetPathByName("ImageWithoutBackground") });
-            }
-
-            // Compare and update images
-            var existingImages = (await _imageCarService.GetAllCarImageUrlsByPathAsync(car.Id, "CarImages")).ToList();
-            var removedImages = existingImages.Where(img => !carDto.ImagesURL.Contains(img)).ToList();
-            foreach (var image in removedImages)
-            {
-                await _imageCarService.DeleteCarImageAsync(image);
-            }
-            foreach (var newImage in carDto.Images)
-            {
-                await _imageCarService.AddCarImageAsync(new AddImageCar { CarId = car.Id, Image = newImage, paths = await GetPathByName("CarImages") });
-            }
-
-            // Update Inside Car Images
-            var existingInsideImages = (await _imageCarService.GetAllCarImageUrlsByPathAsync(car.Id, "InsideCarImages")).ToList();
-            var removedInsideImages = existingInsideImages.Where(img => !carDto.InsideCarImagesURL.Contains(img)).ToList();
-            foreach (var image in removedInsideImages)
-            {
-                await _imageCarService.DeleteCarImageAsync(image);
-            }
-            foreach (var newImage in carDto.InsideCarImages)
-            {
-                await _imageCarService.AddCarImageAsync(new AddImageCar { CarId = car.Id, Image = newImage, paths = await GetPathByName("InsideCarImages") });
-            }
-
-            // Update Colors
-            var existingColors = await _carColorService.GetCarColorByCarIdAsync(car.Id);
-            var removedColors = existingColors.Where(c => !carDto.ColorId.Contains(c.Id)).ToList();
-            var newColors = carDto.ColorId.Where(c => !existingColors.Any(ec => ec.Id == c)).ToList();
-            foreach (var color in removedColors)
-            {
-                await _carColorService.DeleteCarColorAsync(carDto.Id,color.Id);
-            }
-            foreach (var color in newColors)
-            {
-                await _carColorService.AddCarColorAsync(new AddCarColor { CarId = car.Id, ColorId = color, IsActive = true });
-            }
-
-            // Update Offers
-            var existingOffers = await _carOfferService.GetAllOffersForCarAsync(car.Id);
-            var removedOffers = existingOffers.Where(o => !carDto.OfferId.Contains(o.Id)).ToList();
-            var newOffers = carDto.OfferId.Where(o => !existingOffers.Any(eo => eo.Id == o)).ToList();
-            foreach (var offer in removedOffers)
-            {
-                await _carOfferService.DeleteCarOfferAsync(offer.Id,carDto.Id);
-            }
-            foreach (var offer in newOffers)
-            {
-                await _carOfferService.AddCarOfferAsync(new AddCarOffer { CarId = car.Id, OfferId = offer });
-            }
-
-            // Update Specifications
-            var existingSpecifications = await _carSpecificationService.GetSpecificationsByCarIdAsync(car.Id);
-            var removedSpecifications = existingSpecifications.Where(s => !carDto.SpecificationsId.Contains(s.Id)).ToList();
-            var newSpecifications = carDto.SpecificationsId.Where(s => !existingSpecifications.Any(es => es.Id == s)).ToList();
-            foreach (var spec in removedSpecifications)
-            {
-                await _carSpecificationService.DeleteCarSpecificationAsync(carDto.Id,spec.Id);
-            }
-            foreach (var spec in newSpecifications)
-            {
-                await _carSpecificationService.AddCarSpecificationAsync(new AddCarSpecification { CarId = car.Id, SpecificationId = spec });
-            }
-
-            // Save changes
-            _unitOfWork.CarRepository.Update(car);
-            await _unitOfWork.SaveChangesAsync();
-
-            return _mapper.Map<CarDTO>(car);
+            return imageUrls;
         }
 
-        private async Task UpdateCarImage(Car car, IFormFile newImage)
+        public async Task<bool> AddCarColorAsync(CarColor color)
         {
-            var path = await GetPathByName("CarImages");
-            car.ImageId = await _fileHandling.UpdateFile(newImage, path, car.ImageId);
+            await _unitOfWork.CarColorRepository.AddAsync(color);
+            try
+            {
+                await _unitOfWork.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("An error occurred while adding the color: " + ex.Message, ex);
+            }
         }
 
-        public async Task<bool> DeleteCarAsync(string carId)
+        public async Task<bool> AddCarCategoryAsync(CarCategory category)
         {
-            var car = await _unitOfWork.CarRepository.GetByIdAsync(carId);
-            if (car == null) throw new ArgumentException("Car not found");
-
-            // Delete related entities first
-            await DeleteCarRelatedEntities(carId);
-
-            // Delete the car
-            _unitOfWork.CarRepository.Delete(car);
-            await _unitOfWork.SaveChangesAsync();
-            return true;
+            await _unitOfWork.CarCategoryRepository.AddAsync(category);
+            try
+            {
+                await _unitOfWork.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("An error occurred while adding the category: " + ex.Message, ex);
+            }
         }
 
-        private async Task DeleteCarRelatedEntities(string carId)
+        public async Task<bool> AddCarModelAsync(CarModel model)
         {
-            // Delete car colors
-            var carColors = await _unitOfWork.CarColorRepository.FindAllAsync(x => x.CarId == carId);
-            _unitOfWork.CarColorRepository.DeleteRange(carColors);
-
-            // Delete car offers
-            var carOffers = await _unitOfWork.CarOfferRepository.FindAllAsync(x => x.CarId == carId);
-            _unitOfWork.CarOfferRepository.DeleteRange(carOffers);
-
-            // Delete car images
-            var carImages = await _unitOfWork.ImageCarRepository.FindAllAsync(x => x.CarId == carId);
-            _unitOfWork.ImageCarRepository.DeleteRange(carImages);
-
-            // Delete car specifications
-            var carSpecifications = await _unitOfWork.CarSpecificationRepository.FindAllAsync(x => x.carId == carId);
-            _unitOfWork.CarSpecificationRepository.DeleteRange(carSpecifications);
-
-            var carBooking = await _unitOfWork.BookingRepository.FindAllAsync(q => q.Car.Id == carId);
-            _unitOfWork.BookingRepository.DeleteRange(carBooking);
-
-            await _unitOfWork.SaveChangesAsync();
+            await _unitOfWork.CarModelRepository.AddAsync(model);
+            try
+            {
+                await _unitOfWork.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("An error occurred while adding the model: " + ex.Message, ex);
+            }
         }
 
-        private async Task SetCarImage(Car car, IFormFile image)
+        public async Task<IEnumerable<CarModel>> GetAllCarModelsAsync()
         {
-            var path = await GetPathByName("CarImages");
-            car.ImageId = await _fileHandling.UploadFile(image, path);
+            return await _unitOfWork.CarModelRepository.GetAllAsync();
         }
 
-        private async Task<Paths> GetPathByName(string name)
+        public async Task<IEnumerable<CarCategory>> GetAllCarCategoriesAsync()
+        {
+            return await _unitOfWork.CarCategoryRepository.GetAllAsync();
+        }
+
+        public async Task<IEnumerable<CarColor>> GetAllCarColorsAsync()
+        {
+            return await _unitOfWork.CarColorRepository.GetAllAsync();
+        }
+
+        public async Task<Paths> GetPathByName(string name)
         {
             var path = await _unitOfWork.PathsRepository.FindAsync(x => x.Name == name);
             if (path == null) throw new ArgumentException("Path not found");
             return path;
+        }
+
+        public async Task<string> GetcarImage(string ImageId)
+        {
+            if (string.IsNullOrEmpty(ImageId))
+            {
+                return null;
+            }
+
+            var carImage = await _fileHandling.GetFile(ImageId);
+            return carImage;
+        }
+
+        public async Task<IEnumerable<CarDetails>> GetCarsByBrandAsync(string brandId)
+        {
+            var cars = await _unitOfWork.CarRepository.FindAllAsync(
+                a => a.Brands.Id == brandId,
+                include: q => q.Include(c => c.Brands)
+                               .Include(c => c.Category)
+                               .Include(c => c.Model)
+                               .Include(c => c.AvailableColors)
+            );
+
+            var carsDto = _mapper.Map<IEnumerable<CarDetails>>(cars);
+            foreach (var carDTO in carsDto)
+            {
+                var imagecar = await _unitOfWork.ImageCarRepository.FindAllAsync(q => q.CarId == carDTO.Id);
+                carDTO.ImageUrls = await GetImageUrls(imagecar);
+            }
+            return carsDto;
+        }
+
+        public async Task<CarComparisonResult> CompareCarsAsync(CompareCarsRequest request)
+        {
+            var car1 = await _unitOfWork.CarRepository.FindAsync(
+                q => q.Model.Id == request.CarModel1 && q.Category.Id == request.CarCategory1 && q.Type == request.CarType1,
+                include: q => q.Include(c => c.Brands)
+                               .Include(c => c.Category)
+                               .Include(c => c.Model)
+                               .Include(c => c.AvailableColors));
+
+            var car2 = await _unitOfWork.CarRepository.FindAsync(
+                q => q.Model.Id == request.CarModel2 && q.Category.Id == request.CarCategory2 && q.Type == request.CarType2,
+                include: q => q.Include(c => c.Brands)
+                               .Include(c => c.Category)
+                               .Include(c => c.Model)
+                               .Include(c => c.AvailableColors));
+
+            if (car1 == null || car2 == null)
+                throw new ArgumentException("One or both cars not found.");
+
+            return new CarComparisonResult
+            {
+                Car1 = _mapper.Map<CarDetails>(car1),
+                Car2 = _mapper.Map<CarDetails>(car2),
+                ComparisonSummary = $"Comparison between {car1.Name} and {car2.Name}"
+            };
+        }
+
+        public async Task<CarComparisonData> GetCarComparisonDataAsync()
+        {
+            var cars = await _unitOfWork.CarRepository.GetAllAsync();
+            var models = await _unitOfWork.CarModelRepository.GetAllAsync();
+            var categories = await _unitOfWork.CarCategoryRepository.GetAllAsync();
+
+            return new CarComparisonData
+            {
+                Cars = _mapper.Map<IEnumerable<CarDetails>>(cars),
+                Models = _mapper.Map<IEnumerable<CarModel>>(models),
+                Categories = _mapper.Map<IEnumerable<CarCategory>>(categories),
+                Types = cars.Select(c => c.Type).Distinct()
+            };
+        }
+
+        public async Task<IEnumerable<BrandWithDetails>> GetCarComparisonDataWithBrandAsync()
+        {
+            var brands = await _unitOfWork.BrandRepository.GetAllAsync();
+            var compareDate = new List<BrandWithDetails>();
+            foreach(var brand in brands)
+            {
+                var cars = await _unitOfWork.CarRepository.FindAllAsync(
+                    a => a.Brands.Id == brand.Id,
+                    include: q => q.Include(c => c.Brands)
+                                   .Include(c => c.Category)
+                                   .Include(c => c.Model)
+                                   .Include(c => c.AvailableColors)
+                );
+
+                var categories = cars.Select(c => c.Category).Distinct().ToList();
+                var models = cars.Select(c => c.Model).Distinct().ToList();
+                var modelDtos = _mapper.Map<IEnumerable<CarModel>>(models);
+                var categoryDtos = _mapper.Map<IEnumerable<CarCategory>>(categories);
+
+                compareDate.Add(new BrandWithDetails
+                {
+                    BrandId = brand.Id,
+                    BrandName = brand.Name,
+                    Cars = _mapper.Map<IEnumerable<CarDetails>>(cars),
+                    Models = modelDtos,
+                    Categories = categoryDtos,
+                });
+            }
+            return compareDate;
         }
 
         public async Task<InstallmentData> GetInstallmentAsync()
@@ -325,6 +305,7 @@ namespace Ramz_Elktear.BusinessLayer.Services
             var banks = await _unitOfWork.BankRepository.GetAllAsync();
             var jobs = await _unitOfWork.JobRepository.GetAllAsync();
             var brands = await _unitOfWork.BrandRepository.GetAllAsync();
+            var cities = await _unitOfWork.CityRepository.GetAllAsync();
 
             // Prepare the comparison data
             var compareData = new List<CompareBrand>();
@@ -333,24 +314,20 @@ namespace Ramz_Elktear.BusinessLayer.Services
             {
                 // Get all cars for the brand
                 var cars = await _unitOfWork.CarRepository.FindAllAsync(
-                    c => c.BrandId == brand.Id,
-                    include: q => q.Include(c => c.Brand)
-                                   .Include(c => c.SubCategory)
-                                   .Include(c => c.ModelYear)
-                                   .Include(c => c.CarColors)
+                    c => c.Brands.Id == brand.Id,
+                    include: q => q.Include(c => c.Brands)
+                                   .Include(c => c.Category)
+                                   .Include(c => c.Model)
+                                   .Include(c => c.AvailableColors)
                 );
 
                 // Group cars by category
-                var categories = cars.GroupBy(c => c.SubCategory).Select(catGroup =>
+                var categories = cars.GroupBy(c => c.Category).Select(catGroup =>
                 {
-                    var models = catGroup.GroupBy(car => car.ModelYear).Select(modelGroup =>
+                    var models = catGroup.GroupBy(car => car.Model).Select(modelGroup =>
                     {
-                        var carDetails = new List<CarDTO>();
-                        foreach (var car in modelGroup)
-                        {
-                            carDetails.Add(PopulateCarDtoAsync(car).Result); // Process one at a time
-                        }
-
+                        // Map car details for each model
+                        var carDetails = modelGroup.Select(car => _mapper.Map<CarDetails>(car)).ToList();
                         return new CompareModel
                         {
                             ModelId = modelGroup.Key.Id,
@@ -362,7 +339,7 @@ namespace Ramz_Elktear.BusinessLayer.Services
                     return new CompareCategory
                     {
                         CategoryId = catGroup.Key.Id,
-                        CategoryName = catGroup.Key.NameAr,
+                        CategoryName = catGroup.Key.Name,
                         compareModel = models
                     };
                 }).ToList();
@@ -371,7 +348,7 @@ namespace Ramz_Elktear.BusinessLayer.Services
                 compareData.Add(new CompareBrand
                 {
                     BrandId = brand.Id,
-                    BrandName = brand.NameAr,
+                    BrandName = brand.Name,
                     compareCategory = categories
                 });
             }
@@ -382,103 +359,8 @@ namespace Ramz_Elktear.BusinessLayer.Services
                 Banks = _mapper.Map<IEnumerable<BankDetails>>(banks),
                 Jobs = _mapper.Map<IEnumerable<JobDetails>>(jobs),
                 BrandDetails = compareData,
+                Cities = _mapper.Map<IEnumerable<CityDto>>(cities)
             };
-        }
-
-        private async Task<CarDTO> PopulateCarDtoAsync(Car car)
-        {
-            var carDto = _mapper.Map<CarDTO>(car);
-            carDto.ImageUrl = await _fileHandling.GetFile(car.ImageId) ?? string.Empty;
-            carDto.Brand = await _brandService.GetBrandByIdAsync(car.BrandId) ?? new BrandDetails();
-            carDto.Option = await _optionService.GetOptionByIdAsync(car.OptionId) ?? new OptionDTO();
-            carDto.SubCategory = await _subCategoryService.GetSubCategoryByIdAsync(car.SubCategoryId) ?? new SubCategoryDTO();
-            carDto.TransmissionType = await _transmissionTypeService.GetTransmissionTypeByIdAsync(car.TransmissionTypeId) ?? new TransmissionTypeDTO();
-            carDto.FuelType = await _fuelTypeService.GetFuelTypeByIdAsync(car.FuelTypeId) ?? new FuelTypeDTO();
-            carDto.Offer = (await _carOfferService.GetAllOffersForCarAsync(car.Id)).ToList() ?? new List<OfferDTO>();
-            carDto.Color = (await _carColorService.GetCarColorByCarIdAsync(car.Id)).ToList() ?? new List<ColorDTO>();
-            carDto.EnginePosition = await _enginePositionService.GetEnginePositionByIdAsync(car.EnginePositionId) ?? new EnginePositionDTO();
-            carDto.EngineSize = await _engineSizeService.GetEngineSizeByIdAsync(car.EngineSizeId) ?? new EngineSizeDTO();
-            carDto.Origin = await _originService.GetOriginByIdAsync(car.OriginId) ?? new OriginDTO();
-            carDto.ModelYear = await _modelYearService.GetModelYearByIdAsync(car.ModelYearId) ?? new ModelYearDTO();
-            carDto.ImagesUrl = (await _imageCarService.GetAllCarImageUrlsByPathAsync(car.Id, "CarImages")).ToList() ?? new List<string>();
-            carDto.ImageWithoutBackgroundUrl = (await _imageCarService.GetAllCarImageUrlsByPathAsync(car.Id, "ImageWithoutBackground")).FirstOrDefault();
-            carDto.InsideCarImagesUrl = (await _imageCarService.GetAllCarImageUrlsByPathAsync(car.Id, "InsideCarImages")).ToList() ?? new List<string>();
-            carDto.Specifications = (await _carSpecificationService.GetSpecificationsByCarIdAsync(car.Id)).ToList() ?? new List<SpecificationDTO>();
-
-            return carDto;
-        }
-        // Gets all cars (with pagination)
-        public async Task<IEnumerable<CarDTO>> GetAllCarsAsync(int size = 20)
-        {
-            var cars = await _unitOfWork.CarRepository.GetAllAsync(
-                include: null,
-                orderBy: query => (IOrderedQueryable<Car>)query.Take(size)
-            );
-            return _mapper.Map<IEnumerable<CarDTO>>(cars);
-        }
-
-        // Search cars based on filters
-        public async Task<IEnumerable<CarDTO>> SearchCarsAsync(string brandId, string categoryId, decimal? minPrice, decimal? maxPrice, int size = 20)
-        {
-            var query = await _unitOfWork.CarRepository.GetAllAsync(include: q => q.Include(a => a.SubCategory));
-
-            if (!string.IsNullOrEmpty(brandId)) query = query.Where(c => c.BrandId == brandId);
-            if (!string.IsNullOrEmpty(categoryId)) query = query.Where(c => c.SubCategory.CategoryId == categoryId);
-            if (minPrice.HasValue) query = query.Where(c => c.SellingPrice >= minPrice.Value);
-            if (maxPrice.HasValue) query = query.Where(c => c.SellingPrice <= maxPrice.Value);
-
-            query = query.Take(size);
-
-            var cars = query.ToList();
-
-            // Populate each car DTO with additional data
-            var populatedCars = new List<CarDTO>();
-            foreach (var car in cars)
-            {
-                var carDto = await PopulateCarDtoAsync(car);
-                populatedCars.Add(carDto);
-            }
-
-            return populatedCars;
-        }
-
-        public async Task<IEnumerable<CarDTO>> SearchCarsbyPageAsync(string brandId, string categoryId, string modelId, int page, int size)
-        {
-            var query = await _unitOfWork.CarRepository.GetAllAsync(
-                include: q => q.Include(a => a.SubCategory).Include(a => a.ModelYear) // Make sure to include relevant navigation properties
-            );
-
-            if (!string.IsNullOrEmpty(brandId))
-                query = query.Where(c => c.BrandId == brandId);
-
-            if (!string.IsNullOrEmpty(categoryId))
-                query = query.Where(c => c.SubCategory.CategoryId == categoryId);
-
-            if (!string.IsNullOrEmpty(modelId))
-                query = query.Where(c => c.ModelYearId == modelId);
-
-            // Implement pagination
-            query = query.Skip((page - 1) * size).Take(size);
-
-            var cars = query.ToList(); // Make sure to execute the query asynchronously
-            return _mapper.Map<IEnumerable<CarDTO>>(cars);
-        }
-
-        public async Task<IEnumerable<CarDTO>> GetCarsByOfferIdAsync(string offerId)
-        {
-            var carOffers = await _unitOfWork.CarOfferRepository.FindAllAsync(x => x.OfferId == offerId);
-            if (!carOffers.Any()) return Enumerable.Empty<CarDTO>();
-
-            var carIds = carOffers.Select(x => x.CarId).ToList();
-            var cars = await _unitOfWork.CarRepository.FindAllAsync(x => carIds.Contains(x.Id) && !x.IsDeleted && x.IsActive);
-
-            var carDtos = new List<CarDTO>();
-            foreach (var car in cars)
-            {
-                carDtos.Add(await PopulateCarDtoAsync(car));
-            }
-
-            return carDtos;
         }
     }
 }

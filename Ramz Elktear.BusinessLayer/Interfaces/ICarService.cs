@@ -1,21 +1,26 @@
-﻿using Ramz_Elktear.core.DTO.CarModels;
-using Microsoft.AspNetCore.Http;
+﻿using Ramz_Elktear.core.DTO.BrandModels;
+using Ramz_Elktear.core.DTO.CarModels;
+using Ramz_Elktear.core.Entities.Cars;
 
 namespace Ramz_Elktear.BusinessLayer.Interfaces
 {
     public interface ICarService
     {
-        Task<IEnumerable<CarDTO>> GetAllCarsAsync();
-        Task<CarDTO> GetCarByIdAsync(string carId);
-        Task<CarDTO> AddCarAsync(AddCar carDto);
-        Task<CarDTO> UpdateCarAsync(UpdateCarDTO carDto);
-        Task<bool> DeleteCarAsync(string carId);
-        Task<IEnumerable<CarDTO>> GetCarsByBrandIdAsync(string brandId);
+        Task<IEnumerable<CarDetails>> GetAllCarsAsync();
+        Task<CarDetails> GetCarByIdAsync(string carId);
+        Task<CarDetails> AddCarAsync(AddCar carDto);
+        //Task<bool> UpdateCarAsync(string carId, CarDetails carDto);
+        //Task<bool> DeleteCarAsync(string carId);
+        Task<bool> AddCarColorAsync(CarColor color);
+        Task<bool> AddCarCategoryAsync(CarCategory category);
+        Task<bool> AddCarModelAsync(CarModel model);
+        Task<IEnumerable<CarColor>> GetAllCarColorsAsync();
+        Task<IEnumerable<CarCategory>> GetAllCarCategoriesAsync();
+        Task<IEnumerable<CarModel>> GetAllCarModelsAsync();
         Task<CarComparisonResult> CompareCarsAsync(CompareCarsRequest request);
+        Task<CarComparisonData> GetCarComparisonDataAsync();
         Task<InstallmentData> GetInstallmentAsync();
-        Task<IEnumerable<CarDTO>> GetAllCarsAsync(int size = 20);
-        Task<IEnumerable<CarDTO>> SearchCarsAsync(string brandId, string categoryId, decimal? minPrice, decimal? maxPrice, int size = 20);
-        Task<IEnumerable<CarDTO>> SearchCarsbyPageAsync(string brandId, string categoryId, string modelId, int page, int size);
-        Task<IEnumerable<CarDTO>> GetCarsByOfferIdAsync(string offerId);
+        Task<IEnumerable<CarDetails>> GetCarsByBrandAsync(string brandId);
+        Task<IEnumerable<BrandWithDetails>> GetCarComparisonDataWithBrandAsync();
     }
 }

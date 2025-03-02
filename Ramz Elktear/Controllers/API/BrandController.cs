@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Ramz_Elktear.BusinessLayer.Interfaces;
 using Ramz_Elktear.core.DTO;
+using Ramz_Elktear.core.DTO.BrandModels;
 
 namespace Ramz_Elktear.Controllers.API
 {
@@ -69,6 +71,47 @@ namespace Ramz_Elktear.Controllers.API
                     ErrorMessage = string.Empty
                 };
                 return Ok(successResponse);
+            }
+            catch (Exception ex)
+            {
+                var response = new BaseResponse
+                {
+                    status = false,
+                    Data = null,
+                    ErrorCode = 500,
+                    ErrorMessage = $"Internal Server Error: {ex.Message}"
+                };
+                return StatusCode(500, response);
+            }
+        }
+
+        // Create a New Brand
+        [HttpPost]
+        public async Task<IActionResult> AddBrand([FromForm] AddBrand brandDto)
+        {
+            try
+            {
+                if (brandDto == null)
+                {
+                    var response = new BaseResponse
+                    {
+                        status = false,
+                        Data = null,
+                        ErrorCode = 400,
+                        ErrorMessage = "Invalid data."
+                    };
+                    return BadRequest(response);
+                }
+
+                var newBrand = await _brandService.AddBrandAsync(brandDto);
+                var successResponse = new BaseResponse
+                {
+                    status = true,
+                    Data = newBrand,
+                    ErrorCode = 0,
+                    ErrorMessage = string.Empty
+                };
+                return CreatedAtAction(nameof(GetBrandById), new { id = newBrand.Id }, successResponse);
             }
             catch (Exception ex)
             {

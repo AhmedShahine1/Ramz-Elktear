@@ -14,6 +14,44 @@ namespace Ramz_Elktear.Controllers.API
             _bankService = bankService;
         }
 
+        // Add Bank
+        [HttpPost("AddBank")]
+        public async Task<IActionResult> AddBank([FromForm] AddBank bankDto)
+        {
+            try
+            {
+                if (bankDto == null)
+                {
+                    return BadRequest(new BaseResponse
+                    {
+                        status = false,
+                        Data = null,
+                        ErrorCode = 400,
+                        ErrorMessage = "Invalid data."
+                    });
+                }
+
+                var result = await _bankService.AddBankAsync(bankDto);
+                return Ok(new BaseResponse
+                {
+                    status = true,
+                    Data = result,
+                    ErrorCode = 0,
+                    ErrorMessage = string.Empty
+                });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new BaseResponse
+                {
+                    status = false,
+                    Data = null,
+                    ErrorCode = 500,
+                    ErrorMessage = $"Internal Server Error: {ex.Message}"
+                });
+            }
+        }
+
         // Get All Banks
         [HttpGet("GetBanks")]
         public async Task<IActionResult> GetAllBanks()
