@@ -7,7 +7,7 @@ namespace Ramz_Elktear.BusinessLayer.Interfaces
         Task<IEnumerable<BrandDetails>> GetAllBrandsAsync();
         Task<BrandDetails> GetBrandByIdAsync(string brandId);
         Task<BrandDetails> AddBrandAsync(AddBrand brandDto);
-        Task<bool> UpdateBrandAsync(string brandId, BrandDetails brandDto);
+        Task<BrandDetails> UpdateBrandAsync(UpdateBrandDto brandDto);
         Task<bool> DeleteBrandAsync(string brandId);
     }
 }

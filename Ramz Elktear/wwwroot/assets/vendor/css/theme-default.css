@@ -691,17 +691,18 @@ a:hover {
 .bg-menu-theme .menu-horizontal-next {
   color: #384551;
 }
+
 .bg-menu-theme .menu-link:hover, .bg-menu-theme .menu-link:focus,
 .bg-menu-theme .menu-horizontal-prev:hover,
 .bg-menu-theme .menu-horizontal-prev:focus,
 .bg-menu-theme .menu-horizontal-next:hover,
 .bg-menu-theme .menu-horizontal-next:focus {
-  color: #384551;
+  color: #c9b040;
 }
 .bg-menu-theme .menu-link.active,
 .bg-menu-theme .menu-horizontal-prev.active,
 .bg-menu-theme .menu-horizontal-next.active {
-  color: #384551;
+  color: #c9b040;
 }
 .bg-menu-theme .menu-item.disabled .menu-link,
 .bg-menu-theme .menu-horizontal-prev.disabled,
@@ -713,7 +714,7 @@ a:hover {
   color: #384551;
 }
 .bg-menu-theme .menu-item.active > .menu-link:not(.menu-toggle) {
-  background-color: #fff;
+  background-color: #ff0000;
 }
 .bg-menu-theme.menu-horizontal .menu-sub > .menu-item.active > .menu-link:not(.menu-toggle) {
   background-color: white;

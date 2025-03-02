@@ -39,9 +39,9 @@ namespace Ramz_Elktear.BusinessLayer.Services
             return _mapper.Map<JobDetails>(job);
         }
 
-        public async Task<bool> UpdateJobAsync(string jobId, JobDetails jobDto)
+        public async Task<bool> UpdateJobAsync(UpdateJob jobDto)
         {
-            var job = await _unitOfWork.JobRepository.GetByIdAsync(jobId);
+            var job = await _unitOfWork.JobRepository.GetByIdAsync(jobDto.Id);
             if (job == null) throw new ArgumentException("Job not found");
 
             _mapper.Map(jobDto, job);

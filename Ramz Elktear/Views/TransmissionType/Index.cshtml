@@ -1,0 +1,72 @@
+﻿@model IEnumerable<TransmissionTypeDTO>
+
+<div class="headerIndex">
+    <h3><span class="text-truncate">TransmissionType List</span></h3>
+    <a href="@Url.Action("Create")" class="btn btn-success mb-3">
+        <i class="bx bx-plus"></i> <span class="text-truncate">Add New TransmissionType</span>
+    </a>
+</div>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th><span class="text-truncate">Name (Arabic)</span></th>
+            <th><span class="text-truncate">Name (English)</span></th>
+            <th><span class="text-truncate">Description (Arabic)</span></th>
+            <th><span class="text-truncate">Description (English)</span></th>
+            <th><span class="text-truncate">Active</span></th>
+            <th><span class="text-truncate">Actions</span></th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null && Model.Any())
+        {
+            int index = 1;
+            foreach (var transmissionType in Model)
+            {
+                <tr>
+                    <td>@index</td>
+                    <td>@transmissionType.NameAr</td>
+                    <td>@transmissionType.NameEn</td>
+                    <td>@transmissionType.DescriptionAr</td>
+                    <td>@transmissionType.DescriptionEn</td>
+                    <td>
+                        @if (transmissionType.IsActive)
+                        {
+                            <span class="badge bg-label-primary"><i class="bx bx-check"></i> Active</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-label-danger"><i class="bx bx-x"></i> Inactive</span>
+                        }
+                    </td>
+                    <td>
+                        <div class="dropdown">
+                            <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
+                                <i class="bx bx-dots-vertical-rounded"></i>
+                            </button>
+                            <div class="dropdown-menu">
+                                <a class="dropdown-item" href="@Url.Action("Edit", new { id = transmissionType.Id })">
+                                    <i class="bx bx-edit-alt me-1"></i> Edit
+                                </a>
+                                <form action="@Url.Action("Delete", new { id = transmissionType.Id })" method="post" class="dropdown-item">
+                                    @Html.AntiForgeryToken()
+                                    <button type="submit" class="btn p-0" style="border: none; background: transparent; color: inherit;">
+                                        <i class="bx bx-trash me-1"></i> Delete
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                index++;
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="7" class="text-center">No transmission types available.</td>
+            </tr>
+        }
+    </tbody>
+</table>

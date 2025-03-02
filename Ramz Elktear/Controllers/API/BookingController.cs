@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Ramz_Elktear.BusinessLayer.Interfaces;
 using Ramz_Elktear.Controllers.API;
 using Ramz_Elktear.core.DTO;
@@ -23,66 +25,61 @@ namespace Ramz_Elktear.API.Controllers
             try
             {
                 var bookings = await _bookingService.GetAllBookingsAsync();
-                var response = new BaseResponse
+                return Ok(new BaseResponse
                 {
                     status = true,
                     Data = bookings,
                     ErrorCode = 0,
                     ErrorMessage = string.Empty
-                };
-                return Ok(response);
+                });
             }
             catch (Exception ex)
             {
-                var response = new BaseResponse
+                return StatusCode(500, new BaseResponse
                 {
                     status = false,
                     Data = null,
                     ErrorCode = 500,
                     ErrorMessage = $"Internal Server Error: {ex.Message}"
-                };
-                return StatusCode(500, response);
+                });
             }
         }
 
         // Get Booking By Id
         [HttpGet("Book")]
-        public async Task<IActionResult> GetBookingById([FromQuery][Required]string id)
+        public async Task<IActionResult> GetBookingById([FromQuery][Required] string id)
         {
             try
             {
                 var booking = await _bookingService.GetBookingByIdAsync(id);
                 if (booking == null)
                 {
-                    var response = new BaseResponse
+                    return NotFound(new BaseResponse
                     {
                         status = false,
                         Data = null,
                         ErrorCode = 404,
                         ErrorMessage = "Booking not found"
-                    };
-                    return NotFound(response);
+                    });
                 }
 
-                var successResponse = new BaseResponse
+                return Ok(new BaseResponse
                 {
                     status = true,
                     Data = booking,
                     ErrorCode = 0,
                     ErrorMessage = string.Empty
-                };
-                return Ok(successResponse);
+                });
             }
             catch (Exception ex)
             {
-                var response = new BaseResponse
+                return StatusCode(500, new BaseResponse
                 {
                     status = false,
                     Data = null,
                     ErrorCode = 500,
                     ErrorMessage = $"Internal Server Error: {ex.Message}"
-                };
-                return StatusCode(500, response);
+                });
             }
         }
 
@@ -94,36 +91,116 @@ namespace Ramz_Elktear.API.Controllers
             {
                 if (!ModelState.IsValid)
                 {
-                    var response = new BaseResponse
+                    return BadRequest(new BaseResponse
                     {
                         status = false,
                         Data = null,
                         ErrorCode = 400,
                         ErrorMessage = "Invalid data"
-                    };
-                    return BadRequest(response);
+                    });
                 }
 
+                var userId = User.Claims.FirstOrDefault(x => x.Type == "uid")?.Value;
+                if (string.IsNullOrEmpty(userId))
+                {
+                    return Unauthorized(new BaseResponse
+                    {
+                        status = false,
+                        Data = null,
+                        ErrorCode = 401,
+                        ErrorMessage = "User ID not found in claims"
+                    });
+                }
+
+                createBookingDto.UserId = userId;
                 var newBooking = await _bookingService.AddBookingAsync(createBookingDto);
-                var successResponse = new BaseResponse
+
+                return CreatedAtAction(nameof(GetBookingById), new { id = newBooking.Id }, new BaseResponse
                 {
                     status = true,
                     Data = newBooking,
                     ErrorCode = 0,
                     ErrorMessage = string.Empty
-                };
-                return CreatedAtAction(nameof(GetBookingById), new { id = newBooking.Id }, successResponse);
+                });
             }
             catch (Exception ex)
             {
-                var response = new BaseResponse
+                return StatusCode(500, new BaseResponse
                 {
                     status = false,
                     Data = null,
                     ErrorCode = 500,
                     ErrorMessage = $"Internal Server Error: {ex.Message}"
-                };
-                return StatusCode(500, response);
+                });
+            }
+        }
+
+        // Get Bookings By Buyer
+        [HttpGet("Booking")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        public async Task<IActionResult> GetBookingsByBuyer()
+        {
+            try
+            {
+                var buyerId = User.Claims.FirstOrDefault(x => x.Type == "uid")?.Value;
+                var bookings = await _bookingService.GetBookingsByBuyerIdAsync(buyerId);
+
+                return Ok(new BaseResponse
+                {
+                    status = true,
+                    Data = bookings,
+                    ErrorCode = 0,
+                    ErrorMessage = string.Empty
+                });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new BaseResponse
+                {
+                    status = false,
+                    Data = null,
+                    ErrorCode = 500,
+                    ErrorMessage = $"Internal Server Error: {ex.Message}"
+                });
+            }
+        }
+
+        // Delete Booking
+        [HttpDelete("Book")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        public async Task<IActionResult> DeleteBooking([FromQuery][Required] string id)
+        {
+            try
+            {
+                var result = await _bookingService.DeleteBookingAsync(id);
+                if (!result)
+                {
+                    return NotFound(new BaseResponse
+                    {
+                        status = false,
+                        Data = null,
+                        ErrorCode = 404,
+                        ErrorMessage = "Booking not found"
+                    });
+                }
+
+                return Ok(new BaseResponse
+                {
+                    status = true,
+                    Data = null,
+                    ErrorCode = 0,
+                    ErrorMessage = "Booking deleted successfully"
+                });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new BaseResponse
+                {
+                    status = false,
+                    Data = null,
+                    ErrorCode = 500,
+                    ErrorMessage = $"Internal Server Error: {ex.Message}"
+                });
             }
         }
     }

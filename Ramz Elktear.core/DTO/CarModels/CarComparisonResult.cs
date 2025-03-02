@@ -2,8 +2,8 @@
 {
     public class CarComparisonResult
     {
-        public CarDetails Car1 { get; set; }
-        public CarDetails Car2 { get; set; }
+        public CarDTO Car1 { get; set; }
+        public CarDTO Car2 { get; set; }
         public string ComparisonSummary { get; set; }
     }
 }

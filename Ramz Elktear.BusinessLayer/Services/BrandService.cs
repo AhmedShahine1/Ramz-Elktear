@@ -26,71 +26,80 @@ namespace Ramz_Elktear.BusinessLayer.Services
 
         public async Task<IEnumerable<BrandDetails>> GetAllBrandsAsync()
         {
-            var brands = await _unitOfWork.BrandRepository.GetAllAsync(include: q => q.Include(b => b.Logo));
-            var brandDto = new List<BrandDetails>();
+            var brands = await _unitOfWork.BrandRepository.GetAllAsync();
+            var brandDtos = new List<BrandDetails>();
+
             foreach (var brand in brands)
             {
-                var b = new BrandDetails()
+                brandDtos.Add(new BrandDetails
                 {
                     Id = brand.Id,
-                    Name = brand.Name,
-                    LogoUrl = await GetbrandImage(brand.LogoId),
-                };
-                brandDto.Add(b);
+                    NameAr = brand.NameAr,
+                    NameEn = brand.NameEn,
+                    DescriptionAr = brand.DescriptionAr,
+                    DescriptionEn = brand.DescriptionEn,
+                    ImageUrl = await GetBrandImage(brand.ImageId),
+                });
             }
-            return brandDto;
+
+            return brandDtos;
         }
 
         public async Task<BrandDetails> GetBrandByIdAsync(string brandId)
         {
-            var brand = await _unitOfWork.BrandRepository.FindAsync(a => a.Id == brandId, include: q => q.Include(b => b.Logo));
+            var brand = await _unitOfWork.BrandRepository.GetByIdAsync(brandId);
             if (brand == null) throw new ArgumentException("Brand not found");
-            var brandDto = new BrandDetails()
+
+            return new BrandDetails
             {
-                Id = brandId,
-                Name = brand.Name,
-                LogoUrl = await GetbrandImage(brand.LogoId),
+                Id = brand.Id,
+                NameAr = brand.NameAr,
+                NameEn = brand.NameEn,
+                DescriptionAr = brand.DescriptionAr,
+                DescriptionEn = brand.DescriptionEn,
+                ImageUrl = await GetBrandImage(brand.ImageId),
             };
-            
-            return brandDto;
         }
 
         public async Task<BrandDetails> AddBrandAsync(AddBrand brandDto)
         {
-            var brand = new Brand()
+            var brand = new Brand
             {
-                Name = brandDto.Name,
+                NameAr = brandDto.NameAr,
+                NameEn = brandDto.NameEn,
+                DescriptionAr = brandDto.DescriptionAr,
+                DescriptionEn = brandDto.DescriptionEn,
+                CreatedDate = DateTime.UtcNow,
+                IsActive = true,
             };
-            await SetBrandImage(brand, brandDto.Logo);
+
+            await SetBrandImage(brand, brandDto.Image);
             await _unitOfWork.BrandRepository.AddAsync(brand);
             await _unitOfWork.SaveChangesAsync();
-            var res = new BrandDetails()
-            {
-                Id = brand.Id,
-                Name = brand.Name,
-                LogoUrl = await GetbrandImage(brand.LogoId),
-            };
 
-            return res;
+            return await GetBrandByIdAsync(brand.Id);
         }
 
-        public async Task<bool> UpdateBrandAsync(string brandId, BrandDetails brandDto)
+        public async Task<BrandDetails> UpdateBrandAsync(UpdateBrandDto brandDto)
         {
-            var brand = await _unitOfWork.BrandRepository.GetByIdAsync(brandId);
+            var brand = await _unitOfWork.BrandRepository.GetByIdAsync(brandDto.Id);
             if (brand == null) throw new ArgumentException("Brand not found");
 
-            _mapper.Map(brandDto, brand);
-            _unitOfWork.BrandRepository.Update(brand);
+            brand.NameAr = brandDto.NameAr;
+            brand.NameEn = brandDto.NameEn;
+            brand.DescriptionAr = brandDto.DescriptionAr;
+            brand.DescriptionEn = brandDto.DescriptionEn;
+            brand.LastModifiedDate = DateTime.UtcNow;
 
-            try
+            if (brandDto.Image != null)
             {
-                await _unitOfWork.SaveChangesAsync();
-                return true;
+                await UpdateBrandImage(brand, brandDto.Image);
             }
-            catch (Exception ex)
-            {
-                throw new Exception("An error occurred while updating the brand: " + ex.Message, ex);
-            }
+
+            _unitOfWork.BrandRepository.Update(brand);
+            await _unitOfWork.SaveChangesAsync();
+
+            return await GetBrandByIdAsync(brand.Id);
         }
 
         public async Task<bool> DeleteBrandAsync(string brandId)
@@ -110,34 +119,29 @@ namespace Ramz_Elktear.BusinessLayer.Services
             }
         }
 
-        public async Task<Paths> GetPathByName(string name)
+        private async Task SetBrandImage(Brand brand, IFormFile image)
+        {
+            var path = await GetPathByName("ImageBrand");
+            brand.ImageId = await _fileHandling.UploadFile(image, path);
+        }
+
+        private async Task UpdateBrandImage(Brand brand, IFormFile image)
+        {
+            var path = await GetPathByName("ImageBrand");
+            brand.ImageId = await _fileHandling.UpdateFile(image, path, brand.ImageId);
+        }
+
+        private async Task<string> GetBrandImage(string brandId)
+        {
+            if (string.IsNullOrEmpty(brandId)) return null;
+            return await _fileHandling.GetFile(brandId);
+        }
+
+        private async Task<Paths> GetPathByName(string name)
         {
             var path = await _unitOfWork.PathsRepository.FindAsync(x => x.Name == name);
             if (path == null) throw new ArgumentException("Path not found");
             return path;
         }
-
-        private async Task SetBrandImage(Brand brand, IFormFile imageProfile)
-        {
-            var path = await GetPathByName("LogoBrand");
-            brand.LogoId = await _fileHandling.UploadFile(imageProfile, path);
-        }
-
-        private async Task UpdatebrandImage(Brand brand, IFormFile imageProfile)
-        {
-            var path = await GetPathByName("LogoBrand");
-            brand.LogoId = await _fileHandling.UpdateFile(imageProfile, path,brand.LogoId);
-        }
-        public async Task<string> GetbrandImage(string brandId)
-        {
-            if (string.IsNullOrEmpty(brandId))
-            {
-                return null;
-            }
-
-            var brandImage = await _fileHandling.GetFile(brandId);
-            return brandImage;
-        }
-
     }
 }

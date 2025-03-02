@@ -132,6 +132,33 @@ namespace Ramz_Elktear.BusinessLayer.Services
             return image.Id;
         }
 
+        public async Task<bool> DeleteFile(string imageId)
+        {
+            var image = await unitOfWork.ImagesRepository
+                .FindByQuery(x => x.Id == imageId)
+                .Include(s => s.path)
+                .FirstOrDefaultAsync();
+
+            if (image == null)
+            {
+                throw new FileNotFoundException("Image not found.");
+            }
+
+            var filePath = Path.Combine(webHostEnvironment.WebRootPath, $"{image.path.Name}/{image.Name}");
+
+            // Delete the file from storage
+            if (File.Exists(filePath))
+            {
+                File.Delete(filePath);
+            }
+
+            // Remove from database
+            unitOfWork.ImagesRepository.Delete(image);
+            await unitOfWork.SaveChangesAsync();
+
+            return true;
+        }
+
         private static string RandomString(int length)
         {
             const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";

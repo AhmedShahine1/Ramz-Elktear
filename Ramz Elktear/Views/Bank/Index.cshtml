@@ -1,17 +1,22 @@
 ﻿@model IEnumerable<BankDetails>
 
 <div class="card">
-    <h5 class="card-header">Bank List</h5>
+    <div class="headerIndex">
+        <h3><span class="text-truncate">Bank List</span></h3>
+        <a href="@Url.Action("Create")" class="btn btn-success mb-3">
+            <i class="bx bx-plus"></i> <span class="text-truncate">Add New Bank</span>
+        </a>
+    </div>
     <div class="table-responsive text-nowrap">
         <table class="table">
             <thead class="table-light">
                 <tr>
                     <th>#</th>
-                    <th>Bank Name</th>
-                    <th>Address</th>
-                    <th>Swift Code</th>
-                    <th>IBAN</th>
-                    <th>Actions</th>
+                    <th><span class="text-truncate">Bank Name</span></th>
+                    <th><span class="text-truncate">Address</span></th>
+                    <th><span class="text-truncate">Swift Code</span></th>
+                    <th><span class="text-truncate">IBAN</span></th>
+                    <th><span class="text-truncate">Actions</span></th>
                 </tr>
             </thead>
             <tbody class="table-border-bottom-0">
