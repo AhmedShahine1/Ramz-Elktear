@@ -8,6 +8,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="DevExpress.Reporting.Core" Version="24.2.3" />
+    <PackageReference Include="FirebaseAdmin" Version="3.1.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Ramz Elktear.core\Ramz_Elktear.core.csproj" />
     <ProjectReference Include="..\Ramz Elktear.RepositoryLayer\Ramz_Elktear.RepositoryLayer.csproj" />
   </ItemGroup>

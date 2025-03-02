@@ -1,0 +1,47 @@
+﻿@model AddOffer
+
+<h3>Add New Offer</h3>
+
+<form asp-action="Create" method="post" enctype="multipart/form-data">
+    @Html.AntiForgeryToken()
+
+    <div class="form-group">
+        <label for="NameAr">Offer Name (Arabic)</label>
+        <input type="text" class="form-control" asp-for="NameAr" required />
+    </div>
+
+    <div class="form-group">
+        <label for="NameEn">Offer Name (English)</label>
+        <input type="text" class="form-control" asp-for="NameEn" required />
+    </div>
+
+    <div class="form-group">
+        <label for="NewPrice">New Price</label>
+        <input type="number" class="form-control" asp-for="NewPrice" required step="0.01" />
+    </div>
+
+    <div class="form-group">
+        <label for="Image">Offer Image</label>
+        <input type="file" class="form-control" asp-for="Image" accept="image/*" />
+    </div>
+
+    <div class="form-group">
+        <label for="StartDate">Start Date</label>
+        <input type="date" class="form-control" asp-for="StartDate" required />
+    </div>
+
+    <div class="form-group">
+        <label for="EndDate">End Date</label>
+        <input type="date" class="form-control" asp-for="EndDate" required />
+    </div>
+
+    <div class="form-group form-check">
+        <input type="checkbox" class="form-check-input" asp-for="Delivery" />
+        <label class="form-check-label" for="Delivery">Delivery Available</label>
+    </div>
+
+    <div class="form-group">
+        <button type="submit" class="btn btn-success">Add Offer</button>
+        <a href="@Url.Action("Index")" class="btn btn-secondary">Back to Offer List</a>
+    </div>
+</form>

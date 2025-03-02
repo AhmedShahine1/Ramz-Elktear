@@ -1,0 +1,84 @@
+﻿@model IEnumerable<CarDTO>
+
+<div class="headerIndex">
+    <h3><span class="text-truncate">Car List</span></h3>
+    <div>
+        <a href="@Url.Action("Create")" class="btn btn-success mb-3">
+            <i class="bx bx-plus"></i> <span class="text-truncate">Add New Car</span>
+        </a>
+        <a href="@Url.Action("AllCars","Report")" class="btn btn-info mb-3">
+            <i class="bx bx-file"></i> <span class="text-truncate">Report</span>
+        </a>
+    </div>
+</div>
+
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th><i class="bx bx-text"></i> <span class="text-truncate">Name (Arabic)</span></th>
+            <th><i class="bx bx-text"></i> <span class="text-truncate">Name (English)</span></th>
+            <th><i class="bx bx-info-circle"></i> <span class="text-truncate">Description (Arabic)</span></th>
+            <th><i class="bx bx-info-circle"></i> <span class="text-truncate">Description (English)</span></th>
+            <th><i class="bx bx-money"></i> <span class="text-truncate">Selling Price</span></th>
+            <th><i class="bx bx-image"></i> <span class="text-truncate">Image</span></th>
+            <th><i class="bx bx-cog"></i> <span class="text-truncate">Actions</span></th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null && Model.Any())
+        {
+            int index = 1;
+            foreach (var car in Model)
+            {
+                <tr>
+                    <td>@index</td>
+                    <td>@car.NameAr</td>
+                    <td>@car.NameEn</td>
+                    <td>@car.DescrptionAr</td>
+                    <td>@car.DescrptionEn</td>
+                    <td>@car.SellingPrice?.ToString("C")</td>
+                    <td>
+                        @if (!string.IsNullOrEmpty(car.ImageUrl))
+                        {
+                            <img src="@car.ImageUrl" alt="Car Image" width="100" class="rounded shadow" />
+                        }
+                        else
+                        {
+                            <i class="bx bx-image-alt text-muted"></i> <p>No Image</p>
+                        }
+                    </td>
+                    <td>
+                        <div class="dropdown">
+                            <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
+                                <i class="bx bx-dots-vertical-rounded"></i>
+                            </button>
+                            <div class="dropdown-menu">
+                                <a class="dropdown-item" href="@Url.Action("Edit", new { id = car.Id })">
+                                    <i class="bx bx-edit-alt me-1"></i> Edit
+                                </a>
+                                <form action="@Url.Action("Delete", new { id = car.Id })" method="post" class="dropdown-item">
+                                    @Html.AntiForgeryToken()
+                                    <button type="submit" class="btn p-0" style="border: none; background: transparent; color: inherit;">
+                                        <i class="bx bx-trash me-1"></i> Delete
+                                    </button>
+                                </form>
+                                <a class="dropdown-item" href="@Url.Action("Details", new { id = car.Id })">
+                                    <i class="bx bx-info-circle me-1"></i> View Details
+                                </a>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                index++;
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="8" class="text-center">No cars available.</td>
+            </tr>
+        }
+    </tbody>
+</table>

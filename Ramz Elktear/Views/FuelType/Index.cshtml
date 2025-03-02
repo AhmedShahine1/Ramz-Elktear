@@ -1,0 +1,86 @@
+﻿@model IEnumerable<FuelTypeDTO>
+
+<div class="headerIndex">
+    <h3><span class="text-truncate">Fuel Type List</span></h3>
+    <a href="@Url.Action("Create")" class="btn btn-success mb-3">
+        <i class="bx bx-plus"></i> <span class="text-truncate">Add New Fuel Type</span>
+    </a>
+</div>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th><i class="bx bx-text"></i> <span class="text-truncate">Name (Arabic)</span></th>
+            <th><i class="bx bx-text"></i> <span class="text-truncate">Name (English)</span></th>
+            <th><i class="bx bx-info-circle"></i> <span class="text-truncate">Description (Arabic)</span></th>
+            <th><i class="bx bx-info-circle"></i> <span class="text-truncate">Description (English)</span></th>
+            <th><i class="bx bx-image"></i> <span class="text-truncate">Image</span></th>
+            <th><i class="bx bx-check-circle"></i> <span class="text-truncate">Active</span></th>
+            <th><i class="bx bx-cog"></i> <span class="text-truncate">Actions</span></th>
+
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null && Model.Any())
+        {
+            int index = 1;
+            foreach (var fuelType in Model)
+            {
+                <tr>
+                    <td>@index</td>
+                    <td>@fuelType.NameAr</td>
+                    <td>@fuelType.NameEn</td>
+                    <td>@fuelType.DescriptionAr</td>
+                    <td>@fuelType.DescriptionEn</td>
+                    <td>
+                        @if (!string.IsNullOrEmpty(fuelType.ImageUrl))
+                        {
+                            <img src="@fuelType.ImageUrl" alt="Fuel Type Image" width="60" class="rounded shadow" />
+                        }
+                        else
+                        {
+                            <i class="bx bx-image-alt text-muted"></i> <p>No Image</p>
+                        }
+                    </td>
+                    <td>
+                        @if (fuelType.IsActive)
+                        {
+                            <span class="badge bg-label-primary"><i class="bx bx-check"></i> Active</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-label-danger"><i class="bx bx-x"></i> Inactive</span>
+                        }
+                    </td>
+                    <td>
+                        <div class="dropdown">
+                            <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
+                                <i class="bx bx-dots-vertical-rounded"></i>
+                            </button>
+                            <div class="dropdown-menu">
+                                <a class="dropdown-item" href="@Url.Action("Edit", new { id = fuelType.Id })">
+                                    <i class="bx bx-edit-alt me-1"></i> Edit
+                                </a>
+                                <form action="@Url.Action("Delete", new { id = fuelType.Id })" method="post" class="dropdown-item">
+                                    @Html.AntiForgeryToken()
+                                    <button type="submit" class="btn p-0" style="border: none; background: transparent; color: inherit;">
+                                        <i class="bx bx-trash me-1"></i> Delete
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                index++;
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="8" class="text-center text-muted">
+                    <i class="bx bx-error-circle"></i> No fuel types available.
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

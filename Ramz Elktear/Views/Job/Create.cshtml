@@ -1,0 +1,22 @@
+﻿@model AddJob
+
+<h3>Add New Job</h3>
+
+<form asp-action="Create" method="post">
+    @Html.AntiForgeryToken()
+
+    <div class="form-group">
+        <label for="Title">Job Title</label>
+        <input type="text" class="form-control" asp-for="Name" required />
+    </div>
+
+    <div class="form-group">
+        <label for="Description">Job Description</label>
+        <textarea class="form-control" asp-for="Description" required></textarea>
+    </div>
+
+    <div class="form-group">
+        <button type="submit" class="btn btn-success">Add Job</button>
+        <a href="@Url.Action("Index")" class="btn btn-secondary">Back to Job List</a>
+    </div>
+</form>

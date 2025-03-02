@@ -1,1 +1,169 @@
-﻿
+﻿@model HomePageViewModel
+
+@{
+    ViewData["Title"] = "Dashboard";
+}
+
+<h2><span class="text-truncate">Dashboard</span></h2>
+
+<div class="col-12 col-md-8 col-lg-12 col-xxl-4 order-3 order-md-2">
+    <div class="row">
+        <!-- Total Bookings Card -->
+        <div class="col-6 mb-6">
+            <div class="card h-100">
+                <div class="card-body">
+                    <div class="card-title d-flex align-items-start justify-content-between mb-4">
+                        <div class="avatar flex-shrink-0">
+                            <img src="../assets/img/icons/unicons/paypal.png" alt="paypal" class="rounded" />
+                        </div>
+                    </div>
+                    <p class="mb-1"><span class="text-truncate">Total Bookings</span></p>
+                    <h4 class="card-title mb-3">@Model.TotalBookings</h4>
+                </div>
+            </div>
+        </div>
+
+        <!-- Total Cars Card -->
+        <div class="col-6 mb-6">
+            <div class="card h-100">
+                <div class="card-body">
+                    <div class="card-title d-flex align-items-start justify-content-between mb-4">
+                        <div class="avatar flex-shrink-0">
+                            <img src="../assets/img/icons/unicons/cc-primary.png" alt="Credit Card" class="rounded" />
+                        </div>
+                    </div>
+                    <p class="mb-1"><span class="text-truncate">Total Cars</span></p>
+                    <h4 class="card-title mb-3">@Model.TotalCars</h4>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <!-- Booking Stats by Month -->
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header"><span class="text-truncate">Bookings Per Month</span></div>
+            <div class="card-body">
+                <canvas id="bookingStatsChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <!-- Booking Stats by Brand -->
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header"><span class="text-truncate">Bookings Per Brand</span></div>
+            <div class="card-body">
+                <canvas id="brandStatsChart"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Bookings Per Brand Over Time (Fixed Line Chart) -->
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header"><span class="text-truncate">Bookings Per Brand Over Time</span></div>
+            <div class="card-body">
+                @if (Model.BrandBookingsOverTime == null || !Model.BrandBookingsOverTime.Any())
+                {
+                    <p>No booking data available.</p>
+                }
+                else
+                {
+                    <canvas id="brandOverTimeChart"></canvas>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            // Booking Stats by Month (Bar Chart)
+            var bookingStatsCtx = document.getElementById('bookingStatsChart').getContext('2d');
+            new Chart(bookingStatsCtx, {
+                type: 'bar',
+                data: {
+                    labels: @Html.Raw(Json.Serialize(Model.BookingStatsByMonth.Select(m => $"{m.Month}/{m.Year}"))),
+                    datasets: [{
+                        label: 'Total Bookings',
+                        data: @Html.Raw(Json.Serialize(Model.BookingStatsByMonth.Select(m => m.BookingCount))),
+                        backgroundColor: 'rgba(54, 162, 235, 0.6)',
+                        borderColor: 'rgba(54, 162, 235, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: { y: { beginAtZero: true } }
+                }
+            });
+
+            // Booking Stats by Brand (Bar Chart)
+            var brandStatsCtx = document.getElementById('brandStatsChart').getContext('2d');
+            new Chart(brandStatsCtx, {
+                type: 'bar',
+                data: {
+                    labels: @Html.Raw(Json.Serialize(Model.BookingStatsByBrand.Select(b => b.BrandName))),
+                    datasets: [{
+                        label: 'Total Bookings',
+                        data: @Html.Raw(Json.Serialize(Model.BookingStatsByBrand.Select(b => b.TotalBookings))),
+                        backgroundColor: 'rgba(255, 99, 132, 0.6)',
+                        borderColor: 'rgba(255, 99, 132, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: { y: { beginAtZero: true } }
+                }
+            });
+
+            // Bookings Per Brand Over Time (Fixed Line Graph)
+            var brandOverTimeCtx = document.getElementById('brandOverTimeChart').getContext('2d');
+
+            // Serialize the data properly in C#
+            var brandOverTimeData = @Html.Raw(Json.Serialize(
+            Model.BrandBookingsOverTime
+                .GroupBy(b => b.BrandName)
+                .ToDictionary(
+                    g => g.Key,
+                    g => g.Select(b => new { label = $"{b.Month}/{b.Year}", count = b.BookingCount }).ToList()
+                )
+        ));
+
+            // Extract unique month/year labels
+            var labels = [...new Set(Object.values(brandOverTimeData).flat().map(b => b.label))];
+
+            // Generate datasets
+            var datasets = Object.keys(brandOverTimeData).map(brand => ({
+                label: brand,
+                data: labels.map(label => {
+                    var dataPoint = brandOverTimeData[brand].find(b => b.label === label);
+                    return dataPoint ? dataPoint.count : 0;
+                }),
+                borderColor: `#${Math.floor(Math.random()*16777215).toString(16)}`,
+                fill: false
+            }));
+
+            // Initialize the line chart
+            new Chart(brandOverTimeCtx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: datasets
+                },
+                options: {
+                    responsive: true,
+                    scales: { y: { beginAtZero: true } }
+                }
+            });
+        });
+    </script>
+}

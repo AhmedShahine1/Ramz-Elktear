@@ -1,0 +1,166 @@
+﻿@model BranchDetails
+
+<div class="row">
+    <div class="col-xxl">
+        <div class="card mb-6">
+            <div class="card-header d-flex align-items-center justify-content-between">
+                <h5 class="mb-0">Add Branch</h5>
+            </div>
+            <div class="card-body">
+                <form asp-action="Edit" method="post" enctype="multipart/form-data">
+                    <input type="hidden" name="Id" value="@Model.Id" />
+                    <!-- Hidden Latitude & Longitude Inputs -->
+                    <input type="hidden" class="form-control" id="latitude" name="Latitude" value="@Model?.latitude" required />
+                    <input type="hidden" class="form-control" id="longitude" name="Longitude" value="@Model?.longitude" required />
+
+                    <!-- Branch Name -->
+                    <div class="row mb-6">
+                        <label class="col-sm-2 col-form-label" for="name">Name</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="name" name="Name" placeholder="Branch Name" value="@Model?.Name" required />
+                        </div>
+                    </div>
+
+                    <!-- Branch Address -->
+                    <div class="row mb-6">
+                        <label class="col-sm-2 col-form-label" for="address">Address</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="address" name="Address" placeholder="Branch Address" value="@Model?.Address" required />
+                        </div>
+                    </div>
+
+                    <!-- Branch Email -->
+                    <div class="row mb-6">
+                        <label class="col-sm-2 col-form-label" for="email">Email</label>
+                        <div class="col-sm-10">
+                            <input type="email" class="form-control" id="email" name="Email" placeholder="Branch Email" value="@Model?.Email" required />
+                        </div>
+                    </div>
+
+                    <!-- Start Work -->
+                    <div class="row mb-6">
+                        <label class="col-sm-2 col-form-label" for="startWork">Start Work</label>
+                        <div class="col-sm-10">
+                            <input type="time" class="form-control" id="startWork" name="StartWork" value="@Model?.StartWork" required />
+                        </div>
+                    </div>
+
+                    <!-- End Work -->
+                    <div class="row mb-6">
+                        <label class="col-sm-2 col-form-label" for="endWork">End Work</label>
+                        <div class="col-sm-10">
+                            <input type="time" class="form-control" id="endWork" name="EndWork" value="@Model?.EndWork" required />
+                        </div>
+                    </div>
+
+                    <!-- Location Map -->
+                    <div class="row mb-6">
+                        <label class="col-sm-2 col-form-label">Select Location</label>
+                        <div class="col-sm-10">
+                            <div id="map" style="height: 300px; width: 100%;"></div>
+                        </div>
+                    </div>
+
+                    <!-- Phone Numbers (Dynamic Input) -->
+                    <div class="row mb-6">
+                        <label class="col-sm-2 col-form-label">Phone Numbers</label>
+                        <div class="col-sm-10">
+                            <div id="phoneNumbersContainer">
+                                @if (Model?.PhoneNumber != null && Model.PhoneNumber.Any())
+                                {
+                                    for (int i = 0; i < Model.PhoneNumber.Count; i++)
+                                    {
+                                        <div class="input-group mb-2 phone-number-group">
+                                            <input type="text" class="form-control" name="PhoneNumber" value="@Model.PhoneNumber[i]" required />
+                                            <button type="button" class="btn btn-danger remove-phone" onclick="removePhoneNumber(this)">X</button>
+                                        </div>
+                                    }
+                                }
+                                else
+                                {
+                                    <div class="input-group mb-2 phone-number-group">
+                                        <input type="text" class="form-control" name="PhoneNumber" required />
+                                        <button type="button" class="btn btn-danger remove-phone" onclick="removePhoneNumber(this)">X</button>
+                                    </div>
+                                }
+                            </div>
+                            <button type="button" class="btn btn-success mt-2" onclick="addPhoneNumber()">+ Add Phone</button>
+                        </div>
+                    </div>
+
+                    <!-- Upload Image -->
+                    <div class="row mb-6">
+                        <label class="col-sm-2 col-form-label" for="image">Image</label>
+                        <div class="col-sm-10">
+                            <input type="file" class="form-control" id="image" name="Image" />
+                        </div>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <div class="row justify-content-end">
+                        <div class="col-sm-10">
+                            <button type="submit" class="btn btn-primary">Save Branch</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Leaflet.js CSS -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+
+<!-- Leaflet.js Script -->
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+         let defaultLat = @(Model?.latitude != null ? Model.latitude : "30.0444");
+         let defaultLng = @(Model?.longitude != null ? Model.longitude : "31.2357");
+
+          let latInput = document.getElementById("latitude");
+          let lngInput = document.getElementById("longitude");
+
+        let map = L.map('map').setView([defaultLat, defaultLng], 8);
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; OpenStreetMap contributors'
+        }).addTo(map);
+
+        let marker = L.marker([defaultLat, defaultLng], { draggable: true }).addTo(map);
+
+        marker.on('dragend', function (event) {
+            let position = marker.getLatLng();
+            latInput.value = position.lat;
+            lngInput.value = position.lng;
+        });
+
+        map.on('click', function (e) {
+            marker.setLatLng(e.latlng);
+            latInput.value = e.latlng.lat;
+            lngInput.value = e.latlng.lng;
+        });
+    });
+
+    // JavaScript for Adding/Removing Phone Numbers
+    function addPhoneNumber() {
+        let container = document.getElementById("phoneNumbersContainer");
+        let div = document.createElement("div");
+        div.classList.add("input-group", "mb-2", "phone-number-group");
+
+        div.innerHTML = `
+            <input type="text" class="form-control" name="PhoneNumber" required />
+            <button type="button" class="btn btn-danger remove-phone" onclick="removePhoneNumber(this)">X</button>
+        `;
+
+        container.appendChild(div);
+    }
+
+    function removePhoneNumber(button) {
+        let container = document.getElementById("phoneNumbersContainer");
+        if (container.childElementCount > 1) {
+            button.parentElement.remove();
+        }
+    }
+</script>

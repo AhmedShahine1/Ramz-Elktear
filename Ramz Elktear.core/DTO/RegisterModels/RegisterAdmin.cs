@@ -10,11 +10,6 @@ namespace Ramz_Elktear.core.DTO.RegisterModels
         [Required(ErrorMessage = "You should enter the Full Name"), StringLength(100)]
         public string FullName { get; set; }
 
-        [DisplayName("Email")]
-        [DataType(DataType.EmailAddress)]
-        [Required(ErrorMessage = "You should enter the Email")]
-        public string Email { get; set; }
-
         [DisplayName("Phone Number")]
         [DataType(DataType.PhoneNumber)]
         [Required(ErrorMessage = "You should enter Phone Number")]

@@ -1,7 +1,152 @@
-﻿
-@{
-    ViewData["Title"] = "Index";
+﻿@model IEnumerable<BookingDto>
+
+<div class="card">
+    <div class="headerIndex">
+        <h3><span class="text-truncate">Booking List</span></h3>
+        <div>
+            <a href="@Url.Action("Create")" class="btn btn-success mb-3">
+                <i class="bx bx-plus"></i> <span class="text-truncate">Add New Booking</span>
+            </a>
+            <a href="@Url.Action("AllBooking","Report")" class="btn btn-info mb-3">
+                <i class="bx bx-file"></i> <span class="text-truncate">Report</span>
+            </a>
+        </div>
+    </div>
+
+    <div class="table-responsive text-nowrap">
+        <table class="table">
+            <thead class="table-light">
+                <tr>
+                    <th>#</th>
+                    <th><span class="text-truncate">Booking Status</span></th>
+                    <th><span class="text-truncate">User</span></th>
+                    <th><span class="text-truncate">Car</span></th>
+                    <th><span class="text-truncate">Sales</span></th> <!-- NEW COLUMN -->
+                    <th><span class="text-truncate">Actions</span></th>
+                </tr>
+            </thead>
+            <tbody class="table-border-bottom-0">
+                @if (Model != null && Model.Any())
+                {
+                    int index = 1;
+                    foreach (var booking in Model)
+                    {
+                        <tr>
+                            <td>@index</td>
+                            <td>@booking.BookingStatus</td>
+                            <td>@(booking.Buyer?.FullName ?? "N/A")</td> <!-- Show user's phone number -->
+                            <td>@booking.Car.NameAr</td>
+
+                            <!-- Sales Rep Column -->
+                            <td>
+                                <div class="sales-container" data-booking-id="@booking.Id">
+                                    <select class="form-select sales-dropdown" data-booking-id="@booking.Id">
+                                        @if (booking.Seller != null)
+                                        {
+                                            <option value="@booking.Seller.Id">@booking.Seller.FullName (Current)</option>
+                                        }
+                                        <option value="">Select Sales</option>
+                                        @foreach (var sales in ViewBag.SalesList as List<AuthDTO>)
+                                        {
+                                            if (booking.Seller == null || sales.Id != booking.Seller.Id)
+                                            {
+                                                <option value="@sales.Id">@sales.FullName</option>
+                                            }
+                                        }
+                                    </select>
+                                </div>
+                            </td>
+
+                            <!-- Actions Column -->
+                            <td>
+                                <div class="dropdown">
+                                    <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
+                                        <i class="bx bx-dots-vertical-rounded"></i>
+                                    </button>
+                                    <div class="dropdown-menu">
+                                        <a class="dropdown-item" href="@Url.Action("Details", "Booking", new { id = booking.Id })">
+                                            <i class="bx bx-show me-1"></i> View
+                                        </a>
+                                        <button class="dropdown-item update-status" data-booking-id="@booking.Id">
+                                            <i class="bx bx-refresh me-1"></i> Change Status
+                                        </button>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        index++;
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="7" class="text-center">No bookings found.</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@section Scripts {
+    <!-- Toastr CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+
+    <!-- jQuery (If not included already) -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <!-- Toastr JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            // Configure Toastr options
+            toastr.options = {
+                closeButton: true,
+                progressBar: true,
+                positionClass: "toast-top-right",
+                timeOut: "3000" // Auto close after 3 seconds
+            };
+
+            // Automatically update sales when selection changes
+            $(".sales-dropdown").change(function () {
+                var bookingId = $(this).data("booking-id");
+                var salesId = $(this).val();
+
+                if (!salesId) {
+                    toastr.warning("Please select a valid sales representative.");
+                    return;
+                }
+
+                $.ajax({
+                    url: "/booking/AssignSales",
+                    type: "POST",
+                    data: { bookingId: bookingId, salesId: salesId },
+                    success: function () {
+                        toastr.success("Sales updated successfully!");
+                    },
+                    error: function () {
+                        toastr.error("Error updating sales. Please try again.");
+                    }
+                });
+            });
+
+            // Update Booking Status
+            $(".update-status").click(function () {
+                var bookingId = $(this).data("booking-id");
+
+                $.ajax({
+                    url: "/booking/UpdateStatus",
+                    type: "POST",
+                    data: { bookingId: bookingId },
+                    success: function () {
+                        toastr.success("Booking status updated!");
+                    },
+                    error: function () {
+                        toastr.error("Error updating status.");
+                    }
+                });
+            });
+        });
+    </script>
 }
-
-<h1>Index</h1>
-

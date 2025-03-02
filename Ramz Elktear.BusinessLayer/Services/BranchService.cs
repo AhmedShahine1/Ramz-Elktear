@@ -33,9 +33,12 @@ namespace Ramz_Elktear.BusinessLayer.Services
                     Id = branch.Id,
                     Name = branch.Name,
                     PhoneNumber = branch.PhoneNumber,
+                    Address = branch.Address,
                     Email = branch.Email,
                     StartWork = branch.StartWork,
                     EndWork = branch.EndWork,
+                    latitude = branch.latitude,
+                    longitude = branch.longitude,
                     ImageUrl = await GetBranchImage(branch.ImageId),
                 });
             }

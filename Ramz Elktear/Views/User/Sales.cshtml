@@ -1,0 +1,38 @@
+﻿@model IEnumerable<AuthDTO>
+
+<div class="card">
+    <h5 class="card-header">Sales Return Users</h5>
+    <div class="table-responsive text-nowrap">
+        <table class="table">
+            <thead class="table-light">
+                <tr>
+                    <th>#</th>
+                    <th><span class="text-truncate">Phone Number</span></th>
+                    <th><span class="text-truncate">Role</span></th>
+
+                </tr>
+            </thead>
+            <tbody class="table-border-bottom-0">
+                @if (Model != null && Model.Any())
+                {
+                    int index = 1;
+                    foreach (var user in Model)
+                    {
+                        <tr>
+                            <td>@index</td>
+                            <td>@user.PhoneNumber</td>
+                            <td>Sales</td> <!-- Fixed string "Sales" -->
+                        </tr>
+                        index++;
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="3" class="text-center">No users found in Sales Return role.</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

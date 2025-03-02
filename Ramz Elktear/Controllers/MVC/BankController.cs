@@ -1,8 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Ramz_Elktear.core.DTO.InstallmentModels;
 
 namespace Ramz_Elktear.Controllers.MVC
 {
+    [Authorize(Policy = "Admin")]
     public class BankController : Controller
     {
         private readonly IBankService _bankService;

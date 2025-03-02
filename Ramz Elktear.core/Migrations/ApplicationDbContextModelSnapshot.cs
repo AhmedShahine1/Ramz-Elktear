@@ -23,19 +23,129 @@ namespace Ramz_Elktear.core.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("CarCarColor", b =>
+            modelBuilder.Entity("Car", b =>
                 {
-                    b.Property<string>("AvailableColorsId")
+                    b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("CarsId")
+                    b.Property<string>("BrandId")
+                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
-                    b.HasKey("AvailableColorsId", "CarsId");
+                    b.Property<string>("CarCode")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
-                    b.HasIndex("CarsId");
+                    b.Property<string>("CarSKU")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
-                    b.ToTable("CarCarColor", "dbo");
+                    b.Property<long>("CreatedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("DescrptionAr")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DescrptionEn")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("EnginePositionId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("EngineSizeId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("FuelTypeId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("ImageId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<decimal?>("InstallmentPrice")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsSpecial")
+                        .HasColumnType("bit");
+
+                    b.Property<int?>("Kilometers")
+                        .HasColumnType("int");
+
+                    b.Property<long>("LastModifiedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime>("LastModifiedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("ModelYearId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("NameAr")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("NameEn")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("OptionId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("OriginId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int?>("QuantityInStock")
+                        .HasColumnType("int");
+
+                    b.Property<decimal?>("SellingPrice")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("SubCategoryId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("TransmissionTypeId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BrandId");
+
+                    b.HasIndex("EnginePositionId");
+
+                    b.HasIndex("EngineSizeId");
+
+                    b.HasIndex("FuelTypeId");
+
+                    b.HasIndex("ImageId");
+
+                    b.HasIndex("ModelYearId");
+
+                    b.HasIndex("OptionId");
+
+                    b.HasIndex("OriginId");
+
+                    b.HasIndex("SubCategoryId");
+
+                    b.HasIndex("TransmissionTypeId");
+
+                    b.ToTable("Cars", "dbo");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -191,12 +301,18 @@ namespace Ramz_Elktear.core.Migrations
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("DeviceToken")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Email")
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
+
+                    b.Property<string>("FullName")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
@@ -264,22 +380,29 @@ namespace Ramz_Elktear.core.Migrations
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<string>("BuyerId")
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<string>("CarId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("CityId")
+                    b.Property<DateTime>("CreateAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("SellerId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
+                    b.HasIndex("BuyerId");
+
                     b.HasIndex("CarId");
 
-                    b.HasIndex("CityId");
-
-                    b.HasIndex("UserId");
+                    b.HasIndex("SellerId");
 
                     b.ToTable("Booking", "dbo");
                 });
@@ -331,6 +454,12 @@ namespace Ramz_Elktear.core.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<double>("latitude")
+                        .HasColumnType("float");
+
+                    b.Property<double>("longitude")
+                        .HasColumnType("float");
+
                     b.HasKey("Id");
 
                     b.ToTable("Branches", "dbo");
@@ -341,142 +470,196 @@ namespace Ramz_Elktear.core.Migrations
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("LogoId")
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("DescriptionAr")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DescriptionEn")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ImageId")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("Name")
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("LastModifiedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("NameAr")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("NameEn")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("LogoId");
+                    b.HasIndex("ImageId");
 
                     b.ToTable("Brands", "dbo");
                 });
 
-            modelBuilder.Entity("Ramz_Elktear.core.Entities.Cars.Car", b =>
+            modelBuilder.Entity("Ramz_Elktear.core.Entities.Cars.EnginePosition", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<double>("Acceleration")
-                        .HasColumnType("float");
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("BrandId")
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("DescriptionAr")
                         .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DescriptionEn")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ImageId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("CategoryId")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
 
-                    b.Property<string>("Description")
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("LastModifiedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("NameAr")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Dimensions")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Engine")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<double>("FuelConsumption")
-                        .HasColumnType("float");
-
-                    b.Property<string>("FuelType")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.PrimitiveCollection<string>("KeyFeatures")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ModelId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("NumberOfSeats")
-                        .HasColumnType("int");
-
-                    b.Property<decimal>("Price")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.PrimitiveCollection<string>("SafetySystems")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("StorageCapacity")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Transmission")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("TransmissionType")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Type")
+                    b.Property<string>("NameEn")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("BrandId");
+                    b.HasIndex("ImageId");
 
-                    b.HasIndex("CategoryId");
-
-                    b.HasIndex("ModelId");
-
-                    b.ToTable("Cars", "dbo");
+                    b.ToTable("EnginePositions", "dbo");
                 });
 
-            modelBuilder.Entity("Ramz_Elktear.core.Entities.Cars.CarCategory", b =>
+            modelBuilder.Entity("Ramz_Elktear.core.Entities.Cars.EngineSize", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("Name")
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("DescriptionAr")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DescriptionEn")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ImageId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("LastModifiedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("NameAr")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("NameEn")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
-                    b.ToTable("CarCategory", "dbo");
+                    b.HasIndex("ImageId");
+
+                    b.ToTable("EngineSizes", "dbo");
                 });
 
-            modelBuilder.Entity("Ramz_Elktear.core.Entities.Cars.CarColor", b =>
+            modelBuilder.Entity("Ramz_Elktear.core.Entities.Cars.FuelType", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("Name")
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("DescriptionAr")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DescriptionEn")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ImageId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("LastModifiedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("NameAr")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("NameEn")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
-                    b.ToTable("CarColor", "dbo");
-                });
+                    b.HasIndex("ImageId");
 
-            modelBuilder.Entity("Ramz_Elktear.core.Entities.Cars.CarModel", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("CarModel", "dbo");
+                    b.ToTable("FuelTypes", "dbo");
                 });
 
             modelBuilder.Entity("Ramz_Elktear.core.Entities.Cars.ImageCar", b =>
@@ -490,13 +673,302 @@ namespace Ramz_Elktear.core.Migrations
 
                     b.Property<string>("ImageId")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("CarId");
 
-                    b.ToTable("ImageCars", "dbo");
+                    b.HasIndex("ImageId");
+
+                    b.ToTable("CarImages", "dbo");
+                });
+
+            modelBuilder.Entity("Ramz_Elktear.core.Entities.Cars.ModelYear", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("LastModifiedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ModelYears", "dbo");
+                });
+
+            modelBuilder.Entity("Ramz_Elktear.core.Entities.Cars.Option", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("DescriptionAr")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DescriptionEn")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("LastModifiedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("NameAr")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("NameEn")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Options", "dbo");
+                });
+
+            modelBuilder.Entity("Ramz_Elktear.core.Entities.Cars.Origin", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("DescriptionAr")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DescriptionEn")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("LastModifiedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("NameAr")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("NameEn")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Origins", "dbo");
+                });
+
+            modelBuilder.Entity("Ramz_Elktear.core.Entities.Cars.TransmissionType", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("DescriptionAr")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DescriptionEn")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ImageId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("LastModifiedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("NameAr")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("NameEn")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ImageId");
+
+                    b.ToTable("TransmissionTypes", "dbo");
+                });
+
+            modelBuilder.Entity("Ramz_Elktear.core.Entities.Categories.Category", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("DescriptionAr")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DescriptionEn")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ImageId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("LastModifiedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("NameAr")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("NameEn")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ImageId");
+
+                    b.ToTable("Categories", "dbo");
+                });
+
+            modelBuilder.Entity("Ramz_Elktear.core.Entities.Color.CarColor", b =>
+                {
+                    b.Property<string>("CarId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("ColorId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("LastModifiedDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("CarId", "ColorId");
+
+                    b.HasIndex("ColorId");
+
+                    b.ToTable("CarColors", "dbo");
+                });
+
+            modelBuilder.Entity("Ramz_Elktear.core.Entities.Color.Colors", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("LastModifiedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Value")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Colors", "dbo");
                 });
 
             modelBuilder.Entity("Ramz_Elktear.core.Entities.Files.Images", b =>
@@ -581,51 +1053,323 @@ namespace Ramz_Elktear.core.Migrations
                     b.ToTable("Jobs", "dbo");
                 });
 
-            modelBuilder.Entity("Ramz_Elktear.core.Entities.Offer.Offer", b =>
+            modelBuilder.Entity("Ramz_Elktear.core.Entities.Offer.CarOffer", b =>
+                {
+                    b.Property<string>("CarId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("OfferId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("LastModifiedDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("CarId", "OfferId");
+
+                    b.HasIndex("OfferId");
+
+                    b.ToTable("CarOffers", "dbo");
+                });
+
+            modelBuilder.Entity("Ramz_Elktear.core.Entities.Offer.Offers", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("CarId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("CreatedAt")
+                    b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime?>("ExpiryDate")
+                    b.Property<DateTime?>("EndDate")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("ImageId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("LastModifiedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("NameAr")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("NameEn")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal>("NewPrice")
                         .HasColumnType("decimal(18,2)");
 
+                    b.Property<DateTime?>("StartDate")
+                        .HasColumnType("datetime2");
+
                     b.Property<bool>("delivery")
                         .HasColumnType("bit");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CarId");
+                    b.HasIndex("ImageId");
 
                     b.ToTable("Offers", "dbo");
                 });
 
-            modelBuilder.Entity("CarCarColor", b =>
+            modelBuilder.Entity("Ramz_Elktear.core.Entities.Promotion.Promotion", b =>
                 {
-                    b.HasOne("Ramz_Elktear.core.Entities.Cars.CarColor", null)
-                        .WithMany()
-                        .HasForeignKey("AvailableColorsId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("ImageArId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("ImageEnId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("redirctURL")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ImageArId");
+
+                    b.HasIndex("ImageEnId");
+
+                    b.ToTable("Promotion", "dbo");
+                });
+
+            modelBuilder.Entity("Ramz_Elktear.core.Entities.Specificate.CarSpecification", b =>
+                {
+                    b.Property<string>("carId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("SpecificationId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("LastModifiedDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("carId", "SpecificationId");
+
+                    b.HasIndex("SpecificationId");
+
+                    b.ToTable("CarSpecifications", "dbo");
+                });
+
+            modelBuilder.Entity("Ramz_Elktear.core.Entities.Specificate.Specification", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("LastModifiedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("NameAr")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("NameEn")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Specifications", "dbo");
+                });
+
+            modelBuilder.Entity("SubCategory", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("BrandId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("CategoryId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("CategoryId1")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("LastModifiedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("NameAr")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("NameEn")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BrandId");
+
+                    b.HasIndex("CategoryId");
+
+                    b.HasIndex("CategoryId1");
+
+                    b.ToTable("SubCategories", "dbo");
+                });
+
+            modelBuilder.Entity("Car", b =>
+                {
+                    b.HasOne("Ramz_Elktear.core.Entities.Brands.Brand", "Brand")
+                        .WithMany("Cars")
+                        .HasForeignKey("BrandId")
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("Ramz_Elktear.core.Entities.Cars.Car", null)
-                        .WithMany()
-                        .HasForeignKey("CarsId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                    b.HasOne("Ramz_Elktear.core.Entities.Cars.EnginePosition", "EnginePosition")
+                        .WithMany("Cars")
+                        .HasForeignKey("EnginePositionId")
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+
+                    b.HasOne("Ramz_Elktear.core.Entities.Cars.EngineSize", "EngineSize")
+                        .WithMany("Cars")
+                        .HasForeignKey("EngineSizeId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Ramz_Elktear.core.Entities.Cars.FuelType", "FuelType")
+                        .WithMany("Cars")
+                        .HasForeignKey("FuelTypeId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Ramz_Elktear.core.Entities.Files.Images", "Image")
+                        .WithMany()
+                        .HasForeignKey("ImageId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("Ramz_Elktear.core.Entities.Cars.ModelYear", "ModelYear")
+                        .WithMany("Cars")
+                        .HasForeignKey("ModelYearId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Ramz_Elktear.core.Entities.Cars.Option", "Option")
+                        .WithMany("Cars")
+                        .HasForeignKey("OptionId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Ramz_Elktear.core.Entities.Cars.Origin", "Origin")
+                        .WithMany("Cars")
+                        .HasForeignKey("OriginId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("SubCategory", "SubCategory")
+                        .WithMany("Cars")
+                        .HasForeignKey("SubCategoryId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("Ramz_Elktear.core.Entities.Cars.TransmissionType", "TransmissionType")
+                        .WithMany("Cars")
+                        .HasForeignKey("TransmissionTypeId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Brand");
+
+                    b.Navigation("EnginePosition");
+
+                    b.Navigation("EngineSize");
+
+                    b.Navigation("FuelType");
+
+                    b.Navigation("Image");
+
+                    b.Navigation("ModelYear");
+
+                    b.Navigation("Option");
+
+                    b.Navigation("Origin");
+
+                    b.Navigation("SubCategory");
+
+                    b.Navigation("TransmissionType");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -692,68 +1436,117 @@ namespace Ramz_Elktear.core.Migrations
 
             modelBuilder.Entity("Ramz_Elktear.core.Entities.Booking.Booking", b =>
                 {
-                    b.HasOne("Ramz_Elktear.core.Entities.Cars.Car", "Car")
+                    b.HasOne("Ramz_Elktear.core.Entities.ApplicationData.ApplicationUser", "Buyer")
+                        .WithMany()
+                        .HasForeignKey("BuyerId");
+
+                    b.HasOne("Car", "Car")
                         .WithMany()
                         .HasForeignKey("CarId");
 
-                    b.HasOne("Ramz_Elktear.core.Entities.Booking.City", "City")
+                    b.HasOne("Ramz_Elktear.core.Entities.ApplicationData.ApplicationUser", "Seller")
                         .WithMany()
-                        .HasForeignKey("CityId");
+                        .HasForeignKey("SellerId");
 
-                    b.HasOne("Ramz_Elktear.core.Entities.ApplicationData.ApplicationUser", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId");
+                    b.Navigation("Buyer");
 
                     b.Navigation("Car");
 
-                    b.Navigation("City");
-
-                    b.Navigation("User");
+                    b.Navigation("Seller");
                 });
 
             modelBuilder.Entity("Ramz_Elktear.core.Entities.Brands.Brand", b =>
                 {
-                    b.HasOne("Ramz_Elktear.core.Entities.Files.Images", "Logo")
+                    b.HasOne("Ramz_Elktear.core.Entities.Files.Images", "Image")
                         .WithMany()
-                        .HasForeignKey("LogoId")
+                        .HasForeignKey("ImageId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Logo");
+                    b.Navigation("Image");
                 });
 
-            modelBuilder.Entity("Ramz_Elktear.core.Entities.Cars.Car", b =>
+            modelBuilder.Entity("Ramz_Elktear.core.Entities.Cars.EnginePosition", b =>
                 {
-                    b.HasOne("Ramz_Elktear.core.Entities.Brands.Brand", "Brands")
+                    b.HasOne("Ramz_Elktear.core.Entities.Files.Images", "Image")
                         .WithMany()
-                        .HasForeignKey("BrandId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ImageId");
 
-                    b.HasOne("Ramz_Elktear.core.Entities.Cars.CarCategory", "Category")
+                    b.Navigation("Image");
+                });
+
+            modelBuilder.Entity("Ramz_Elktear.core.Entities.Cars.EngineSize", b =>
+                {
+                    b.HasOne("Ramz_Elktear.core.Entities.Files.Images", "Image")
                         .WithMany()
-                        .HasForeignKey("CategoryId");
+                        .HasForeignKey("ImageId");
 
-                    b.HasOne("Ramz_Elktear.core.Entities.Cars.CarModel", "Model")
+                    b.Navigation("Image");
+                });
+
+            modelBuilder.Entity("Ramz_Elktear.core.Entities.Cars.FuelType", b =>
+                {
+                    b.HasOne("Ramz_Elktear.core.Entities.Files.Images", "Image")
                         .WithMany()
-                        .HasForeignKey("ModelId");
+                        .HasForeignKey("ImageId");
 
-                    b.Navigation("Brands");
-
-                    b.Navigation("Category");
-
-                    b.Navigation("Model");
+                    b.Navigation("Image");
                 });
 
             modelBuilder.Entity("Ramz_Elktear.core.Entities.Cars.ImageCar", b =>
                 {
-                    b.HasOne("Ramz_Elktear.core.Entities.Cars.Car", "Car")
-                        .WithMany()
+                    b.HasOne("Car", "Car")
+                        .WithMany("CarImages")
                         .HasForeignKey("CarId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Ramz_Elktear.core.Entities.Files.Images", "Image")
+                        .WithMany()
+                        .HasForeignKey("ImageId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Car");
+
+                    b.Navigation("Image");
+                });
+
+            modelBuilder.Entity("Ramz_Elktear.core.Entities.Cars.TransmissionType", b =>
+                {
+                    b.HasOne("Ramz_Elktear.core.Entities.Files.Images", "Image")
+                        .WithMany()
+                        .HasForeignKey("ImageId");
+
+                    b.Navigation("Image");
+                });
+
+            modelBuilder.Entity("Ramz_Elktear.core.Entities.Categories.Category", b =>
+                {
+                    b.HasOne("Ramz_Elktear.core.Entities.Files.Images", "Image")
+                        .WithMany()
+                        .HasForeignKey("ImageId");
+
+                    b.Navigation("Image");
+                });
+
+            modelBuilder.Entity("Ramz_Elktear.core.Entities.Color.CarColor", b =>
+                {
+                    b.HasOne("Car", "Car")
+                        .WithMany("CarColors")
+                        .HasForeignKey("CarId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Ramz_Elktear.core.Entities.Color.Colors", "Color")
+                        .WithMany("CarColors")
+                        .HasForeignKey("ColorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Car");
+
+                    b.Navigation("Color");
                 });
 
             modelBuilder.Entity("Ramz_Elktear.core.Entities.Files.Images", b =>
@@ -767,20 +1560,176 @@ namespace Ramz_Elktear.core.Migrations
                     b.Navigation("path");
                 });
 
-            modelBuilder.Entity("Ramz_Elktear.core.Entities.Offer.Offer", b =>
+            modelBuilder.Entity("Ramz_Elktear.core.Entities.Offer.CarOffer", b =>
                 {
-                    b.HasOne("Ramz_Elktear.core.Entities.Cars.Car", "Car")
-                        .WithMany()
+                    b.HasOne("Car", "Car")
+                        .WithMany("CarOffers")
                         .HasForeignKey("CarId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Ramz_Elktear.core.Entities.Offer.Offers", "Offer")
+                        .WithMany("CarOffers")
+                        .HasForeignKey("OfferId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Car");
+
+                    b.Navigation("Offer");
+                });
+
+            modelBuilder.Entity("Ramz_Elktear.core.Entities.Offer.Offers", b =>
+                {
+                    b.HasOne("Ramz_Elktear.core.Entities.Files.Images", "Image")
+                        .WithMany()
+                        .HasForeignKey("ImageId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Image");
+                });
+
+            modelBuilder.Entity("Ramz_Elktear.core.Entities.Promotion.Promotion", b =>
+                {
+                    b.HasOne("Ramz_Elktear.core.Entities.Files.Images", "ImageAr")
+                        .WithMany()
+                        .HasForeignKey("ImageArId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Ramz_Elktear.core.Entities.Files.Images", "ImageEn")
+                        .WithMany()
+                        .HasForeignKey("ImageEnId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("ImageAr");
+
+                    b.Navigation("ImageEn");
+                });
+
+            modelBuilder.Entity("Ramz_Elktear.core.Entities.Specificate.CarSpecification", b =>
+                {
+                    b.HasOne("Ramz_Elktear.core.Entities.Specificate.Specification", "Specification")
+                        .WithMany("CarSpecifications")
+                        .HasForeignKey("SpecificationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Car", "car")
+                        .WithMany("CarSpecifications")
+                        .HasForeignKey("carId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Specification");
+
+                    b.Navigation("car");
+                });
+
+            modelBuilder.Entity("SubCategory", b =>
+                {
+                    b.HasOne("Ramz_Elktear.core.Entities.Brands.Brand", "Brand")
+                        .WithMany()
+                        .HasForeignKey("BrandId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Ramz_Elktear.core.Entities.Categories.Category", "Category")
+                        .WithMany()
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Ramz_Elktear.core.Entities.Categories.Category", null)
+                        .WithMany("SubCategories")
+                        .HasForeignKey("CategoryId1");
+
+                    b.Navigation("Brand");
+
+                    b.Navigation("Category");
+                });
+
+            modelBuilder.Entity("Car", b =>
+                {
+                    b.Navigation("CarColors");
+
+                    b.Navigation("CarImages");
+
+                    b.Navigation("CarOffers");
+
+                    b.Navigation("CarSpecifications");
+                });
+
+            modelBuilder.Entity("Ramz_Elktear.core.Entities.Brands.Brand", b =>
+                {
+                    b.Navigation("Cars");
+                });
+
+            modelBuilder.Entity("Ramz_Elktear.core.Entities.Cars.EnginePosition", b =>
+                {
+                    b.Navigation("Cars");
+                });
+
+            modelBuilder.Entity("Ramz_Elktear.core.Entities.Cars.EngineSize", b =>
+                {
+                    b.Navigation("Cars");
+                });
+
+            modelBuilder.Entity("Ramz_Elktear.core.Entities.Cars.FuelType", b =>
+                {
+                    b.Navigation("Cars");
+                });
+
+            modelBuilder.Entity("Ramz_Elktear.core.Entities.Cars.ModelYear", b =>
+                {
+                    b.Navigation("Cars");
+                });
+
+            modelBuilder.Entity("Ramz_Elktear.core.Entities.Cars.Option", b =>
+                {
+                    b.Navigation("Cars");
+                });
+
+            modelBuilder.Entity("Ramz_Elktear.core.Entities.Cars.Origin", b =>
+                {
+                    b.Navigation("Cars");
+                });
+
+            modelBuilder.Entity("Ramz_Elktear.core.Entities.Cars.TransmissionType", b =>
+                {
+                    b.Navigation("Cars");
+                });
+
+            modelBuilder.Entity("Ramz_Elktear.core.Entities.Categories.Category", b =>
+                {
+                    b.Navigation("SubCategories");
+                });
+
+            modelBuilder.Entity("Ramz_Elktear.core.Entities.Color.Colors", b =>
+                {
+                    b.Navigation("CarColors");
                 });
 
             modelBuilder.Entity("Ramz_Elktear.core.Entities.Files.Paths", b =>
                 {
                     b.Navigation("Images");
+                });
+
+            modelBuilder.Entity("Ramz_Elktear.core.Entities.Offer.Offers", b =>
+                {
+                    b.Navigation("CarOffers");
+                });
+
+            modelBuilder.Entity("Ramz_Elktear.core.Entities.Specificate.Specification", b =>
+                {
+                    b.Navigation("CarSpecifications");
+                });
+
+            modelBuilder.Entity("SubCategory", b =>
+                {
+                    b.Navigation("Cars");
                 });
 #pragma warning restore 612, 618
         }

@@ -56,6 +56,7 @@ if (app.Environment.IsDevelopment())
 else
 {
     app.UseMiddleware<ExceptionMiddleware>();
+    app.UseExceptionHandler("/Home/Error");
 }
 
 app.UseSwaggerDocumentation();

@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -8,6 +7,7 @@ using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Ramz_Elktear.BusinessLayer.Interfaces;
 using Ramz_Elktear.core.DTO;
+using Ramz_Elktear.core.DTO.AuthModels;
 using Ramz_Elktear.core.DTO.RegisterModels;
 using Ramz_Elktear.core.DTO.RoleModels;
 using Ramz_Elktear.core.DTO.UpdateModels;
@@ -197,6 +197,30 @@ namespace Ramz_Elktear.BusinessLayer.Services
             return result;
         }
 
+        public async Task<IdentityResult> RegisterSales(RegisterSales model)
+        {
+            if (await IsPhoneExistAsync(model.PhoneNumber))
+            {
+                throw new ArgumentException("phone number already exists.");
+            }
+
+            var user = mapper.Map<ApplicationUser>(model);
+            await SetProfileImage(user, model.ImageProfile);
+            user.PhoneNumberConfirmed = true;
+            var result = await _userManager.CreateAsync(user, model.Password);
+
+            if (result.Succeeded)
+            {
+                await _userManager.AddToRoleAsync(user, "Sales");
+            }
+            else
+            {
+                throw new InvalidOperationException($"Failed to create user: {string.Join(", ", result.Errors.Select(e => e.Description))}");
+            }
+
+            return result;
+        }
+
         //------------------------------------------------------------------------------------------------------------
         public async Task<IdentityResult> UpdateAdmin(string adminId, RegisterAdmin model)
         {
@@ -298,6 +322,17 @@ namespace Ramz_Elktear.BusinessLayer.Services
 
             return result;
         }
+
+        public async Task<bool> SetDeviceTokenAsync(string userId, string deviceToken)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null) return false;
+
+            user.DeviceToken = deviceToken;
+            var result = await _userManager.UpdateAsync(user);
+
+            return result.Succeeded;
+        }
         //------------------------------------------------------------------------------------------------------------
         public async Task<(bool IsSuccess, string Token, string ErrorMessage)> Login(LoginModel model)
         {
@@ -305,6 +340,40 @@ namespace Ramz_Elktear.BusinessLayer.Services
             {
                 var user = await _userManager.FindByNameAsync(model.PhoneNumber);
                 if (user == null || !await _userManager.CheckPasswordAsync(user, "Ahmed@123"))
+                {
+                    return (false, null, "Invalid login attempt.");
+                }
+
+                // Check if user status is true and phone number is confirmed
+                if (!user.Status)
+                {
+                    return (false, null, "Your account is deactivated. Please contact support.");
+                }
+
+                if (!user.PhoneNumberConfirmed)
+                {
+                    return (false, null, "Phone number not confirmed. Please verify your phone number.");
+                }
+
+                // Proceed with login
+                await _signInManager.SignInAsync(user, model.RememberMe);
+                var token = await GenerateJwtToken(user, true);
+                var tokenString = new JwtSecurityTokenHandler().WriteToken(token);
+
+                return (true, tokenString, null);
+            }
+            catch (Exception ex)
+            {
+                return (false, null, ex.Message);
+            }
+        }
+
+        public async Task<(bool IsSuccess, string Token, string ErrorMessage)> LoginAdmin(LoginAdmin model)
+        {
+            try
+            {
+                var user = await _userManager.FindByNameAsync(model.PhoneNumber);
+                if (user == null || !await _userManager.CheckPasswordAsync(user, model.Password))
                 {
                     return (false, null, "Invalid login attempt.");
                 }
@@ -426,6 +495,12 @@ namespace Ramz_Elktear.BusinessLayer.Services
         public Task<List<string>> GetRoles()
         {
             return _roleManager.Roles.Select(x => x.Name).ToListAsync();
+        }
+
+        public async Task<List<AuthDTO>> GetUsersWithSalesReturnRole()
+        {
+            var usersInRole = await _userManager.GetUsersInRoleAsync("Sales");
+            return mapper.Map<List<AuthDTO>>(usersInRole);
         }
 
         //------------------------------------------------------------------------------------------------------------
