@@ -21,9 +21,9 @@ namespace Ramz_Elktear.core.DTO.CarModels
         public string NameEn { get; set; }
         public string DescrptionAr { get; set; }
         public string DescrptionEn { get; set; }
-        public decimal? SellingPrice { get; set; }
-        public decimal? InstallmentPrice { get; set; }
-        public int? QuantityInStock { get; set; }
+        public decimal SellingPrice { get; set; }
+        public decimal InstallmentPrice { get; set; }
+        public int QuantityInStock { get; set; }
         public SubCategoryDTO SubCategory { get; set; }
         public string CarCode { get; set; }
         public string CarSKU { get; set; }

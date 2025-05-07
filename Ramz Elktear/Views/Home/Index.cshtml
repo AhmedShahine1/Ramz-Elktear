@@ -4,78 +4,146 @@
     ViewData["Title"] = "Dashboard";
 }
 
-<h2><span class="text-truncate">Dashboard</span></h2>
+<div class="container-fluid p-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="h3 mb-0 text-gray-800 text-truncate">Dashboard Overview</h1>
+        <div class="d-none d-sm-inline-block">
+            <span class="mr-2">
+                <i class="far fa-calendar-alt"></i> @DateTime.Now.ToString("MMMM dd, yyyy")
+            </span>
+        </div>
+    </div>
 
-<div class="col-12 col-md-8 col-lg-12 col-xxl-4 order-3 order-md-2">
+    <!-- Summary Cards Row -->
+    <div class="row mb-4">
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-primary shadow h-100">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="text-xs font-weight-bold text-primary text-uppercase mb-1 text-truncate">Total Bookings</h6>
+                            <div class="h4 mb-0 font-weight-bold">@Model.TotalBookings</div>
+                        </div>
+                        <div class="text-primary">
+                            <i class="fas fa-calendar fa-2x"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-success shadow h-100">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="text-xs font-weight-bold text-success text-uppercase mb-1 text-truncate">Total Cars</h6>
+                            <div class="h4 mb-0 font-weight-bold">@Model.TotalCars</div>
+                        </div>
+                        <div class="text-success">
+                            <i class="fas fa-car fa-2x"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        @foreach (var status in Model.BookingCountByStatus.Take(2))
+        {
+            <div class="col-xl-3 col-md-6 mb-4">
+                <div class="card border-left-info shadow h-100">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <h6 class="text-xs font-weight-bold text-info text-uppercase mb-1 text-truncate">@status.Status Bookings</h6>
+                                <div class="h4 mb-0 font-weight-bold">@status.Count</div>
+                            </div>
+                            <div class="text-info">
+                                <i class="fas fa-clipboard-list fa-2x"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+
+    <!-- Booking Status Cards -->
+    @if (Model.BookingCountByStatus.Count > 2)
+    {
+        <div class="row mb-4">
+            @foreach (var status in Model.BookingCountByStatus.Skip(2))
+            {
+                <div class="col-xl-3 col-md-6 mb-4">
+                    <div class="card border-left-warning shadow h-100">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h6 class="text-xs font-weight-bold text-warning text-uppercase mb-1 text-truncate">@status.Status Bookings</h6>
+                                    <div class="h4 mb-0 font-weight-bold">@status.Count</div>
+                                </div>
+                                <div class="text-warning">
+                                    <i class="fas fa-clipboard-list fa-2x"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+
+    <!-- Time-Based Charts Row -->
+    <div class="row mb-4">
+        <div class="col-xl-8 col-lg-7">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                    <h6 class="m-0 font-weight-bold text-primary text-truncate">Bookings Timeline</h6>
+                    <div class="dropdown no-arrow">
+                        <a class="dropdown-toggle" href="#" role="button" id="timelineDropdown" data-toggle="dropdown">
+                            <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in">
+                            <a class="dropdown-item chart-switch text-truncate" href="#" data-type="monthly">Monthly View</a>
+                            <a class="dropdown-item chart-switch text-truncate" href="#" data-type="yearly">Yearly View</a>
+                            <a class="dropdown-item chart-switch text-truncate" href="#" data-type="daily">Daily View</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="chart-area">
+                        <canvas id="timelineChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-4 col-lg-5">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                    <h6 class="m-0 font-weight-bold text-primary text-truncate">Bookings by Brand</h6>
+                </div>
+                <div class="card-body">
+                    <div class="chart-pie pt-4 pb-2">
+                        <canvas id="brandChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Brand Performance Row -->
     <div class="row">
-        <!-- Total Bookings Card -->
-        <div class="col-6 mb-6">
-            <div class="card h-100">
-                <div class="card-body">
-                    <div class="card-title d-flex align-items-start justify-content-between mb-4">
-                        <div class="avatar flex-shrink-0">
-                            <img src="../assets/img/icons/unicons/paypal.png" alt="paypal" class="rounded" />
-                        </div>
-                    </div>
-                    <p class="mb-1"><span class="text-truncate">Total Bookings</span></p>
-                    <h4 class="card-title mb-3">@Model.TotalBookings</h4>
+        <div class="col-xl-12">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                    <h6 class="m-0 font-weight-bold text-primary text-truncate">Brand Performance Over Time</h6>
                 </div>
-            </div>
-        </div>
-
-        <!-- Total Cars Card -->
-        <div class="col-6 mb-6">
-            <div class="card h-100">
                 <div class="card-body">
-                    <div class="card-title d-flex align-items-start justify-content-between mb-4">
-                        <div class="avatar flex-shrink-0">
-                            <img src="../assets/img/icons/unicons/cc-primary.png" alt="Credit Card" class="rounded" />
-                        </div>
+                    <div class="chart-area">
+                        <canvas id="brandOverTimeChart"></canvas>
                     </div>
-                    <p class="mb-1"><span class="text-truncate">Total Cars</span></p>
-                    <h4 class="card-title mb-3">@Model.TotalCars</h4>
                 </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="row">
-    <!-- Booking Stats by Month -->
-    <div class="col-md-6">
-        <div class="card">
-            <div class="card-header"><span class="text-truncate">Bookings Per Month</span></div>
-            <div class="card-body">
-                <canvas id="bookingStatsChart"></canvas>
-            </div>
-        </div>
-    </div>
-
-    <!-- Booking Stats by Brand -->
-    <div class="col-md-6">
-        <div class="card">
-            <div class="card-header"><span class="text-truncate">Bookings Per Brand</span></div>
-            <div class="card-body">
-                <canvas id="brandStatsChart"></canvas>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Bookings Per Brand Over Time (Fixed Line Chart) -->
-<div class="row">
-    <div class="col-md-12">
-        <div class="card">
-            <div class="card-header"><span class="text-truncate">Bookings Per Brand Over Time</span></div>
-            <div class="card-body">
-                @if (Model.BrandBookingsOverTime == null || !Model.BrandBookingsOverTime.Any())
-                {
-                    <p>No booking data available.</p>
-                }
-                else
-                {
-                    <canvas id="brandOverTimeChart"></canvas>
-                }
             </div>
         </div>
     </div>
@@ -83,87 +151,417 @@
 
 @section Scripts {
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Add these Bootstrap JavaScript dependencies -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js"></script>
+
     <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            // Booking Stats by Month (Bar Chart)
-            var bookingStatsCtx = document.getElementById('bookingStatsChart').getContext('2d');
-            new Chart(bookingStatsCtx, {
-                type: 'bar',
+        document.addEventListener('DOMContentLoaded', function() {
+            // Color palette
+            const colors = {
+                primary: '#4e73df',
+                success: '#1cc88a',
+                info: '#36b9cc',
+                warning: '#f6c23e',
+                danger: '#e74a3b',
+                secondary: '#858796',
+                light: '#f8f9fc',
+                dark: '#5a5c69'
+            };
+
+            const colorPalette = [
+                colors.primary,
+                colors.success,
+                colors.info,
+                colors.warning,
+                colors.danger,
+                '#6f42c1',
+                '#fd7e14',
+                '#20c997',
+                '#6c757d'
+            ];
+
+            // Common chart options
+            const commonOptions = {
+                maintainAspectRatio: false,
+                layout: {
+                    padding: {
+                        left: 10,
+                        right: 25,
+                        top: 25,
+                        bottom: 0
+                    }
+                },
+                scales: {
+                    x: {
+                        grid: {
+                            display: false,
+                            drawBorder: false
+                        }
+                    },
+                    y: {
+                        beginAtZero: true,
+                        grid: {
+                            color: "rgb(234, 236, 244)",
+                            drawBorder: false,
+                            borderDash: [2]
+                        },
+                        ticks: {
+                            // Include a dollar sign in the ticks
+                            callback: function(value, index, values) {
+                                return value;
+                            },
+                            font: {
+                                size: 12,
+                                weight: 'bold'
+                            },
+                            precision: 0
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        display: true,
+                        position: 'top'
+                    },
+                    tooltip: {
+                        backgroundColor: "rgb(255,255,255)",
+                        bodyColor: "#858796",
+                        titleMarginBottom: 10,
+                        titleColor: '#6e707e',
+                        titleFont: {
+                            size: 14
+                        },
+                        borderColor: '#dddfeb',
+                        borderWidth: 1,
+                        padding: {
+                            x: 15,
+                            y: 15
+                        },
+                        displayColors: false,
+                        caretPadding: 10
+                    }
+                }
+            };
+
+            // Get data from model
+            const bookingStatsByDate = @Html.Raw(Json.Serialize(Model.BookingStatsByDate)) || [];
+            const brandStats = @Html.Raw(Json.Serialize(Model.BookingStatsByBrand)) || [];
+            const brandOverTimeData = @Html.Raw(Json.Serialize(Model.BrandBookingsOverTime)) || [];
+
+            // Current date
+            const currentDate = new Date();
+            const currentYear = currentDate.getFullYear();
+            const currentMonth = currentDate.getMonth() + 1; // JavaScript months are 0-indexed
+
+            // Process monthly data (current year)
+            const monthlyData = [];
+            const monthNames = [
+                'January', 'February', 'March', 'April', 'May', 'June',
+                'July', 'August', 'September', 'October', 'November', 'December'
+            ];
+
+            for (let month = 1; month <= 12; month++) {
+                let count = 0;
+                for (const stat of bookingStatsByDate) {
+                    if (stat.year === currentYear && stat.month === month) {
+                        count += stat.bookingCount;
+                    }
+                }
+                monthlyData.push({
+                    month: month,
+                    monthName: monthNames[month - 1],
+                    count: count
+                });
+            }
+
+            // Process yearly data
+            const yearlyMap = new Map();
+            for (const stat of bookingStatsByDate) {
+                const year = stat.year;
+                if (!yearlyMap.has(year)) {
+                    yearlyMap.set(year, 0);
+                }
+                yearlyMap.set(year, yearlyMap.get(year) + stat.bookingCount);
+            }
+
+            const yearlyData = Array.from(yearlyMap, ([year, count]) => ({
+                year,
+                count
+            })).sort((a, b) => a.year - b.year);
+
+            // Process daily data (current month)
+            const daysInMonth = new Date(currentYear, currentMonth, 0).getDate();
+            const dailyData = [];
+
+            for (let day = 1; day <= daysInMonth; day++) {
+                let count = 0;
+                for (const stat of bookingStatsByDate) {
+                    if (stat.year === currentYear && stat.month === currentMonth && stat.day === day) {
+                        count += stat.bookingCount;
+                    }
+                }
+                dailyData.push({
+                    day: day,
+                    count: count
+                });
+            }
+
+            // Initialize charts
+            let timelineChart = null;
+
+            function initTimelineChart(type = 'monthly') {
+                const ctx = document.getElementById('timelineChart');
+
+                if (timelineChart) {
+                    timelineChart.destroy();
+                }
+
+                let data, labels, title;
+
+                switch(type) {
+                    case 'yearly':
+                        data = yearlyData.map(item => item.count);
+                        labels = yearlyData.map(item => item.year.toString());
+                        title = 'Bookings by Year';
+                        break;
+                    case 'daily':
+                        data = dailyData.map(item => item.count);
+                        labels = dailyData.map(item => `Day ${item.day}`);
+                        title = `Bookings by Day (${monthNames[currentMonth - 1]} ${currentYear})`;
+                        break;
+                    case 'monthly':
+                    default:
+                        data = monthlyData.map(item => item.count);
+                        labels = monthlyData.map(item => item.monthName);
+                        title = `Bookings by Month (${currentYear})`;
+                        break;
+                }
+
+                // Find the maximum value to set appropriate steps for y-axis
+                const maxValue = Math.max(...data);
+                // Calculate a nice step size based on the max value
+                const stepSize = Math.max(1, Math.ceil(maxValue / 5));
+
+                timelineChart = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: title,
+                            lineTension: 0.3,
+                            backgroundColor: "rgba(78, 115, 223, 0.05)",
+                            borderColor: colors.primary,
+                            pointRadius: 3,
+                            pointBackgroundColor: colors.primary,
+                            pointBorderColor: colors.primary,
+                            pointHoverRadius: 3,
+                            pointHoverBackgroundColor: colors.primary,
+                            pointHoverBorderColor: colors.primary,
+                            pointHitRadius: 10,
+                            pointBorderWidth: 2,
+                            data: data,
+                            fill: true
+                        }]
+                    },
+                    ...commonOptions,
+                    scales: {
+                        ...commonOptions.scales,
+                        y: {
+                            ...commonOptions.scales.y,
+                            ticks: {
+                                stepSize: brandTimeStepSize,
+                                callback: function(value) {
+                                    if (value % 1 === 0) {
+                                        return value;
+                                    }
+                                },
+                                font: {
+                                    weight: 'bold'
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+
+            // Brand pie chart
+            const brandLabels = brandStats.map(item => item.brandName);
+            const brandData = brandStats.map(item => item.totalBookings);
+
+            const brandChartCtx = document.getElementById('brandChart');
+            const brandChart = new Chart(brandChartCtx, {
+                type: 'doughnut',
                 data: {
-                    labels: @Html.Raw(Json.Serialize(Model.BookingStatsByMonth.Select(m => $"{m.Month}/{m.Year}"))),
+                    labels: brandLabels,
                     datasets: [{
-                        label: 'Total Bookings',
-                        data: @Html.Raw(Json.Serialize(Model.BookingStatsByMonth.Select(m => m.BookingCount))),
-                        backgroundColor: 'rgba(54, 162, 235, 0.6)',
-                        borderColor: 'rgba(54, 162, 235, 1)',
-                        borderWidth: 1
+                        data: brandData,
+                        backgroundColor: colorPalette.slice(0, brandLabels.length),
+                        hoverBackgroundColor: colorPalette.slice(0, brandLabels.length).map(color => color + 'dd'),
+                        hoverBorderColor: "rgba(234, 236, 244, 1)"
                     }]
                 },
                 options: {
-                    responsive: true,
-                    scales: { y: { beginAtZero: true } }
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: true,
+                            position: 'bottom',
+                            labels: {
+                                generateLabels: function(chart) {
+                                    const data = chart.data;
+                                    if (data.labels.length && data.datasets.length) {
+                                        return data.labels.map(function(label, i) {
+                                            const meta = chart.getDatasetMeta(0);
+                                            const ds = data.datasets[0];
+                                            const arc = meta.data[i];
+                                            const value = ds.data[i];
+                                            const backgroundColor = ds.backgroundColor[i];
+
+                                            return {
+                                                text: `${label}: ${value}`,
+                                                fillStyle: backgroundColor,
+                                                strokeStyle: backgroundColor,
+                                                lineWidth: 2,
+                                                hidden: arc.hidden,
+                                                index: i
+                                            };
+                                        });
+                                    }
+                                    return [];
+                                }
+                            }
+                        },
+                        tooltip: {
+                            backgroundColor: "rgb(255,255,255)",
+                            bodyColor: "#858796",
+                            borderColor: '#dddfeb',
+                            borderWidth: 1,
+                            padding: {
+                                x: 15,
+                                y: 15
+                            },
+                            displayColors: false,
+                            caretPadding: 10
+                        }
+                    },
+                    cutout: '70%'
                 }
             });
 
-            // Booking Stats by Brand (Bar Chart)
-            var brandStatsCtx = document.getElementById('brandStatsChart').getContext('2d');
-            new Chart(brandStatsCtx, {
-                type: 'bar',
-                data: {
-                    labels: @Html.Raw(Json.Serialize(Model.BookingStatsByBrand.Select(b => b.BrandName))),
-                    datasets: [{
-                        label: 'Total Bookings',
-                        data: @Html.Raw(Json.Serialize(Model.BookingStatsByBrand.Select(b => b.TotalBookings))),
-                        backgroundColor: 'rgba(255, 99, 132, 0.6)',
-                        borderColor: 'rgba(255, 99, 132, 1)',
-                        borderWidth: 1
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    scales: { y: { beginAtZero: true } }
+            // Brand over time chart
+            const brandTimeProcessed = {};
+            const timeLabels = new Set();
+
+            // Process brand over time data
+            brandOverTimeData.forEach(item => {
+                const brand = item.brandName;
+                const timeLabel = `${item.month}/${item.year}`;
+
+                timeLabels.add(timeLabel);
+
+                if (!brandTimeProcessed[brand]) {
+                    brandTimeProcessed[brand] = {};
+                }
+
+                if (!brandTimeProcessed[brand][timeLabel]) {
+                    brandTimeProcessed[brand][timeLabel] = 0;
+                }
+
+                brandTimeProcessed[brand][timeLabel] += item.bookingCount;
+            });
+
+            // Sort time labels chronologically
+            const sortedTimeLabels = Array.from(timeLabels).sort((a, b) => {
+                const [monthA, yearA] = a.split('/').map(Number);
+                const [monthB, yearB] = b.split('/').map(Number);
+
+                if (yearA !== yearB) {
+                    return yearA - yearB;
+                }
+                return monthA - monthB;
+            });
+
+            // Create datasets for brand over time chart
+            const brandTimeDatasets = Object.keys(brandTimeProcessed).map((brand, index) => {
+                const color = colorPalette[index % colorPalette.length];
+
+                return {
+                    label: brand,
+                    data: sortedTimeLabels.map(label => brandTimeProcessed[brand][label] || 0),
+                    borderColor: color,
+                    backgroundColor: 'transparent',
+                    borderWidth: 2,
+                    pointBackgroundColor: color,
+                    pointBorderColor: color,
+                    pointHoverRadius: 3,
+                    pointHoverBackgroundColor: color,
+                    pointHoverBorderColor: color,
+                    lineTension: 0.3
+                };
+            });
+
+            // Find max value for brand time chart
+            let maxBrandValue = 0;
+            brandTimeDatasets.forEach(dataset => {
+                const datasetMax = Math.max(...dataset.data);
+                if (datasetMax > maxBrandValue) {
+                    maxBrandValue = datasetMax;
                 }
             });
 
-            // Bookings Per Brand Over Time (Fixed Line Graph)
-            var brandOverTimeCtx = document.getElementById('brandOverTimeChart').getContext('2d');
+            // Calculate good step size
+            const brandTimeStepSize = Math.max(1, Math.ceil(maxBrandValue / 5));
 
-            // Serialize the data properly in C#
-            var brandOverTimeData = @Html.Raw(Json.Serialize(
-            Model.BrandBookingsOverTime
-                .GroupBy(b => b.BrandName)
-                .ToDictionary(
-                    g => g.Key,
-                    g => g.Select(b => new { label = $"{b.Month}/{b.Year}", count = b.BookingCount }).ToList()
-                )
-        ));
-
-            // Extract unique month/year labels
-            var labels = [...new Set(Object.values(brandOverTimeData).flat().map(b => b.label))];
-
-            // Generate datasets
-            var datasets = Object.keys(brandOverTimeData).map(brand => ({
-                label: brand,
-                data: labels.map(label => {
-                    var dataPoint = brandOverTimeData[brand].find(b => b.label === label);
-                    return dataPoint ? dataPoint.count : 0;
-                }),
-                borderColor: `#${Math.floor(Math.random()*16777215).toString(16)}`,
-                fill: false
-            }));
-
-            // Initialize the line chart
-            new Chart(brandOverTimeCtx, {
+            // Initialize brand over time chart
+            const brandTimeCtx = document.getElementById('brandOverTimeChart');
+            const brandTimeChart = new Chart(brandTimeCtx, {
                 type: 'line',
                 data: {
-                    labels: labels,
-                    datasets: datasets
+                    labels: sortedTimeLabels,
+                    datasets: brandTimeDatasets
                 },
                 options: {
-                    responsive: true,
-                    scales: { y: { beginAtZero: true } }
+                    ...commonOptions,
+                    scales: {
+                        ...commonOptions.scales,
+                        y: {
+                            ...commonOptions.scales.y,
+                            ticks: {
+                                stepSize: brandTimeStepSize,
+                                callback: function(value) {
+                                    if (value % 1 === 0) {
+                                        return value;
+                                    }
+                                },
+                                font: {
+                                    weight: 'bold'
+                                }
+                            }
+                        }
+                    }
                 }
             });
+
+            // Initialize timeline chart with monthly data
+            initTimelineChart('monthly');
+
+            // Setup event listeners for chart type switching
+            document.querySelectorAll('.chart-switch').forEach(button => {
+                button.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const type = this.getAttribute('data-type');
+                    initTimelineChart(type);
+                });
+            });
+
+            // Add Font Awesome if not already included
+            if (!document.querySelector('link[href*="font-awesome"]')) {
+                const fontAwesome = document.createElement('link');
+                fontAwesome.rel = 'stylesheet';
+                fontAwesome.href = 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css';
+                document.head.appendChild(fontAwesome);
+            }
         });
     </script>
 }

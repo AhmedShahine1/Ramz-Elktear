@@ -1,16 +1,16 @@
 ﻿<!doctype html>
 
 <html lang="en"
-      class="light-style layout-menu-fixed layout-compact"
-      dir="ltr"
-      data-theme="theme-default"
-      data-assets-path="../assets/"
-      data-template="vertical-menu-template-free"
-      data-style="light">
+class="light-style layout-menu-fixed layout-compact"
+dir="ltr"
+data-theme="theme-default"
+data-assets-path="../assets/"
+data-template="vertical-menu-template-free"
+data-style="light">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport"
-          content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
+    content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
 
     <title>Ramz Elktear</title>
 
@@ -23,7 +23,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap"
-          rel="stylesheet" />
+    rel="stylesheet" />
 
     <link href="~/assets/vendor/fonts/boxicons.css" rel="stylesheet" />
 
@@ -52,9 +52,9 @@
 
             <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
                 <div class="app-brand demo">
-                    <a href="index.html" class="app-brand-link">
+                    <a href="/Home/Index" class="app-brand-link">
                         <span class="app-brand-logo demo">
-                            <img src="~/assets/img/group 92.png" style="width: 200px;" />
+                            <img src="@Context.Request.Cookies["siteLogo"]" style="width: 200px;" />
                         </span>
                     </a>
 
@@ -63,196 +63,270 @@
                     </a>
                 </div>
 
-                <div class="menu-inner-shadow"></div>
-
                 <ul class="menu-inner py-1">
-                    <li class="menu-item">
-                        <a href="/Home/Index" class="menu-link">
-                            <i class="menu-icon tf-icons bx bx-home"></i> <!-- Added icon -->
-                            <div class="text-truncate">Dashboard</div>
-                        </a>
-                    </li>
-                    <!-- Dropdown for Model Year, Offers, etc. -->
-                    <li class="menu-item">
-                        <a href="javascript:void(0);" class="menu-link menu-toggle">
-                            <i class="menu-icon tf-icons bx bx-table"></i>
-                            <div class="text-truncate">Basic Information</div>
-                        </a>
+                    @if (SignInManager.IsSignedIn(User))
+                    {
+                        var user = await UserManager.GetUserAsync(User);
+                        var roles = await UserManager.GetRolesAsync(user);
+                        @if (roles.Contains("Admin"))
+                        {
+                            <li class="menu-item">
+                                <a href="/Home/Index" class="menu-link">
+                                    <i class="menu-icon tf-icons bx bx-home"></i> <!-- Added icon -->
+                                    <div class="text-truncate">Dashboard</div>
+                                </a>
+                            </li>
+                            <!-- Dropdown for Model Year, Offers, etc. -->
+                            <li class="menu-item">
+                                <a href="javascript:void(0);" class="menu-link menu-toggle">
+                                    <i class="menu-icon tf-icons bx bx-table"></i>
+                                    <div class="text-truncate">Basic Information</div>
+                                </a>
 
 
-                        <ul class="menu-sub">
+                                <ul class="menu-sub">
+                                    <li class="menu-item">
+                                        <a href="/ModelYear/Index" class="menu-link">
+                                            <div class="text-truncate">Model Year</div>
+                                        </a>
+                                    </li>
+                                    <li class="menu-item">
+                                        <a href="/Offer/Index" class="menu-link">
+                                            <div class="text-truncate">Offers</div>
+                                        </a>
+                                    </li>
+                                    <li class="menu-item">
+                                        <a href="/Option/Index" class="menu-link">
+                                            <div class="text-truncate">Options</div>
+                                        </a>
+                                    </li>
+                                    <li class="menu-item">
+                                        <a href="/Origin/Index" class="menu-link">
+                                            <div class="text-truncate">Origins</div>
+                                        </a>
+                                    </li>
+                                    <li class="menu-item">
+                                        <a href="/fueltype/index" class="menu-link">
+                                            <div class="text-truncate">Fuel Types</div>
+                                        </a>
+                                    </li>
+                                    <li class="menu-item">
+                                        <a href="/enginesize/index" class="menu-link">
+                                            <div class="text-truncate">Engine Sizes</div>
+                                        </a>
+                                    </li>
+                                    <li class="menu-item">
+                                        <a href="/engineposition/index" class="menu-link">
+                                            <div class="text-truncate">Engine Positions</div>
+                                        </a>
+                                    </li>
+                                    <li class="menu-item">
+                                        <a href="/color/index" class="menu-link">
+                                            <div class="text-truncate">Colors</div>
+                                        </a>
+                                    </li>
+                                    <li class="menu-item">
+                                        <a href="/category/index" class="menu-link">
+                                            <div class="text-truncate">Categories</div>
+                                        </a>
+                                    </li>
+                                    <li class="menu-item">
+                                        <a href="/brand/index" class="menu-link">
+                                            <div class="text-truncate">Brands</div>
+                                        </a>
+                                    </li>
+                                    <li class="menu-item">
+                                        <a href="/bank/index" class="menu-link">
+                                            <div class="text-truncate">Banks</div>
+                                        </a>
+                                    </li>
+                                    <li class="menu-item">
+                                        <a href="/Job/index" class="menu-link">
+                                            <div class="text-truncate">Job</div>
+                                        </a>
+                                    </li>
+                                    <li class="menu-item">
+                                        <a href="/branch/index" class="menu-link">
+                                            <div class="text-truncate">Branches</div>
+                                        </a>
+                                    </li>
+                                    <li class="menu-item">
+                                        <a href="/Promotion/index" class="menu-link">
+                                            <div class="text-truncate">Promotion</div>
+                                        </a>
+                                    </li>
+                                    <li class="menu-item">
+                                        <a href="/transmissionType/index" class="menu-link">
+                                            <div class="text-truncate">Transmission Types</div>
+                                        </a>
+                                    </li>
+                                    <li class="menu-item">
+                                        <a href="/subcategory/index" class="menu-link">
+                                            <div class="text-truncate">Sub Categories</div>
+                                        </a>
+                                    </li>
+                                    <li class="menu-item">
+                                        <a href="/specification/index" class="menu-link">
+                                            <div class="text-truncate">Specifications</div>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <!-- Cars Dropdown -->
                             <li class="menu-item">
-                                <a href="/ModelYear/Index" class="menu-link">
-                                    <div class="text-truncate">Model Year</div>
+                                <a href="javascript:void(0);" class="menu-link menu-toggle">
+                                    <i class="menu-icon tf-icons bx bx-car"></i>
+                                    <div class="text-truncate">Cars</div>
+                                </a>
+                                <ul class="menu-sub">
+                                    <li class="menu-item">
+                                        <a href="/car/index" class="menu-link">
+                                            <div class="text-truncate">All Cars</div>
+                                        </a>
+                                    </li>
+                                    <li class="menu-item">
+                                        <a href="/car/create" class="menu-link">
+                                            <div class="text-truncate">Add New Car</div>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <!-- Existing Notification Menu -->
+                            <li class="menu-item">
+                                <a href="/Notification/Send" class="menu-link">
+                                    <i class="menu-icon tf-icons bx bx-bell"></i>
+                                    <div class="text-truncate">Notification</div>
+                                </a>
+                            </li>
+                            <!-- Existing Booking Menu -->
+                            <li class="menu-item">
+                                <a href="javascript:void(0);" class="menu-link menu-toggle">
+                                    <i class="menu-icon tf-icons bx bx-calendar"></i>
+                                    <div class="text-truncate">Bookings</div>
+                                </a>
+                                <ul class="menu-sub">
+                                    <li class="menu-item">
+                                        <a href="/booking/all" class="menu-link">
+                                            <div class="text-truncate">All Bookings</div>
+                                        </a>
+                                    </li>
+                                    <li class="menu-item">
+                                        <a href="/booking/recieve" class="menu-link">
+                                            <div class="text-truncate">Received Bookings</div>
+                                        </a>
+                                    </li>
+                                    <li class="menu-item">
+                                        <a href="/booking/send" class="menu-link">
+                                            <div class="text-truncate">Sent Bookings</div>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <!-- Existing Reports Menu -->
+                            <li class="menu-item">
+                                <a href="/Report/Index" class="menu-link">
+                                    <i class="menu-icon tf-icons bx bx-file"></i>
+                                    <div class="text-truncate">Reports</div>
+                                </a>
+                            </li>
+                            <!-- Sales Users Dropdown -->
+                            <li class="menu-item">
+                                <a href="javascript:void(0);" class="menu-link menu-toggle">
+                                    <i class="menu-icon tf-icons bx bx-user"></i>
+                                    <div class="text-truncate">Users</div>
+                                </a>
+                                <ul class="menu-sub">
+                                    <li class="menu-item">
+                                        <a href="/User/Sales" class="menu-link">
+                                            <div class="text-truncate">Sales Users</div>
+                                        </a>
+                                    </li>
+                                    <li class="menu-item">
+                                        <a href="/Auth/Register" class="menu-link">
+                                            <div class="text-truncate">Add User</div>
+                                        </a>
+                                    </li>
+                                    <li class="menu-item">
+                                        <a href="/User/AssignUserRoles" class="menu-link">
+                                            <div class="text-truncate">Assign User to Roles</div>
+                                        </a>
+                                    </li>
+                                    <li class="menu-item">
+                                        <a href="/User/AssignSalesToManager" class="menu-link">
+                                            <div class="text-truncate">Assign Sales to Manager</div>
+                                        </a>
+                                    </li>
+                                    <li class="menu-item">
+                                        <a href="/User/AllUsersWithRoles" class="menu-link">
+                                            <div class="text-truncate">All Users with Roles</div>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class="menu-item">
+                                <a href="/ContactForm/Index" class="menu-link">
+                                    <i class="menu-icon tf-icons bx bx-envelope"></i>
+                                    <div class="text-truncate">Contact Forms</div>
                                 </a>
                             </li>
                             <li class="menu-item">
-                                <a href="/Offer/Index" class="menu-link">
-                                    <div class="text-truncate">Offers</div>
+                                <a href="/Setting/Index" class="menu-link">
+                                    <i class="menu-icon tf-icons bx bx-cog"></i>
+                                    <div class="text-truncate">Settings</div>
                                 </a>
                             </li>
                             <li class="menu-item">
-                                <a href="/Option/Index" class="menu-link">
-                                    <div class="text-truncate">Options</div>
+                                <a href="/InsurancePercentage/Index" class="menu-link">
+                                    <i class="menu-icon tf-icons bx bx-shield-quarter"></i>
+                                    <div class="text-truncate">Insurance Settings</div>
+                                </a>
+                            </li>
+                        }
+                        @if (roles.Contains("Manager"))
+                        {
+                            <li class="menu-item">
+                                <a href="/Home/Index" class="menu-link">
+                                    <i class="menu-icon tf-icons bx bx-home"></i> <!-- Added icon -->
+                                    <div class="text-truncate">Dashboard</div>
                                 </a>
                             </li>
                             <li class="menu-item">
-                                <a href="/Origin/Index" class="menu-link">
-                                    <div class="text-truncate">Origins</div>
+                                <a href="/User/SalesByManager" class="menu-link">
+                                    <i class="menu-icon tf-icons bx bx-user"></i>
+                                    <span class="text-truncate">Manage Sales</span>
+                                </a>
+                            </li>
+
+                            <li class="menu-item">
+                                <a href="/booking/SalesBookings" class="menu-link">
+                                    <i class="menu-icon tf-icons bx bx-calendar-check"></i>
+                                    <span class="text-truncate">Sales Bookings</span>
+                                </a>
+                            </li>
+                        }
+                        @if (roles.Contains("Sales"))
+                        {
+                            <li class="menu-item">
+                                <a href="/Home/Index" class="menu-link">
+                                    <i class="menu-icon tf-icons bx bx-home"></i> <!-- Added icon -->
+                                    <div class="text-truncate">Dashboard</div>
                                 </a>
                             </li>
                             <li class="menu-item">
-                                <a href="/fueltype/index" class="menu-link">
-                                    <div class="text-truncate">Fuel Types</div>
+                                <a href="/booking/MyBookings" class="menu-link">
+                                    <i class="menu-icon tf-icons bx bx-calendar"></i>
+                                    <div class="text-truncate">My Bookings</div>
                                 </a>
                             </li>
-                            <li class="menu-item">
-                                <a href="/enginesize/index" class="menu-link">
-                                    <div class="text-truncate">Engine Sizes</div>
-                                </a>
-                            </li>
-                            <li class="menu-item">
-                                <a href="/engineposition/index" class="menu-link">
-                                    <div class="text-truncate">Engine Positions</div>
-                                </a>
-                            </li>
-                            <li class="menu-item">
-                                <a href="/color/index" class="menu-link">
-                                    <div class="text-truncate">Colors</div>
-                                </a>
-                            </li>
-                            <li class="menu-item">
-                                <a href="/category/index" class="menu-link">
-                                    <div class="text-truncate">Categories</div>
-                                </a>
-                            </li>
-                            <li class="menu-item">
-                                <a href="/brand/index" class="menu-link">
-                                    <div class="text-truncate">Brands</div>
-                                </a>
-                            </li>
-                            <li class="menu-item">
-                                <a href="/bank/index" class="menu-link">
-                                    <div class="text-truncate">Banks</div>
-                                </a>
-                            </li>
-                            <li class="menu-item">
-                                <a href="/Job/index" class="menu-link">
-                                    <div class="text-truncate">Job</div>
-                                </a>
-                            </li>
-                            <li class="menu-item">
-                                <a href="/branch/index" class="menu-link">
-                                    <div class="text-truncate">Branches</div>
-                                </a>
-                            </li>
-                            <li class="menu-item">
-                                <a href="/Promotion/index" class="menu-link">
-                                    <div class="text-truncate">Promotion</div>
-                                </a>
-                            </li>
-                            <li class="menu-item">
-                                <a href="/transmissionType/index" class="menu-link">
-                                    <div class="text-truncate">Transmission Types</div>
-                                </a>
-                            </li>
-                            <li class="menu-item">
-                                <a href="/subcategory/index" class="menu-link">
-                                    <div class="text-truncate">Sub Categories</div>
-                                </a>
-                            </li>
-                            <li class="menu-item">
-                                <a href="/specification/index" class="menu-link">
-                                    <div class="text-truncate">Specifications</div>
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
-                    <!-- Cars Dropdown -->
-                    <li class="menu-item">
-                        <a href="javascript:void(0);" class="menu-link menu-toggle">
-                            <i class="menu-icon tf-icons bx bx-car"></i>
-                            <div class="text-truncate">Cars</div>
-                        </a>
-                        <ul class="menu-sub">
-                            <li class="menu-item">
-                                <a href="/car/index" class="menu-link">
-                                    <div class="text-truncate">All Cars</div>
-                                </a>
-                            </li>
-                            <li class="menu-item">
-                                <a href="/car/create" class="menu-link">
-                                    <div class="text-truncate">Add New Car</div>
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
-                    <!-- Existing Notification Menu -->
-                    <li class="menu-item">
-                        <a href="/Notification/Send" class="menu-link">
-                            <i class="menu-icon tf-icons bx bx-bell"></i>
-                            <div class="text-truncate">Notification</div>
-                        </a>
-                    </li>
-                    <!-- Existing Booking Menu -->
-                    <li class="menu-item">
-                        <a href="javascript:void(0);" class="menu-link menu-toggle">
-                            <i class="menu-icon tf-icons bx bx-calendar"></i>
-                            <div class="text-truncate">Bookings</div>
-                        </a>
-                        <ul class="menu-sub">
-                            <li class="menu-item">
-                                <a href="/booking/all" class="menu-link">
-                                    <div class="text-truncate">All Bookings</div>
-                                </a>
-                            </li>
-                            <li class="menu-item">
-                                <a href="/booking/recieve" class="menu-link">
-                                    <div class="text-truncate">Received Bookings</div>
-                                </a>
-                            </li>
-                            <li class="menu-item">
-                                <a href="/booking/send" class="menu-link">
-                                    <div class="text-truncate">Sent Bookings</div>
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
-                    <!-- Existing Reports Menu -->
-                    <li class="menu-item">
-                        <a href="/Report/Index" class="menu-link">
-                            <i class="menu-icon tf-icons bx bx-file"></i>
-                            <div class="text-truncate">Reports</div>
-                        </a>
-                    </li>
-                    <!-- Sales Users Dropdown -->
-                    <li class="menu-item">
-                        <a href="javascript:void(0);" class="menu-link menu-toggle">
-                            <i class="menu-icon tf-icons bx bx-user"></i>
-                            <div class="text-truncate">Users</div>
-                        </a>
-                        <ul class="menu-sub">
-                            <li class="menu-item">
-                                <a href="/users/sales" class="menu-link">
-                                    <div class="text-truncate">Sales Users</div>
-                                </a>
-                            </li>
-                        </ul>
-                        <ul class="menu-sub">
-                            <li class="menu-item">
-                                <a href="/Auth/Register" class="menu-link">
-                                    <div class="text-truncate">Add Admin</div>
-                                </a>
-                            </li>
-                        </ul>
-                        <ul class="menu-sub">
-                            <li class="menu-item">
-                                <a href="/Auth/RegisterSales" class="menu-link">
-                                    <div class="text-truncate">Add Sales</div>
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
+                        }
+                        <!-- Existing Request Menu -->
+                        <li class="menu-item">
+                            <a href="/InstallmentRequests/Index" class="menu-link">
+                                <i class="menu-icon tf-icons bx bx-file"></i>
+                                <div class="text-truncate">InstallmentRequests</div>
+                            </a>
+                        </li>
+                    }
                 </ul>
             </aside>
             <!-- / Menu -->
@@ -264,6 +338,7 @@
                     // Retrieve the user profile image and username from cookies
                     string userProfileImage = HttpContextAccessor.HttpContext.Request.Cookies["userProfileImage"];
                     string userName = HttpContextAccessor.HttpContext.Request.Cookies["userName"];
+                    string userRole = HttpContextAccessor.HttpContext.Request.Cookies["userRole"];
                 }
 
                 <nav class="layout-navbar container-xxl navbar navbar-expand-xl navbar-detached align-items-center bg-navbar-theme"
@@ -288,7 +363,7 @@
                                     </div>
                                     <div class="flex-grow-1">
                                         <h6 class="mb-0">@userName</h6>
-                                        <small class="text-muted">Admin</small>
+                                        <small class="text-muted">@userRole</small>
                                     </div>
                                 </div>
                             </li>
@@ -364,20 +439,126 @@
     <script src="~/assets/js/dashboards-analytics.js"></script>
     <script>
         document.addEventListener("DOMContentLoaded", function () {
+            // Cache DOM elements once
             const languageSwitchers = document.querySelectorAll(".lang-switch");
-
-            // Event listener for language switcher
-            languageSwitchers.forEach(switcher => {
-                switcher.addEventListener("click", function () {
-                    const selectedLang = this.getAttribute("data-lang");
-                    setLanguage(selectedLang);
-                    localStorage.setItem("selectedLang", selectedLang); // Store preference
-                    location.reload();
-                });
-            });
+            const textElements = document.querySelectorAll(".text-truncate");
+            const leftSection = document.getElementById("left-section");
+            const rightSection = document.getElementById("right-section");
+            const body = document.body;
+            const htmlElement = document.documentElement;
 
             // Translations dictionary
             const translations = {
+                "Name (Arabic) *": "الاسم (عربي) *",
+                "Name (English) *": "الاسم (إنجليزي) *",
+                "Description (Arabic)": "الوصف (عربي)",
+                "Description (English)": "الوصف (إنجليزي)",
+                "Car Image *": "صورة السيارة(للويب سايت) *",
+                "Image Without Background *": "صورة بدون خلفية (للتطبيق) *",
+                "Pending": "قيد الانتظار",
+                "Approved": "تمت الموافقة عليها",
+                "Rejected": "تم رفضها",
+                "InProgress": "جاري العمل عليها",
+                "Completed": "تم بيعها",
+                "Checked": "تم التحقق منها",
+                "Additional Images (Outside Car) *": "صور إضافية (خارج السيارة) *",
+                "Inside Car Images *": "صور من داخل السيارة *",
+                "Selling Price *": "سعر البيع *",
+                "SELLINGPRICE": "سعر البيع",
+                "Installment Price *": "سعر التقسيط *",
+                "Quantity in Stock *": "الكمية المتوفرة *",
+                "Kilometers *": "عدد الكيلومترات *",
+                "Specifications *": "المواصفات *",
+                "Fields marked with an asterisk (*) are required": "الحقول المشار إليها بعلامة النجمة (*) مطلوبة",
+                "Color *": "اللون *",
+                "Brand *": "العلامة التجارية *",
+                "Car Code": "رمز السيارة",
+                "Car SKU": "رمز التخزين (SKU)",
+                "Transmission Type *": "نوع ناقل الحركة *",
+                "Fuel Type *": "نوع الوقود *",
+                "Engine Size *": "حجم المحرك *",
+                "Model Year *": "سنة الموديل *",
+                "Engine Position *": "موضع المحرك *",
+                "Origin *": "المنشأ *",
+                "Subcategory *": "الفئة الفرعية *",
+                "Option *": "الخيار *",
+                "Is Special": "مميز",
+                "Is Active": "نشط",
+                "Create": "إنشاء",
+                "Add New Bank": "إضافة بنك جديد",
+                "Total Sales Agents": "إجمالي وكلاء المبيعات",
+                "Total Sales": "إجمالي المبيعات",
+                "Sales Dashboard": "لوحة تحكم المبيعات",
+                "Manager Dashboard": "لوحة تحكم المديرين",
+                "Total Sales:": "إجمالي المبيعات:",
+                "Sales Per Month": "المبيعات لكل شهر",
+                "Add Branch": "إضافة فرع جديد",
+                "Name": "الاسم",
+                "Address": "العنوان",
+                "Email": "البريد الإلكتروني",
+                "Start Work": "بداية العمل",
+                "End Work": "نهاية العمل",
+                "Select Location": "اختر الموقع",
+                "Phone Numbers": "أرقام الهاتف",
+                "Image": "الصورة",
+                "Save Branch": "حفظ الفرع",
+                "+ Add Phone": "+ إضافة رقم هاتف",
+                "X": "إغلاق",
+                "Edit Bank": "تعديل البنك",
+                "Edit Branch": "تعديل الفرع",
+                "Booking Details": "تفاصيل الحجز",
+                "Status:": "الحالة:",
+                "Buyer Information": "معلومات المشتري",
+                "Name:": "الاسم:",
+                "Phone:": "الهاتف:",
+                "Seller Information": "معلومات البائع",
+                "Car Details": "تفاصيل السيارة",
+                "Price:": "السعر:",
+                "Kilometers:": "عدد الكيلومترات:",
+                "Transmission:": "ناقل الحركة:",
+                "Fuel Type:": "نوع الوقود:",
+                "Brand:": "العلامة التجارية:",
+                "Car Image": "صورة السيارة",
+                "Back to Bookings": "العودة إلى الحجوزات",
+                "Booking details not available.": "تفاصيل الحجز غير متوفرة.",
+                "Booking List": "قائمة الحجوزات",
+                "Add New Booking": "إضافة حجز جديد",
+                "Report": "تقرير",
+                "Booking Status": "حالة الحجز",
+                "User": "المستخدم",
+                "Car": "السيارة",
+                "Sales": "المبيعات",
+                "Actions": "الإجراءات",
+                "View": "عرض",
+                "View Details": "عرض التفاصيل",
+                "Add to Offer": "أضف إلى العرض",
+                "Change Status": "تغيير الحالة",
+                "No bookings found.": "لم يتم العثور على حجوزات.",
+                "Please select a valid sales representative.": "يرجى اختيار مندوب مبيعات صالح.",
+                "Sales updated successfully!": "تم تحديث المبيعات بنجاح!",
+                "Error updating sales. Please try again.": "حدث خطأ أثناء تحديث المبيعات. يرجى المحاولة مرة أخرى.",
+                "Booking status updated!": "تم تحديث حالة الحجز!",
+                "Error updating status.": "حدث خطأ أثناء تحديث الحالة.",
+                "Bank Name": "اسم البنك",
+                "Add New Offer": "إضافة عرض جديد",
+                "Contact Forms": "نماذج الاتصال",
+                "Phone": "رقم الهاتف",
+                "Message": "الرسالة",
+                "Created Date": "تاريخ الإنشاء",
+                "Offer Name (Arabic)": "اسم العرض (بالعربية)",
+                "Offer Name (English)": "اسم العرض (بالإنجليزية)",
+                "New Price": "السعر الجديد",
+                "Offer Image": "صورة العرض",
+                "Start Date": "تاريخ البدء",
+                "End Date": "تاريخ الانتهاء",
+                "Delivery Available": "التوصيل متاح",
+                "Add Offer": "إضافة العرض",
+                "Back to Offer List": "العودة إلى قائمة العروض",
+                "Bank Address": "عنوان البنك",
+                "Swift Code": "رمز السويفت",
+                "SWIFT Code": "رمز SWIFT",
+                "IBAN": "رقم الآيبان",
+                "Add Bank": "إضافة بنك",
                 "Dashboard": "لوحة التحكم",
                 "Cars": "السيارات",
                 "All Cars": "جميع السيارات",
@@ -400,8 +581,8 @@
                 "Specifications": "المواصفات",
                 "Bookings": "الحجوزات",
                 "All Bookings": "جميع الحجوزات",
-                "Received Bookings": "الحجوزات المستلمة",
-                "Sent Bookings": "الحجوزات المرسلة",
+                "Received Bookings": "الحجوزات تم بيعها",
+                "Sent Bookings": "الحجوزات جاري العمل عليها",
                 "Users": "المستخدمين",
                 "Sales Users": "فريق المبيعات",
                 "My Profile": "ملفي الشخصي",
@@ -424,8 +605,8 @@
                 "USER": "المستخدم",
                 "CAR": "السيارة",
                 "BRANCH NAME": "اسم الفرع",
-                "ADDRESS": "العنوان",
                 "EMAIL": "البريد الإلكتروني",
+                "Insurance Settings": "إعدادات التأمين",
                 "PHONE NUMBERS": "أرقام الهاتف",
                 "ACTIVE": "نشط",
                 "NAME": "الاسم",
@@ -473,9 +654,8 @@
                 "Add New SubCategory": "إضافة فئة فرعية جديدة",
                 "TransmissionType List": "قائمة أنواع ناقل الحركة",
                 "Add New TransmissionType": "إضافة نوع ناقل حركة جديد",
-                "Dashboard": "لوحة التحكم",
-                "Total Bookings": "إجمالي الحجوزات",
-                "Total Cars": "إجمالي السيارات",
+                "TOTAL BOOKINGS": "إجمالي الحجوزات",
+                "TOTAL CARS": "إجمالي السيارات",
                 "Bookings Per Month": "الحجوزات حسب الشهر",
                 "Bookings Per Brand": "الحجوزات حسب العلامة التجارية",
                 "Bookings Per Brand Over Time": "الحجوزات حسب العلامة التجارية على مر الزمن",
@@ -501,47 +681,174 @@
                 "Kilometers":"كيلومترات",
                 "nstallment Price":"سعر التقسيط",
                 "Selling Price":"سعر البيع",
-                "Status":"الحالة",
                 "Special":"خاص",
                 "Color":"لون",
                 "Notification":"الاشعارات",
-                "Reports":"تقارير"
+                "Reports":"تقارير",
+                "Basic Information": "المعلومات الأساسية",
+                "Model Year": "سنة الموديل",
+                "Job": "الوظائف",
+                "Promotion": "الترويج",
+                "Notification": "الإشعارات",
+                "Add User": "إضافة مستخدم",
+                "Assign User to Roles": "تعيين المستخدم للأدوار",
+                "Assign Sales to Manager": "تعيين المبيعات للمدير",
+                "All Users with Roles": "جميع المستخدمين مع الأدوار",
+                "Contact Forms": "نماذج الاتصال",
+                "Manage Sales": "إدارة المبيعات",
+                "Sales Bookings": "حجوزات المبيعات",
+                "My Bookings": "حجوزاتي",
+                "InstallmentRequests": "طلبات التقسيط",
+                "Contact Form Submissions": "إرسالات نموذج الاتصال",
+                "Email": "البريد الإلكتروني",
+                "PHONE": "رقم الهاتف",
+                "MESSAGE": "الرسالة",
+                "DATE": "التاريخ",
+                "Assign Roles to Users": "تعيين الأدوار للمستخدمين",
+                "User Name": "اسم المستخدم",
+                "Phone Number": "رقم الهاتف",
+                "Action": "الإجراء",
+                "Assign": "تعيين",
+                "Date": "التاريخ",
+                "ACTION": "الإجراء",
+                "SALES USER": "مستخدم المبيعات",
+                "MANAGER": "المدير",
+                "Insurance Percentage List": "نسب التأمين",
+                "Add New": "إضافة جديد",
+                "MIN AGE": "الحد الأدنى للعمر",
+                "MAX AGE": "الحد الأقصى للعمر",
+                "GENDER": "الجنس",
+                "PERCENTAGE": "النسبة",
+                "Edit": "تعديل",
+                "Delete": "حذف",
+                "No data found.": "لا توجد بيانات",
+                "Min Age": "الحد الأدنى للعمر",
+                "Max Age": "الحد الأقصى للعمر",
+                "Gender": "الجنس",
+                "Percentage": "النسبة",
+                "Save": "حفظ",
+                "Cancel": "إلغاء",
+                "Installment Requests": "طلبات التقسيط",
+                "All Users": "جميع المستخدمين",
+                "All Model Years": "جميع موديلات السنوات",
+                "All Status": "جميع الحالات",
+                "MODEL YEAR": "سنة الموديل",
+                "BANK": "البنك",
+                "JOB": "الوظيفة",
+                "Status updated successfully!": "تم تحديث الحالة بنجاح!",
+                "Error updating status. Please try again.": "حدث خطأ أثناء تحديث الحالة، حاول مرة أخرى.",
+                "Add New Setting": "إضافة إعداد جديد",
+                "IMAGE TYPE": "نوع الصورة",
+                "PREVIEW": "المعاينة",
+                "Edit Setting": "تعديل الإعداد",
+                "Image Type": "نوع الصورة",
+                "-- Select Type --": "-- اختر النوع --",
+                "Upload Image": "رفع صورة جديدة",
+                "Update": "تحديث",
+                "Roles": "الأدوار",
+                "Sales Return Users": "مستخدمو إرجاع المبيعات",
+                "Role": "الدور",
+                "No users found in Sales Return role.": "لم يتم العثور على مستخدمين في دور إرجاع المبيعات.",
+                "REPORT NAME": "اسم التقرير",
+                "View Report": "عرض التقرير",
+                "VIEW REPORT": "عرض التقرير",
+                "DOWNLOAD REPORT": "تحميل التقرير",
+                "All Branches": "جميع الفروع",
+                "All Offers": "جميع العروض",
+                "Download PDF": "تحميل PDF",
+                "Brand Performance Over Time": "أداء العلامة التجارية على مر الزمن",
+                "Bookings by Brand": "الحجوزات حسب العلامة التجارية",
+                "Daily View": "عرض يومي",
+                "Monthly View": "عرض شهري",
+                "Yearly View": "عرض سنوي",
+                "Bookings Timeline": "الجدول الزمني للحجوزات",
+                "RECIEVE BOOKINGS": "الحجوزات تم بيعها",
+                "SEND BOOKINGS": "الحجوزات جاري العمل عليها",
+                "send": " جاري العمل عليها",
+                "recieve": " تم بيعها",
+                "Dashboard Overview": "نظرة عامة على لوحة التحكم",
+                "Manager Dashboard": "لوحة تحكم المدير",
+                "Total Sales Agents": "إجمالي مندوبي المبيعات",
+                "Total Sales": "إجمالي المبيعات",
+                "Monthly Sales Trends": "اتجاهات المبيعات الشهرية",
+                "Sales performance over time": "أداء المبيعات على مر الزمن",
+                "Sales by Agent": "المبيعات حسب المندوب",
+                "Comparative analysis of agent performance": "تحليل مقارن لأداء المندوبين"
+            };
 
-          };
+            // Create reverse mapping for faster lookup
+            const reverseTranslations = {};
+            for (const [english, arabic] of Object.entries(translations)) {
+                reverseTranslations[arabic] = english;
+            }
 
-            // Translation function
+            // Event listener for language switcher
+            languageSwitchers.forEach(switcher => {
+                switcher.addEventListener("click", function () {
+                    const selectedLang = this.getAttribute("data-lang");
+                    setLanguage(selectedLang);
+                    localStorage.setItem("selectedLang", selectedLang); // Store preference
+                    // Translate in place without page reload
+                    translatePage(selectedLang);
+                });
+            });
+
+            // Translation function - handles DOM layout direction
             function setLanguage(lang) {
-                document.documentElement.lang = lang;
-                const isRTL = document.documentElement.lang === 'ar';
+                htmlElement.lang = lang;
+                const isRTL = lang === 'ar';
 
-                // Remove both classes first
-                document.getElementById("left-section").classList.remove("me-auto", "ms-auto");
-                document.getElementById("right-section").classList.remove("me-auto", "ms-auto");
+                // Handle RTL/LTR layout
+                body.classList.toggle("rtl", isRTL);
 
-                // Add only the correct one based on direction
+                // Reset classes first to avoid duplicates
+                leftSection.classList.remove("me-auto", "ms-auto");
+                rightSection.classList.remove("me-auto", "ms-auto");
+
+                // Apply correct classes based on direction
                 if (isRTL) {
-                    document.getElementById("left-section").classList.add("ms-auto");
-                    document.getElementById("right-section").classList.remove("me-auto", "ms-auto");
+                    leftSection.classList.add("ms-auto");
                 } else {
-                    document.getElementById("left-section").classList.add("me-auto");
-                    document.getElementById("right-section").classList.add("ms-auto");
+                    leftSection.classList.add("me-auto");
+                    rightSection.classList.add("ms-auto");
                 }
-                // Swap text direction
-                document.body.classList.toggle("rtl", lang === "ar");
+            }
 
-                // Update text content dynamically based on language
-                document.querySelectorAll(".text-truncate").forEach(item => {
-                    let text = item.innerText.trim();
-                    item.innerText = lang === "en" ? getKeyByValue(text) : translations[text];
+            // Translate page content without reload
+            function translatePage(lang) {
+                // Use a batch update approach to improve performance
+                const updates = [];
+
+                textElements.forEach(item => {
+                    const text = item.innerText.trim();
+
+                    let translatedText;
+                    if (lang === "en") {
+                        // Arabic to English
+                        translatedText = reverseTranslations[text] || text;
+                    } else {
+                        // English to Arabic
+                        translatedText = translations[text] || text;
+                    }
+
+                    updates.push({ element: item, text: translatedText });
+                });
+
+                // Apply all updates at once to minimize reflows
+                requestAnimationFrame(() => {
+                    updates.forEach(update => {
+                        update.element.innerText = update.text;
+                    });
                 });
             }
 
-            function getKeyByValue(value) {
-                return Object.keys(translations).find(key => translations[key] === value) || value;
-            }
+            // Initialize with saved language preference
             const savedLang = localStorage.getItem("selectedLang") || "ar";
             setLanguage(savedLang);
+            translatePage(savedLang);
         });
+
+        // Full screen toggle function
         function toggleFullScreen() {
             if (!document.fullscreenElement) {
                 document.documentElement.requestFullscreen();
@@ -551,7 +858,7 @@
                 }
             }
         }
-    </script>
+        </script>
 </body>
 </html>
 @RenderSection("Scripts", required: false)

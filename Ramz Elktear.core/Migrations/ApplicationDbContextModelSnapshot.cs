@@ -33,11 +33,9 @@ namespace Ramz_Elktear.core.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("CarCode")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("CarSKU")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<long>("CreatedBy")
@@ -47,11 +45,9 @@ namespace Ramz_Elktear.core.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("DescrptionAr")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("DescrptionEn")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("EnginePositionId")
@@ -69,7 +65,7 @@ namespace Ramz_Elktear.core.Migrations
                     b.Property<string>("ImageId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<decimal?>("InstallmentPrice")
+                    b.Property<decimal>("InstallmentPrice")
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<bool>("IsActive")
@@ -107,13 +103,12 @@ namespace Ramz_Elktear.core.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("OriginId")
-                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<int?>("QuantityInStock")
+                    b.Property<int>("QuantityInStock")
                         .HasColumnType("int");
 
-                    b.Property<decimal?>("SellingPrice")
+                    b.Property<decimal>("SellingPrice")
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("SubCategoryId")
@@ -320,6 +315,9 @@ namespace Ramz_Elktear.core.Migrations
                     b.Property<DateTimeOffset?>("LockoutEnd")
                         .HasColumnType("datetimeoffset");
 
+                    b.Property<string>("ManagerId")
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<string>("NormalizedEmail")
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
@@ -361,6 +359,8 @@ namespace Ramz_Elktear.core.Migrations
                         .HasColumnType("nvarchar(256)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ManagerId");
 
                     b.HasIndex("NormalizedEmail")
                         .HasDatabaseName("EmailIndex");
@@ -971,6 +971,35 @@ namespace Ramz_Elktear.core.Migrations
                     b.ToTable("Colors", "dbo");
                 });
 
+            modelBuilder.Entity("Ramz_Elktear.core.Entities.ContactForm", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Message")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Phone")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ContactForms", "dbo");
+                });
+
             modelBuilder.Entity("Ramz_Elktear.core.Entities.Files.Images", b =>
                 {
                     b.Property<string>("Id")
@@ -1022,6 +1051,9 @@ namespace Ramz_Elktear.core.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool>("IsAccapted")
+                        .HasColumnType("bit");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -1035,6 +1067,92 @@ namespace Ramz_Elktear.core.Migrations
                     b.ToTable("Banks", "dbo");
                 });
 
+            modelBuilder.Entity("Ramz_Elktear.core.Entities.Installment.InstallmentRequest", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("BankId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("CarId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("InstallmentMonths")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("InstallmentPrice")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("InsurancePercentageId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("JobId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<decimal>("MonthlyIncome")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("MonthlyObligations")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("gender")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BankId");
+
+                    b.HasIndex("CarId");
+
+                    b.HasIndex("InsurancePercentageId");
+
+                    b.HasIndex("JobId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("InstallmentRequests", "dbo");
+                });
+
+            modelBuilder.Entity("Ramz_Elktear.core.Entities.Installment.InsurancePercentage", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Gender")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("MaxAge")
+                        .HasColumnType("int");
+
+                    b.Property<int>("MinAge")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("Percentage")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("InsurancePercentages", "dbo");
+                });
+
             modelBuilder.Entity("Ramz_Elktear.core.Entities.Installment.Job", b =>
                 {
                     b.Property<string>("Id")
@@ -1044,9 +1162,15 @@ namespace Ramz_Elktear.core.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool>("IsConvertable")
+                        .HasColumnType("bit");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("Percentage")
+                        .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id");
 
@@ -1078,6 +1202,9 @@ namespace Ramz_Elktear.core.Migrations
 
                     b.Property<DateTime>("LastModifiedDate")
                         .HasColumnType("datetime2");
+
+                    b.Property<decimal>("SellingPrice")
+                        .HasColumnType("decimal(18,2)");
 
                     b.HasKey("CarId", "OfferId");
 
@@ -1167,6 +1294,26 @@ namespace Ramz_Elktear.core.Migrations
                     b.HasIndex("ImageEnId");
 
                     b.ToTable("Promotion", "dbo");
+                });
+
+            modelBuilder.Entity("Ramz_Elktear.core.Entities.Setting", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("ImageType")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ImageUrlId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ImageUrlId");
+
+                    b.ToTable("Settings", "dbo");
                 });
 
             modelBuilder.Entity("Ramz_Elktear.core.Entities.Specificate.CarSpecification", b =>
@@ -1337,8 +1484,7 @@ namespace Ramz_Elktear.core.Migrations
                     b.HasOne("Ramz_Elktear.core.Entities.Cars.Origin", "Origin")
                         .WithMany("Cars")
                         .HasForeignKey("OriginId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("SubCategory", "SubCategory")
                         .WithMany("Cars")
@@ -1425,11 +1571,17 @@ namespace Ramz_Elktear.core.Migrations
 
             modelBuilder.Entity("Ramz_Elktear.core.Entities.ApplicationData.ApplicationUser", b =>
                 {
+                    b.HasOne("Ramz_Elktear.core.Entities.ApplicationData.ApplicationUser", "Manager")
+                        .WithMany()
+                        .HasForeignKey("ManagerId");
+
                     b.HasOne("Ramz_Elktear.core.Entities.Files.Images", "Profile")
                         .WithMany()
                         .HasForeignKey("ProfileId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Manager");
 
                     b.Navigation("Profile");
                 });
@@ -1560,6 +1712,49 @@ namespace Ramz_Elktear.core.Migrations
                     b.Navigation("path");
                 });
 
+            modelBuilder.Entity("Ramz_Elktear.core.Entities.Installment.InstallmentRequest", b =>
+                {
+                    b.HasOne("Ramz_Elktear.core.Entities.Installment.Bank", "Bank")
+                        .WithMany()
+                        .HasForeignKey("BankId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Car", "Car")
+                        .WithMany()
+                        .HasForeignKey("CarId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Ramz_Elktear.core.Entities.Installment.InsurancePercentage", "InsurancePercentage")
+                        .WithMany()
+                        .HasForeignKey("InsurancePercentageId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Ramz_Elktear.core.Entities.Installment.Job", "Job")
+                        .WithMany()
+                        .HasForeignKey("JobId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Ramz_Elktear.core.Entities.ApplicationData.ApplicationUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Bank");
+
+                    b.Navigation("Car");
+
+                    b.Navigation("InsurancePercentage");
+
+                    b.Navigation("Job");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("Ramz_Elktear.core.Entities.Offer.CarOffer", b =>
                 {
                     b.HasOne("Car", "Car")
@@ -1607,6 +1802,17 @@ namespace Ramz_Elktear.core.Migrations
                     b.Navigation("ImageAr");
 
                     b.Navigation("ImageEn");
+                });
+
+            modelBuilder.Entity("Ramz_Elktear.core.Entities.Setting", b =>
+                {
+                    b.HasOne("Ramz_Elktear.core.Entities.Files.Images", "ImageUrl")
+                        .WithMany()
+                        .HasForeignKey("ImageUrlId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ImageUrl");
                 });
 
             modelBuilder.Entity("Ramz_Elktear.core.Entities.Specificate.CarSpecification", b =>

@@ -12,62 +12,53 @@ namespace Ramz_Elktear.Controllers.MVC
             _jobService = jobService;
         }
 
-        // GET: Job/Index
+        [HttpGet]
         public async Task<IActionResult> Index()
         {
-            var jobs = await _jobService.GetAllJobsAsync();
+            var jobs = await _jobService.GetAllAsync();
             return View(jobs);
         }
 
+        [HttpGet("Create")]
         public IActionResult Create()
         {
             return View();
         }
-        // POST: Job/Create
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(AddJob jobDto)
-        {
-            if (!ModelState.IsValid) return View(jobDto);
 
-            await _jobService.AddJobAsync(jobDto);
+        [HttpPost("Create")]
+        public async Task<IActionResult> Create(AddJobDTO dto)
+        {
+            if (!ModelState.IsValid) return View(dto);
+
+            await _jobService.AddAsync(dto);
             return RedirectToAction(nameof(Index));
         }
 
-        // GET: Job/Edit/{id}
+        [HttpGet("Edit/{id}")]
         public async Task<IActionResult> Edit(string id)
         {
-            if (string.IsNullOrEmpty(id)) return NotFound();
-            var job = await _jobService.GetJobByIdAsync(id);
+            var job = await _jobService.GetByIdAsync(id);
             if (job == null) return NotFound();
-            return View(new UpdateJob()
-            {
-                Id = job.Id,
-                Name = job.Name,
-                Description = job.Description
-            });
+
+            return View(job);
         }
 
-        // POST: Job/Edit/{id}
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(UpdateJob jobDto)
+        [HttpPost("Edit/{id}")]
+        public async Task<IActionResult> Edit(string id, JobDTO dto)
         {
-            if (!ModelState.IsValid) return View(jobDto);
+            if (!ModelState.IsValid) return View(dto);
 
-            var result = await _jobService.UpdateJobAsync(jobDto);
-            if (!result) return NotFound();
+            var success = await _jobService.UpdateAsync(dto);
+            if (!success) return NotFound();
 
             return RedirectToAction(nameof(Index));
         }
 
-        // POST: Job/Delete/{id}
-        [HttpPost]
-        [ValidateAntiForgeryToken]
+        [HttpPost("Delete/{id}")]
         public async Task<IActionResult> Delete(string id)
         {
-            var result = await _jobService.DeleteJobAsync(id);
-            if (!result) return NotFound();
+            var success = await _jobService.DeleteAsync(id);
+            if (!success) return NotFound();
 
             return RedirectToAction(nameof(Index));
         }

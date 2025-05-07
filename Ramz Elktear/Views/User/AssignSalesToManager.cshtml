@@ -1,0 +1,36 @@
+﻿@model List<ApplicationUser>
+<h2><span class="text-truncate">Assign Sales to Manager</span></h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th><span class="text-truncate">Sales User</span></th>
+            <th><span class="text-truncate">Manager</span></th>
+            <th><span class="text-truncate">Action</span></th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach (var sales in Model)
+        {
+            <form method="post" asp-action="AssignSalesToManager">
+            <tr>
+                <td>@sales.FullName</td>
+                <td>
+                    <select name="managerId" class="form-control">
+                            @foreach (var manager in ViewBag.Managers)
+                            {
+                            <option value="@manager.Id">@manager.FullName</option>
+                            }
+                    </select>
+                    <input type="hidden" name="salesId" value="@sales.Id" />
+                </td>
+                <td>
+                    <button type="submit" class="btn btn-primary">Assign</button>
+                </td>
+            </tr>
+            </form>
+
+        }
+    </tbody>
+</table>

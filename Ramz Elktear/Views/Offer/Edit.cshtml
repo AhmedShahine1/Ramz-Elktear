@@ -1,7 +1,7 @@
 ﻿@model UpdateOffer
 
 <h3>Update Offer</h3>
-<form asp-action ="Edit" method="post" enctype="multipart/form-data">
+<form asp-action="Edit" method="post" enctype="multipart/form-data" id="updateOfferForm">
 
     <input type="hidden" asp-for="Id" />
 
@@ -43,9 +43,37 @@
 
     <div class="form-group">
         <label for="Image">Image</label>
-        <input type="file" asp-for="Image" class="form-control" />
+        <input type="file" asp-for="Image" class="form-control" id="imageUpload" onchange="validateImage()" />
         <span asp-validation-for="Image" class="text-danger"></span>
+        <small id="imageError" class="form-text text-danger" style="display:none;">Image must be 1920x683 pixels.</small>
     </div>
 
-    <button type="submit" class="btn btn-primary">Save Changes</button>
+    <button type="submit" class="btn btn-primary" id="submitBtn">Save Changes</button>
 </form>
+
+<script>
+    function validateImage() {
+        const fileInput = document.getElementById('imageUpload');
+        const imageError = document.getElementById('imageError');
+        const submitButton = document.getElementById('submitBtn');
+        const file = fileInput.files[0];
+
+        if (file) {
+            const img = new Image();
+            img.onload = function () {
+                const width = img.width;
+                const height = img.height;
+
+                // Check if the image dimensions are 1920x683
+                if (width === 1920 && height === 683) {
+                    imageError.style.display = 'none';  // Hide error message if valid
+                    submitButton.disabled = false;  // Enable submit button
+                } else {
+                    imageError.style.display = 'block';  // Show error message
+                    submitButton.disabled = true;  // Disable submit button
+                }
+            };
+            img.src = URL.createObjectURL(file);  // Load the image for validation
+        }
+    }
+</script>

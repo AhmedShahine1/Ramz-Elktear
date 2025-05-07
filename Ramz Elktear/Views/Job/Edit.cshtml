@@ -1,20 +1,26 @@
-﻿@model UpdateJob
+﻿@model JobDTO
 
-<h3>Update Job</h3>
+<h2>Edit Job</h2>
+
 <form asp-action="Edit" method="post">
-    @Html.AntiForgeryToken()
-
     <input type="hidden" asp-for="Id" />
-
-    <div class="form-group">
-        <label for="Title">Job Title</label>
-        <input type="text" class="form-control" asp-for="Name" required />
+    <div class="mb-3">
+        <label class="form-label">Job Name</label>
+        <input asp-for="Name" class="form-control" />
     </div>
 
-    <div class="form-group">
-        <label for="Description">Job Description</label>
-        <textarea class="form-control" asp-for="Description" required></textarea>
+    <div class="mb-3">
+        <label class="form-label">Percentage</label>
+        <input asp-for="Percentage" class="form-control" />
     </div>
-
-    <button type="submit" class="btn btn-primary">Save Changes</button>
+    <div class="mb-3">
+        <label class="form-label">Description</label>
+        <textarea asp-for="Description" class="form-control"></textarea>
+    </div>
+    <div class="mb-3">
+        <label class="form-label">IsConvertable</label>
+        <input type="checkbox" asp-for="IsConvertable" class="form-check-input" />
+    </div>
+    <button type="submit" class="btn btn-primary">Update</button>
+    <a href="@Url.Action("Index")" class="btn btn-secondary">Cancel</a>
 </form>

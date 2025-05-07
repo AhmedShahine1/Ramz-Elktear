@@ -1,126 +1,122 @@
 ﻿@model UpdateCarDTO
 @{
-    ViewData["Title"] = "Edit Car";
+    ViewData["Title"] = "Update Car";
 }
 
-<h3>Edit Car</h3>
+<h3>Update Car</h3>
 
 <form asp-action="Edit" enctype="multipart/form-data">
     <input type="hidden" asp-for="Id" />
-
     <div class="row">
         <!-- Left Column -->
         <div class="col-md-6">
             <div class="mb-3">
-                <label>Name (Arabic)</label>
+                <label class="form-label text-truncate d-block">Name (Arabic) *</label>
                 <input type="text" class="form-control" asp-for="NameAr" required />
                 <span class="text-danger" asp-validation-for="NameAr"></span>
             </div>
 
             <div class="mb-3">
-                <label>Name (English)</label>
+                <label class="form-label text-truncate d-block">Name (English) *</label>
                 <input type="text" class="form-control" asp-for="NameEn" required />
                 <span class="text-danger" asp-validation-for="NameEn"></span>
             </div>
 
             <div class="mb-3">
-                <label>Description (Arabic)</label>
-                <textarea class="form-control" asp-for="DescrptionAr" required></textarea>
+                <label class="form-label text-truncate d-block">Description (Arabic)</label>
+                <textarea class="form-control" asp-for="DescrptionAr"></textarea>
                 <span class="text-danger" asp-validation-for="DescrptionAr"></span>
             </div>
 
             <div class="mb-3">
-                <label>Description (English)</label>
-                <textarea class="form-control" asp-for="DescrptionEn" required></textarea>
+                <label class="form-label text-truncate d-block">Description (English)</label>
+                <textarea class="form-control" asp-for="DescrptionEn"></textarea>
                 <span class="text-danger" asp-validation-for="DescrptionEn"></span>
             </div>
 
             <div class="mb-3">
-                <label>Car Code</label>
-                <input type="text" class="form-control" asp-for="CarCode" required />
-                <span class="text-danger" asp-validation-for="CarCode"></span>
-            </div>
-
-            <div class="mb-3">
-                <label>Car SKU</label>
-                <input type="text" class="form-control" asp-for="CarSKU" required />
-                <span class="text-danger" asp-validation-for="CarSKU"></span>
-            </div>
-
-            <div class="mb-3">
-                <label>Car Image</label>
+                <label class="form-label text-truncate d-block">Car Image *</label>
                 <input type="file" class="form-control" asp-for="Image" />
                 <span class="text-danger" asp-validation-for="Image"></span>
-                <img id="imagePreview" src="#" style="display: none; width: 100px; height: 100px;" />
-            </div>
-            <div class="mb-3">
-                <label>Inside Car Images</label>
-                <input type="file" class="form-control" asp-for="InsideCarImages" multiple />
-                <span class="text-danger" asp-validation-for="InsideCarImages"></span>
+                <div id="imagePreviewContainer"></div>
             </div>
 
             <div class="mb-3">
-                <label>Car Image Without Background</label>
+                <label class="form-label text-truncate d-block">Image Without Background *</label>
                 <input type="file" class="form-control" asp-for="ImageWithoutBackground" />
                 <span class="text-danger" asp-validation-for="ImageWithoutBackground"></span>
+                <div id="bgImagePreviewContainer"></div>
             </div>
-            <img id="imageWithoutBackgroundPreview" src="#" style="display: none; width: 100px; height: 100px;" />
 
             <div class="mb-3">
-                <label>Additional Images</label>
+                <label class="form-label text-truncate d-block">Additional Images (Outside Car) *</label>
                 <input type="file" class="form-control" asp-for="Images" multiple />
                 <span class="text-danger" asp-validation-for="Images"></span>
+                <div id="outsideImagePreviewContainer"></div>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label text-truncate d-block">Inside Car Images *</label>
+                <input type="file" class="form-control" asp-for="InsideCarImages" multiple />
+                <span class="text-danger" asp-validation-for="InsideCarImages"></span>
+                <div id="insideImagePreviewContainer"></div>
             </div>
         </div>
 
         <!-- Right Column -->
         <div class="col-md-6">
             <div class="mb-3">
-                <label>Selling Price</label>
+                <label class="form-label text-truncate d-block">Selling Price *</label>
                 <input type="number" class="form-control" asp-for="SellingPrice" required />
                 <span class="text-danger" asp-validation-for="SellingPrice"></span>
             </div>
 
             <div class="mb-3">
-                <label>Installment Price</label>
+                <label class="form-label text-truncate d-block">Installment Price *</label>
                 <input type="number" class="form-control" asp-for="InstallmentPrice" required />
                 <span class="text-danger" asp-validation-for="InstallmentPrice"></span>
             </div>
 
             <div class="mb-3">
-                <label>Quantity in Stock</label>
+                <label class="form-label text-truncate d-block">Quantity in Stock *</label>
                 <input type="number" class="form-control" asp-for="QuantityInStock" required />
                 <span class="text-danger" asp-validation-for="QuantityInStock"></span>
             </div>
 
             <div class="mb-3">
-                <label>Kilometers</label>
+                <label class="form-label text-truncate d-block">Kilometers *</label>
                 <input type="number" class="form-control" asp-for="Kilometers" required />
                 <span class="text-danger" asp-validation-for="Kilometers"></span>
             </div>
 
             <div class="mb-3">
-                <label>Specifications</label>
+                <label class="form-label text-truncate d-block">Specifications *</label>
                 <select class="form-control" asp-for="SpecificationsId" asp-items="ViewBag.Specifications" multiple></select>
                 <span class="text-danger" asp-validation-for="SpecificationsId"></span>
             </div>
 
             <div class="mb-3">
-                <label>Color</label>
+                <label class="form-label text-truncate d-block">Color *</label>
                 <select class="form-control" asp-for="ColorId" asp-items="ViewBag.Colors" multiple></select>
                 <span class="text-danger" asp-validation-for="ColorId"></span>
             </div>
 
             <div class="mb-3">
-                <label>Offer</label>
-                <select class="form-control" asp-for="OfferId" asp-items="ViewBag.Offers" multiple></select>
-                <span class="text-danger" asp-validation-for="OfferId"></span>
+                <label class="form-label text-truncate d-block">Brand *</label>
+                <select class="form-control" asp-for="BrandId" asp-items="ViewBag.Brands" required></select>
+                <span class="text-danger" asp-validation-for="BrandId"></span>
             </div>
 
             <div class="mb-3">
-                <label>Brand</label>
-                <select class="form-control" asp-for="BrandId" asp-items="ViewBag.Brands" required></select>
-                <span class="text-danger" asp-validation-for="BrandId"></span>
+                <label class="form-label text-truncate d-block">Car Code</label>
+                <input type="text" class="form-control" asp-for="CarCode" />
+                <span class="text-danger" asp-validation-for="CarCode"></span>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label text-truncate d-block">Car SKU</label>
+                <input type="text" class="form-control" asp-for="CarSKU" />
+                <span class="text-danger" asp-validation-for="CarSKU"></span>
             </div>
         </div>
     </div>
@@ -129,86 +125,124 @@
         <!-- Additional Details -->
         <div class="col-md-6">
             <div class="mb-3">
-                <label>Transmission Type</label>
+                <label class="form-label text-truncate d-block">Transmission Type *</label>
                 <select class="form-control" asp-for="TransmissionTypeId" asp-items="ViewBag.TransmissionTypes" required></select>
                 <span class="text-danger" asp-validation-for="TransmissionTypeId"></span>
             </div>
 
             <div class="mb-3">
-                <label>Fuel Type</label>
+                <label class="form-label text-truncate d-block">Fuel Type *</label>
                 <select class="form-control" asp-for="FuelTypeId" asp-items="ViewBag.FuelTypes" required></select>
                 <span class="text-danger" asp-validation-for="FuelTypeId"></span>
             </div>
 
             <div class="mb-3">
-                <label>Engine Size</label>
+                <label class="form-label text-truncate d-block">Engine Size *</label>
                 <select class="form-control" asp-for="EngineSizeId" asp-items="ViewBag.EngineSizes" required></select>
                 <span class="text-danger" asp-validation-for="EngineSizeId"></span>
             </div>
 
             <div class="mb-3">
-                <label>Model Year</label>
+                <label class="form-label text-truncate d-block">Model Year *</label>
                 <select class="form-control" asp-for="ModelYearId" asp-items="ViewBag.ModelYears" required></select>
                 <span class="text-danger" asp-validation-for="ModelYearId"></span>
+            </div>
+            <div class="mb-3">
+                <div class="form-check">
+                    <input type="checkbox" class="form-check-input" asp-for="IsActive" />
+                    <label class="form-check-label text-truncate d-block">Is Active</label>
+                </div>
             </div>
         </div>
 
         <div class="col-md-6">
             <div class="mb-3">
-                <label>Engine Position</label>
+                <label class="form-label text-truncate d-block">Engine Position *</label>
                 <select class="form-control" asp-for="EnginePositionId" asp-items="ViewBag.EnginePositions" required></select>
                 <span class="text-danger" asp-validation-for="EnginePositionId"></span>
             </div>
 
             <div class="mb-3">
-                <label>Origin</label>
+                <label class="form-label text-truncate d-block">Origin *</label>
                 <select class="form-control" asp-for="OriginId" asp-items="ViewBag.Origins" required></select>
                 <span class="text-danger" asp-validation-for="OriginId"></span>
             </div>
 
             <div class="mb-3">
-                <label>Subcategory</label>
+                <label class="form-label text-truncate d-block">Subcategory *</label>
                 <select class="form-control" asp-for="SubCategoryId" asp-items="ViewBag.SubCategories" required></select>
                 <span class="text-danger" asp-validation-for="SubCategoryId"></span>
             </div>
 
             <div class="mb-3">
-                <label>Option</label>
+                <label class="form-label text-truncate d-block">Option *</label>
                 <select class="form-control" asp-for="OptionId" asp-items="ViewBag.Options" required></select>
                 <span class="text-danger" asp-validation-for="OptionId"></span>
+            </div>
+            <div class="mb-3">
+                <div class="form-check">
+                    <input type="checkbox" class="form-check-input" asp-for="IsSpecial" />
+                    <label class="form-check-label text-truncate d-block">Is Special</label>
+                </div>
             </div>
         </div>
     </div>
 
-    <!-- Checkbox Fields -->
-    <div class="form-check">
-        <input type="checkbox" class="form-check-input" asp-for="IsSpecial" />
-        <label class="form-check-label">Is Special</label>
-    </div>
-
     <!-- Submit Button -->
-    <button type="submit" class="btn btn-primary mt-3">Update</button>
+    <button type="submit" class="btn btn-primary mt-3">Edit</button>
 </form>
 @section Scripts {
     <script>
-        function previewImage(input, previewId) {
-            let reader = new FileReader();
-            reader.onload = function() {
-                let output = document.getElementById(previewId);
-                output.src = reader.result;
-                output.style.display = "block";
-            };
-            if (input.files && input.files[0]) {
-                reader.readAsDataURL(input.files[0]);
+        function handleImageValidationAndPreview(input, previewContainerId, isMultiple = false) {
+            let files = input.files;
+            let previewContainer = document.getElementById(previewContainerId);
+            previewContainer.innerHTML = ""; // Clear previous previews
+
+            if (files.length > 0) {
+                Array.from(files).forEach(file => {
+                    let img = new Image();
+                    img.onload = function () {
+                        let width = img.width;
+                        let height = img.height;
+                        let aspectRatio = width / height;
+
+                        if (Math.abs(aspectRatio - (16 / 9)) > 0.01) {
+                            alert("Please upload an image with a 16:9 aspect ratio.");
+                            input.value = ""; // Clear the file input
+                        } else {
+                            let reader = new FileReader();
+                            reader.onload = function () {
+                                let imgElement = document.createElement("img");
+                                imgElement.src = reader.result;
+                                imgElement.style = "width: 100px; height: 100px; margin: 5px; display: inline-block; border: 1px solid #ddd; padding: 3px;";
+
+                                if (!isMultiple) {
+                                    previewContainer.innerHTML = ""; // Replace single image
+                                }
+                                previewContainer.appendChild(imgElement);
+                            };
+                            reader.readAsDataURL(file);
+                        }
+                    };
+                    img.src = URL.createObjectURL(file);
+                });
             }
         }
 
-        document.getElementById("Image").addEventListener("change", function(event) {
-            previewImage(event.target, "imagePreview");
+        document.getElementById("Image").addEventListener("change", function () {
+            handleImageValidationAndPreview(this, "imagePreviewContainer");
         });
 
-        document.getElementById("ImageWithoutBackground").addEventListener("change", function(event) {
-            previewImage(event.target, "imageWithoutBackgroundPreview");
+        document.getElementById("ImageWithoutBackground").addEventListener("change", function () {
+            handleImageValidationAndPreview(this, "bgImagePreviewContainer");
+        });
+
+        document.getElementById("Images").addEventListener("change", function () {
+            handleImageValidationAndPreview(this, "outsideImagePreviewContainer", true);
+        });
+
+        document.getElementById("InsideCarImages").addEventListener("change", function () {
+            handleImageValidationAndPreview(this, "insideImagePreviewContainer", true);
         });
     </script>
 }

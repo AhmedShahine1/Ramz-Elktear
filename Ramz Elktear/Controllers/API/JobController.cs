@@ -20,13 +20,11 @@ namespace Ramz_Elktear.Controllers.API
         {
             try
             {
-                var result = await _jobService.GetAllJobsAsync();
+                var result = await _jobService.GetAllAsync();
                 return Ok(new BaseResponse
                 {
                     status = true,
                     Data = result,
-                    ErrorCode = 0,
-                    ErrorMessage = string.Empty
                 });
             }
             catch (Exception ex)

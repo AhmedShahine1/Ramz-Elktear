@@ -2,6 +2,9 @@
 using Ramz_Elktear.BusinessLayer.Interfaces;
 using Ramz_Elktear.core.DTO.CarModels;
 using Ramz_Elktear.core.DTO;
+using Ramz_Elktear.core.Entities.Offer;
+using Ramz_Elktear.BusinessLayer.Services;
+using Ramz_Elktear.core.DTO.CarOfferModels;
 
 namespace Ramz_Elktear.Controllers.API
 {
@@ -9,11 +12,13 @@ namespace Ramz_Elktear.Controllers.API
     {
         private readonly ICarService _carService;
         private readonly IOfferService _offerService;
+        private readonly ICarOfferService _carOfferService;
 
-        public CarController(ICarService carService, IOfferService offerService)
+        public CarController(ICarService carService, IOfferService offerService, ICarOfferService carOfferService)
         {
             _carService = carService;
             _offerService = offerService;
+            _carOfferService = carOfferService;
         }
 
         [HttpGet("cars")]
@@ -106,6 +111,7 @@ namespace Ramz_Elktear.Controllers.API
             try
             {
                 var car = await _carService.GetCarByIdAsync(id);
+                car.ImagesUrl.AddRange(car.InsideCarImagesUrl);
                 if (car == null)
                 {
                     var response = new BaseResponse
@@ -261,15 +267,28 @@ namespace Ramz_Elktear.Controllers.API
         }
 
         [HttpGet("search")]
-        public async Task<IActionResult> SearchCars([FromQuery] string brandId, [FromQuery] string categoryId, [FromQuery] decimal? minPrice, [FromQuery] decimal? maxPrice, [FromQuery] int size = 20)
+        public async Task<IActionResult> SearchCars(
+            [FromQuery] string brandId,
+            [FromQuery] string categoryId,
+            [FromQuery] decimal? minPrice,
+            [FromQuery] decimal? maxPrice,
+            [FromQuery] int pageNumber = 1,
+            [FromQuery] int pageSize = 20)
         {
             try
             {
-                var cars = await _carService.SearchCarsAsync(brandId, categoryId, minPrice, maxPrice, size);
+                var (cars, totalCount) = await _carService.SearchCarsAsync(brandId, categoryId, minPrice, maxPrice, pageNumber, pageSize);
+
                 var response = new BaseResponse
                 {
                     status = true,
-                    Data = cars,
+                    Data = new
+                    {
+                        cars,
+                        totalCount,
+                        totalPages = (int)Math.Ceiling((double)totalCount / pageSize),
+                        currentPage = pageNumber
+                    },
                     ErrorCode = 0,
                     ErrorMessage = string.Empty
                 };
@@ -288,8 +307,13 @@ namespace Ramz_Elktear.Controllers.API
             }
         }
 
-        [HttpGet("Find/{brandId}/{catId}/{modelId}/{page}/{size}")]
-        public async Task<IActionResult> FindCars(string brandId, string catId, string modelId, int page, int size)
+        [HttpGet("Filter")]
+        public async Task<IActionResult> FindCars(
+            [FromQuery] string? brandId,
+            [FromQuery] string? catId,
+            [FromQuery] string? modelId,
+            [FromQuery] int page = 1,
+            [FromQuery] int size = 10)
         {
             try
             {
@@ -316,5 +340,38 @@ namespace Ramz_Elktear.Controllers.API
             }
         }
 
+        // POST: Car/AddCarOffer - API endpoint to add a car to an offer
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddCarOffer([FromBody] AddCarOffer carOffer)
+        {
+            try
+            {
+                var result = await _carOfferService.AddCarOfferAsync(carOffer);
+                if (result != null)
+                    return Ok(new BaseResponse
+                    {
+                        status = true,
+                        ErrorMessage = "Offer added to car successfully!",
+                        Data = result
+                    });
+                else
+                    return BadRequest(new BaseResponse
+                    {
+                        status = false,
+                        ErrorCode = 400,
+                        ErrorMessage = "Failed to add offer to car."
+                    });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new BaseResponse
+                {
+                    status = false,
+                    ErrorCode = 500,
+                    ErrorMessage = ex.Message
+                });
+            }
+        }
     }
 }

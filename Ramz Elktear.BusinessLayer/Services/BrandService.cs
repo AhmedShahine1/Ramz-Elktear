@@ -1,9 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Http;
-using Microsoft.EntityFrameworkCore;
 using Ramz_Elktear.BusinessLayer.Interfaces;
 using Ramz_Elktear.core.DTO.BrandModels;
-using Ramz_Elktear.core.Entities.ApplicationData;
 using Ramz_Elktear.core.Entities.Brands;
 using Ramz_Elktear.core.Entities.Files;
 using Ramz_Elktear.RepositoryLayer.Interfaces;

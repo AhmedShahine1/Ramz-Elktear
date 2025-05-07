@@ -1,6 +1,242 @@
 ﻿@model CarDTO
-<div>
-    <script>
+
+@{
+    string language = Context.Request.Query["lang"].FirstOrDefault() ?? "ar";  // Default to Arabic
+    bool isArabic = language == "ar";
+    var direction = isArabic ? "rtl" : "ltr";
+    var textAlign = isArabic ? "text-end" : "text-start";
+}
+
+<div class="container py-5" dir="@direction">
+    <!-- Language Switcher -->
+    <div class="text-end mb-3">
+        <button onclick="switchLanguage()" class="btn btn-outline-secondary btn-sm">
+            @(isArabic ? "English" : "العربية")
+        </button>
+    </div>
+
+    <div class="row gx-5">
+        <!-- Product Images Gallery -->
+        <aside class="col-lg-6 mb-4">
+            <div class="border rounded-4 mb-3 d-flex justify-content-center">
+                <img id="mainImage" class="rounded-4 img-fluid" style="max-height: 400px; object-fit: contain;" src="@Model.ImageUrl" alt="@(isArabic ? Model.NameAr : Model.NameEn)" />
+            </div>
+            <div class="d-flex flex-wrap justify-content-center mb-3 gallery-thumbnails">
+                @foreach (var imageUrl in Model.ImagesUrl)
+                {
+                    <a class="border mx-1 rounded-2 thumbnail-container" onclick="swapImage(this)">
+                        <img width="60" height="60" class="rounded-2" src="@imageUrl" alt="Car thumbnail" />
+                    </a>
+                }
+            </div>
+        </aside>
+
+        <!-- Product Information -->
+        <main class="col-lg-6">
+            <div class="@textAlign">
+                <h4 class="title text-dark mb-4">@(isArabic ? Model.NameAr : Model.NameEn)</h4>
+
+                <div class="info-grid mb-4">
+                    <div class="info-item">
+                        <span class="info-label">@(isArabic ? "كود السيارة" : "Car Code"):</span>
+                        <span class="info-value">@Model.CarCode</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">@(isArabic ? "رقم تعريف السيارة" : "Car SKU"):</span>
+                        <span class="info-value">@Model.CarSKU</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">@(isArabic ? "الفئة الفرعية" : "SubCategory"):</span>
+                        <span class="info-value">@(isArabic ? Model.SubCategory?.NameAr : Model.SubCategory?.NameEn)</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">@(isArabic ? "عدد الكيلومترات" : "Kilometers"):</span>
+                        <span class="info-value">@Model.Kilometers</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">@(isArabic ? "سعر التقسيط" : "Installment Price"):</span>
+                        <span class="info-value fw-bold">@Model.InstallmentPrice</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">@(isArabic ? "سعر البيع" : "Selling Price"):</span>
+                        <span class="info-value fw-bold">@Model.SellingPrice</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">@(isArabic ? "الحالة" : "Status"):</span>
+                        <span class="info-value">
+                            @if (Model.IsActive)
+                            {
+                                <span class="badge bg-success">@(isArabic ? "نشط" : "Active")</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-secondary">@(isArabic ? "غير نشط" : "Inactive")</span>
+                            }
+                        </span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">@(isArabic ? "مميز" : "Special"):</span>
+                        <span class="info-value">
+                            @if (Model.IsSpecial)
+                            {
+                                <span class="badge bg-warning text-dark">@(isArabic ? "نعم" : "Yes")</span>
+                            }
+                            else
+                            {
+                                <span>@(isArabic ? "لا" : "No")</span>
+                            }
+                        </span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">@(isArabic ? "اللون" : "Color"):</span>
+                        <span class="d-inline-flex gap-1 align-items-center">
+                            @foreach (var color in Model.Color)
+                            {
+                                <span class="color-swatch" style="background-color:@color.Value;" title="@color.Value"></span>
+                            }
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Tabs Section -->
+    <section class="mt-5">
+        <ul class="nav nav-tabs" id="carDetailsTabs" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="details-tab" data-bs-toggle="tab" data-bs-target="#details" type="button" role="tab" aria-controls="details" aria-selected="true">
+                    @(isArabic ? "التفاصيل" : "Details")
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="specifications-tab" data-bs-toggle="tab" data-bs-target="#specifications" type="button" role="tab" aria-controls="specifications" aria-selected="false">
+                    @(isArabic ? "المواصفات" : "Specifications")
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="offers-tab" data-bs-toggle="tab" data-bs-target="#offers" type="button" role="tab" aria-controls="offers" aria-selected="false">
+                    @(isArabic ? "العروض" : "Offers")
+                </button>
+            </li>
+        </ul>
+
+        <div class="tab-content pt-3 pb-5" id="carDetailsTabsContent">
+            <!-- Details Tab -->
+            <div class="tab-pane fade show active @textAlign" id="details" role="tabpanel" aria-labelledby="details-tab">
+                <div class="card">
+                    <div class="card-body">
+                        <dl class="row">
+                            <dt class="col-sm-3">@(isArabic ? "الوصف" : "Description"):</dt>
+                            <dd class="col-sm-9">@(isArabic ? Model.DescrptionAr : Model.DescrptionEn)</dd>
+
+                            <dt class="col-sm-3">@(isArabic ? "موديل السنة" : "Model Year"):</dt>
+                            <dd class="col-sm-9">@Model.ModelYear.Name</dd>
+
+                            <dt class="col-sm-3">@(isArabic ? "موضع المحرك" : "Engine Position"):</dt>
+                            <dd class="col-sm-9">@(isArabic ? Model.EnginePosition?.NameAr : Model.EnginePosition?.NameEn)</dd>
+
+                            <dt class="col-sm-3">@(isArabic ? "ناقل الحركة" : "Transmission Type"):</dt>
+                            <dd class="col-sm-9">@(isArabic ? Model.TransmissionType?.NameAr : Model.TransmissionType?.NameEn)</dd>
+
+                            <dt class="col-sm-3">@(isArabic ? "حجم المحرك" : "Engine Size"):</dt>
+                            <dd class="col-sm-9">@(isArabic ? Model.EngineSize?.NameAr : Model.EngineSize?.NameEn)</dd>
+
+                            <dt class="col-sm-3">@(isArabic ? "الخيار" : "Option"):</dt>
+                            <dd class="col-sm-9">@(isArabic ? Model.Option?.NameAr : Model.Option?.NameEn)</dd>
+
+                            <dt class="col-sm-3">@(isArabic ? "الأصل" : "Origin"):</dt>
+                            <dd class="col-sm-9">@(isArabic ? Model.Origin?.NameAr : Model.Origin?.NameEn)</dd>
+                        </dl>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Specifications Tab -->
+            <div class="tab-pane fade @textAlign" id="specifications" role="tabpanel" aria-labelledby="specifications-tab">
+                <div class="card">
+                    <div class="card-body">
+                        @if (Model.Specifications != null && Model.Specifications.Any())
+                        {
+                            <ul class="list-group list-group-flush">
+                                @foreach (var specification in Model.Specifications)
+                                {
+                                    <li class="list-group-item">@(isArabic ? specification.NameAr : specification.NameEn)</li>
+                                }
+                            </ul>
+                        }
+                        else
+                        {
+                            <p class="text-muted">@(isArabic ? "لا توجد مواصفات متاحة" : "No specifications available")</p>
+                        }
+                    </div>
+                </div>
+            </div>
+
+            <!-- Offers Tab -->
+            <div class="tab-pane fade @textAlign" id="offers" role="tabpanel" aria-labelledby="offers-tab">
+                <div class="card">
+                    <div class="card-body">
+                        @if (Model.Offer != null && Model.Offer.Any())
+                        {
+                            <ul class="list-group list-group-flush">
+                                @foreach (var offer in Model.Offer)
+                                {
+                                    <li class="list-group-item">@(isArabic ? offer.NameAr : offer.NameEn)</li>
+                                }
+                            </ul>
+                        }
+                        else
+                        {
+                            <p class="text-muted">@(isArabic ? "لا توجد عروض متاحة" : "No offers available")</p>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Action Buttons -->
+    <div class="text-center py-4">
+        <a href="@Url.Action("Index")" class="btn btn-primary">
+            @(isArabic ? "العودة إلى القائمة" : "Back to List")
+        </a>
+    </div>
+</div>
+
+<!-- Custom Styles -->
+<style>
+    .color-swatch {
+        width: 25px;
+        height: 25px;
+        display: inline-block;
+        border-radius: 50%;
+        border: 2px solid #333;
+    }
+
+    .thumbnail-container {
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+
+        .thumbnail-container:hover {
+            transform: scale(1.05);
+        }
+
+    .info-item {
+        margin-bottom: 10px;
+    }
+
+    .info-label {
+        font-weight: bold;
+        margin-right: 8px;
+    }
+</style>
+
+<!-- Scripts -->
+<script>
+    // Language handling
+    document.addEventListener('DOMContentLoaded', function() {
         // Get language from localStorage (default to Arabic "ar" if not set)
         let selectedLang = localStorage.getItem("selectedLang") || "ar";
 
@@ -10,116 +246,33 @@
             urlParams.set("lang", selectedLang);
             history.replaceState(null, "", "?" + urlParams.toString());
         }
+    });
 
-        // Function to toggle language and reload the page
-        function switchLanguage() {
-            selectedLang = selectedLang === "ar" ? "en" : "ar"; // Toggle between Arabic and English
-            localStorage.setItem("selectedLang", selectedLang); // Store in localStorage
-            urlParams.set("lang", selectedLang);
-            window.location.search = urlParams.toString(); // Reload with updated language
-        }
-    </script>
-    @{
-        string language = Context.Request.Query["lang"];
-        if (string.IsNullOrEmpty(language))
-        {
-            language = "ar"; // Default to Arabic
-        }
-        var isArabic = language == "ar";
+    // Function to toggle language and reload the page
+    function switchLanguage() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const currentLang = urlParams.get("lang") || "ar";
+        const newLang = currentLang === "ar" ? "en" : "ar";
+
+        // Store in localStorage
+        localStorage.setItem("selectedLang", newLang);
+
+        // Update URL and reload
+        urlParams.set("lang", newLang);
+        window.location.search = urlParams.toString();
     }
 
-    <section class="py-5">
-        <div class="container">
-            <div class="row gx-5">
-                <aside class="col-lg-6">
-                    <div class="border rounded-4 mb-3 d-flex justify-content-center">
-                        <img id="mainImage" class="rounded-4 fit" style="max-width: 100%; max-height: 100vh;" src="@Model.ImageUrl" />
-                    </div>
-                    <div class="d-flex justify-content-center mb-3">
-                        @foreach (var imageUrl in Model.ImagesUrl)
-                        {
-                            <a class="border mx-1 rounded-2">
-                                <img width="60" height="60" class="rounded-2" src="@imageUrl" onclick="swapImage(this)" />
-                            </a>
-                        }
-                    </div>
-                </aside>
-                <main class="col-lg-6">
-                    <h4 class="title text-dark">@(isArabic ? Model.NameAr : Model.NameEn)</h4>
-                    <p><strong>@(isArabic ? "كود السيارة" : "Car Code"):</strong> @Model.CarCode</p>
-                    <p><strong>@(isArabic ? "رقم تعريف السيارة" : "Car SKU"):</strong> @Model.CarSKU</p>
-                    <p><strong>@(isArabic ? "الفئة الفرعية" : "SubCategory"):</strong> @(isArabic ? Model.SubCategory?.NameAr : Model.SubCategory?.NameEn)</p>
-                    <p><strong>@(isArabic ? "عدد الكيلومترات" : "Kilometers"):</strong> @Model.Kilometers</p>
-                    <p><strong>@(isArabic ? "سعر التقسيط" : "Installment Price"):</strong> @Model.InstallmentPrice</p>
-                    <p><strong>@(isArabic ? "سعر البيع" : "Selling Price"):</strong> @Model.SellingPrice</p>
-                    <p><strong>@(isArabic ? "الحالة" : "Status"):</strong> @(Model.IsActive ? (isArabic ? "نشط" : "Active") : (isArabic ? "غير نشط" : "Inactive"))</p>
-                    <p><strong>@(isArabic ? "مميز" : "Special"):</strong> @(Model.IsSpecial ? (isArabic ? "نعم" : "Yes") : (isArabic ? "لا" : "No"))</p>
-                    <p>
-                        <strong>@(isArabic ? "اللون" : "Color"):</strong>
-                        @foreach (var color in Model.Color)
-                        {
-                            <span class="badge" style="background-color:@color.Value; width: 25px; height: 25px; display: inline-block; border-radius: 30px; border: 2px solid black;"></span>
-                        }
-                    </p>
-                </main>
-            </div>
-        </div>
-    </section>
+    // Image gallery functionality
+    function swapImage(element) {
+        const mainImage = document.getElementById("mainImage");
+        const thumbnailImg = element.querySelector('img');
 
-    <section class="container mt-4">
-        <ul class="nav nav-tabs">
-            <li class="nav-item">
-                <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#details">@(isArabic ? "التفاصيل" : "Details")</button>
-            </li>
-            <li class="nav-item">
-                <button class="nav-link" data-bs-toggle="tab" data-bs-target="#specifications">@(isArabic ? "المواصفات" : "Specifications")</button>
-            </li>
-            <li class="nav-item">
-                <button class="nav-link" data-bs-toggle="tab" data-bs-target="#offers">@(isArabic ? "العروض" : "Offers")</button>
-            </li>
-        </ul>
-        <div class="tab-content mt-3">
-            <div class="tab-pane fade" id="offers">
-                <ul>
-                    @foreach (var offer in Model.Offer)
-                    {
-                        <li>@(isArabic ? offer.NameAr : offer.NameEn)</li>
-                    }
-                </ul>
-            </div>
-            <div class="tab-pane fade" id="specifications">
-                <ul>
-                    @foreach (var specification in Model.Specifications)
-                    {
-                        <li>@(isArabic ? specification.NameAr : specification.NameEn)</li>
-                    }
-                </ul>
-            </div>
-            <div class="tab-pane fade show active" id="details">
-                <ul>
-                    <li><strong>@(isArabic ? "الوصف" : "Description"):</strong> @(isArabic ? Model.DescrptionAr : Model.DescrptionEn)</li>
-                    <li><strong>@(isArabic ? "موديل السنة" : "Model Year"):</strong> @Model.ModelYear.Name</li>
-                    <li><strong>@(isArabic ? "موضع المحرك" : "Engine Position"):</strong> @(isArabic ? Model.EnginePosition?.NameAr : Model.EnginePosition?.NameEn)</li>
-                    <li><strong>@(isArabic ? "ناقل الحركة" : "Transmission Type"):</strong> @(isArabic ? Model.TransmissionType?.NameAr : Model.TransmissionType?.NameEn)</li>
-                    <li><strong>@(isArabic ? "حجم المحرك" : "Engine Size"):</strong> @(isArabic ? Model.EngineSize?.NameAr : Model.EngineSize?.NameEn)</li>
-                    <li><strong>@(isArabic ? "الخيار" : "Option"):</strong> @(isArabic ? Model.Option?.NameAr : Model.Option?.NameEn)</li>
-                    <li><strong>@(isArabic ? "الأصل" : "Origin"):</strong> @(isArabic ? Model.Origin?.NameAr : Model.Origin?.NameEn)</li>
-                </ul>
-            </div>
-        </div>
-    </section>
+        if (mainImage && thumbnailImg) {
+            const tempSrc = mainImage.src;
+            const tempAlt = mainImage.alt;
 
-    <div class="container text-center py-4">
-        <a href="@Url.Action("Index")" class="btn btn-primary">@(isArabic ? "العودة إلى القائمة" : "Back to List")</a>
-    </div>
-
-    <script>
-        function swapImage(img) {
-            let mainImage = document.getElementById("mainImage");
-            let tempSrc = mainImage.src;
-            mainImage.src = img.src;
-            img.src = tempSrc;
+            mainImage.src = thumbnailImg.src;
+            thumbnailImg.src = tempSrc;
         }
-    </script>
-
-</div>
+    }
+</script>

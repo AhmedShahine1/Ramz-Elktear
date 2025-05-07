@@ -14,6 +14,7 @@ using Ramz_Elktear.core.Entities.Color;
 using Ramz_Elktear.core.Entities.Categories;
 using Ramz_Elktear.core.Entities.Specificate;
 using Ramz_Elktear.core.Entities.Promotion;
+using Ramz_Elktear.core.Entities;
 
 namespace Ramz_Elktear.core
 {
@@ -57,6 +58,10 @@ namespace Ramz_Elktear.core
         public virtual DbSet<City> Cities { get; set; }
         public virtual DbSet<Booking> Booking { get; set; }
         public virtual DbSet<Promotion> Promotion { get; set; }
+        public virtual DbSet<InsurancePercentage> InsurancePercentages { get; set; }
+        public virtual DbSet<InstallmentRequest> InstallmentRequests { get; set; }
+        public virtual DbSet<ContactForm> ContactForms { get; set; }
+        public virtual DbSet<Setting> Settings { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

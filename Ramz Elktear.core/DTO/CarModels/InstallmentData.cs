@@ -9,7 +9,7 @@ namespace Ramz_Elktear.core.DTO.CarModels
     public class InstallmentData
     {
         public IEnumerable<BankDetails> Banks { get; set; }
-        public IEnumerable<JobDetails> Jobs { get; set; }
+        public IEnumerable<JobDTO> Jobs { get; set; }
         public IEnumerable<CompareBrand> BrandDetails { get; set; }
         public IEnumerable<CityDto> Cities { get; set; }
     }

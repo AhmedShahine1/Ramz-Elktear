@@ -13,6 +13,7 @@ using Ramz_Elktear.core.Entities.Color;
 using Ramz_Elktear.core.Entities.Categories;
 using Ramz_Elktear.core.Entities.Specificate;
 using Ramz_Elktear.core.Entities.Promotion;
+using Ramz_Elktear.core.Entities;
 
 namespace Ramz_Elktear.RepositoryLayer.Repositories
 {
@@ -50,6 +51,10 @@ namespace Ramz_Elktear.RepositoryLayer.Repositories
         public IBaseRepository<CarSpecification> CarSpecificationRepository { get; set; }
         public IBaseRepository<Specification> SpecificationRepository { get; set; }
         public IBaseRepository<Promotion> PromotionRepository { get; set; }
+        public IBaseRepository<InsurancePercentage> InsurancePercentageRepository { get; set; }
+        public IBaseRepository<InstallmentRequest> InstallmentRequestsRepository { get; set; }
+        public IBaseRepository<ContactForm> ContactFormsRepository { get; set; }
+        public IBaseRepository<Setting> SettingsRepository { get; set; }
 
         public UnitOfWork(ApplicationDbContext context)
         {
@@ -83,6 +88,10 @@ namespace Ramz_Elktear.RepositoryLayer.Repositories
             CarSpecificationRepository = new BaseRepository<CarSpecification>(context);
             SpecificationRepository = new BaseRepository<Specification>(context);
             PromotionRepository = new BaseRepository<Promotion>(context);
+            InsurancePercentageRepository = new BaseRepository<InsurancePercentage>(context);
+            InstallmentRequestsRepository = new BaseRepository<InstallmentRequest>(context);
+            ContactFormsRepository = new BaseRepository<ContactForm>(context);
+            SettingsRepository = new BaseRepository<Setting>(context);
         }
 
         public int SaveChanges()

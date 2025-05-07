@@ -59,7 +59,8 @@ namespace Ramz_Elktear.RepositoryLayer.Repositories
             return query.FirstOrDefault(criteria);
         }
 
-        public async Task<T> FindAsync(Expression<Func<T, bool>> criteria, Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null, bool isNoTracking = false)
+        public async Task<T> FindAsync(Expression<Func<T, bool>> criteria, Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null, Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null,
+         bool isNoTracking = false)
         {
             IQueryable<T> query = Context.Set<T>();
 
@@ -67,6 +68,8 @@ namespace Ramz_Elktear.RepositoryLayer.Repositories
                 query = include(query);
             if (isNoTracking)
                 query = query.AsNoTracking();
+            if (orderBy != null)
+                query = orderBy(query);
 
             return await query.FirstOrDefaultAsync(criteria);
         }

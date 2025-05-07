@@ -1,7 +1,48 @@
-﻿
+﻿@model Ramz_Elktear.core.DTO.BookingModels.BookingDto
+
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Booking Details";
 }
 
-<h1>Details</h1>
+<h2 class="text-center text-truncate">Booking Details</h2>
 
+@if (Model != null)
+{
+    <div class="card">
+        <div class="card-body">
+            <h4 class="card-title"><span class="text-truncate">Status:</span> @Model.BookingStatusDisplay</h4>
+
+            <h5 class="text-truncate">Buyer Information</h5>
+            <ul>
+                <li><strong class="text-truncate">Name:</strong> @Model.Buyer.FullName</li>
+                <li><strong class="text-truncate">Phone:</strong> @Model.Buyer.PhoneNumber</li>
+            </ul>
+
+            <h5 class="text-truncate">Seller Information</h5>
+            <ul>
+                <li><strong class="text-truncate">Name:</strong> @Model.Seller.FullName</li>
+                <li><strong class="text-truncate">Phone:</strong> @Model.Seller.PhoneNumber</li>
+            </ul>
+
+            <h5 class="text-truncate">Car Details</h5>
+            <ul>
+                <li><strong class="text-truncate">Name:</strong> @Model.Car.NameEn (@Model.Car.NameAr)</li>
+                <li><strong class="text-truncate">Price:</strong> $@Model.Car.SellingPrice</li>
+                <li><strong class="text-truncate">Kilometers:</strong> @Model.Car.Kilometers</li>
+                <li><strong class="text-truncate">Transmission:</strong> @Model.Car.TransmissionType.NameAr</li>
+                <li><strong class="text-truncate">Fuel Type:</strong> @Model.Car.FuelType.NameAr</li>
+                <li><strong class="text-truncate">Brand:</strong> @Model.Car.Brand.NameAr</li>
+            </ul>
+
+            <h5 class="text-truncate">Car Image</h5>
+            <img src="@Model.Car.ImageUrl" alt="Car Image" class="img-fluid" width="300" />
+
+            <br /><br />
+            <a href="@Url.Action("Index", "Booking")" class="btn btn-secondary text-truncate">Back to Bookings</a>
+        </div>
+    </div>
+}
+else
+{
+    <p class="text-danger text-truncate">Booking details not available.</p>
+}

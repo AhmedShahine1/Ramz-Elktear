@@ -110,7 +110,7 @@
             // 
             // label1
             // 
-            this.label1.BackColor = System.Drawing.Color.DarkGoldenrod;
+            this.label1.BackColor = System.Drawing.Color.ForestGreen;
             this.label1.ForeColor = System.Drawing.Color.White;
             this.label1.LocationFloat = new DevExpress.Utils.PointFloat(298.8889F, 23.88886F);
             this.label1.Name = "label1";

@@ -7,5 +7,6 @@
         public string Address { get; set; }
         public string SwiftCode { get; set; }
         public string IBAN { get; set; }
+        public bool IsAccapted { get; set; }
     }
 }

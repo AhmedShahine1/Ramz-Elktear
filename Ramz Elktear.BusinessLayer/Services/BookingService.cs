@@ -15,12 +15,14 @@ namespace Ramz_Elktear.BusinessLayer.Services
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly ICarService _carService;
+        private readonly IAccountService _accountService;
         private readonly IMapper _mapper;
-        public BookingService(IUnitOfWork unitOfWork, IMapper mapper, ICarService carService)
+        public BookingService(IUnitOfWork unitOfWork, IMapper mapper, ICarService carService, IAccountService accountService)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
             _carService = carService;
+            _accountService = accountService;
         }
 
         public async Task<IEnumerable<BookingDto>> GetAllBookingsAsync()
@@ -38,25 +40,6 @@ namespace Ramz_Elktear.BusinessLayer.Services
                 Buyer = _mapper.Map<AuthDTO>(booking.Buyer),
                 Car = _mapper.Map<CarDTO>(booking.Car),
             }).ToList();
-        }
-
-        public async Task<List<BookingStatsByMonthDto>> GetBookingStatsByMonthAsync()
-        {
-            var bookings = await _unitOfWork.BookingRepository.GetAllAsync();
-
-            var bookingStats = bookings
-                .GroupBy(b => new { b.CreateAt.Year, b.CreateAt.Month })  // Group by year and month
-                .Select(g => new BookingStatsByMonthDto
-                {
-                    Year = g.Key.Year,
-                    Month = g.Key.Month,
-                    BookingCount = g.Count()  // Count the number of bookings for each month
-                })
-                .OrderByDescending(s => s.Year)
-                .ThenByDescending(s => s.Month)
-                .ToList();
-
-            return bookingStats;
         }
 
         public async Task<BookingDto> GetBookingByIdAsync(string bookingId)
@@ -99,11 +82,23 @@ namespace Ramz_Elktear.BusinessLayer.Services
 
         public async Task<BookingDto> AddBookingAsync(CreateBookingDto createBookingDto)
         {
+            var buyer = await _unitOfWork.UserRepository.GetByIdAsync(createBookingDto.UserId);
+            if (buyer == null) throw new ArgumentException("Buyer not found");
+
+            var car = await _unitOfWork.CarRepository.GetByIdAsync(createBookingDto.CarId);
+            if (car == null) throw new ArgumentException("Car not found");
+
+            // Find the manager with the least bookings
+            var manager = await _accountService.GetManagerWithLeastBookingsAsync();
+            if (manager == null) throw new InvalidOperationException("No available managers.");
+
             var booking = new Booking()
             {
-                Buyer = await _unitOfWork.UserRepository.GetByIdAsync(createBookingDto.UserId),
-                Car = await _unitOfWork.CarRepository.GetByIdAsync(createBookingDto.CarId)
+                Buyer = buyer,
+                Car = car,
+                Seller = manager,
             };
+
             await _unitOfWork.BookingRepository.AddAsync(booking);
             await _unitOfWork.SaveChangesAsync();
 
@@ -215,6 +210,56 @@ namespace Ramz_Elktear.BusinessLayer.Services
                 Seller = _mapper.Map<AuthDTO>(booking.Seller),
                 Buyer = _mapper.Map<AuthDTO>(booking.Buyer),
                 Car = _carService.GetCarByIdAsync(booking.Car.Id).Result,
+            }).ToList();
+        }
+
+        public async Task<List<BookingDto>> GetBookingByUserAsync(string userId)
+        {
+            var bookings = await _unitOfWork.BookingRepository.FindAllAsync(
+                b => b.Buyer.Id == userId || b.Seller.Id == userId,  // Check if user is Buyer or Seller
+                include: q => q
+                    .Include(b => b.Buyer)
+                    .Include(b => b.Seller)
+                    .Include(b => b.Car)
+            );
+
+            if (!bookings.Any()) return new List<BookingDto>();
+
+            return bookings.Select(booking => new BookingDto()
+            {
+                Id = booking.Id,
+                BookingStatus = booking.Status,
+                Seller = _mapper.Map<AuthDTO>(booking.Seller),
+                Buyer = _mapper.Map<AuthDTO>(booking.Buyer),
+                Car = _mapper.Map<CarDTO>(booking.Car),
+            }).ToList();
+        }
+
+        public async Task<List<BookingDto>> GetBookingsByManagerIdAsync(string managerId)
+        {
+            // Get sales users assigned to this manager
+            var salesUsers = await _accountService.GetUsersWithSalesReturnRole(managerId);
+            var salesIds = salesUsers.Select(s => s.Id).ToList();
+
+            if (!salesIds.Any())
+                return new List<BookingDto>(); // No sales under this manager
+
+            // Fetch bookings where Seller (Salesperson) is under this manager
+            var bookings = await _unitOfWork.BookingRepository.FindAllAsync(
+                b => salesIds.Contains(b.Seller.Id),
+                include: q => q
+                    .Include(b => b.Buyer)
+                    .Include(b => b.Seller)
+                    .Include(b => b.Car)
+            );
+
+            return bookings.Select(booking => new BookingDto()
+            {
+                Id = booking.Id,
+                BookingStatus = booking.Status,
+                Seller = _mapper.Map<AuthDTO>(booking.Seller),
+                Buyer = _mapper.Map<AuthDTO>(booking.Buyer),
+                Car = _mapper.Map<CarDTO>(booking.Car),
             }).ToList();
         }
 

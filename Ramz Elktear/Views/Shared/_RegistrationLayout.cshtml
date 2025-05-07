@@ -30,7 +30,7 @@
     <script src="~/assets/js/config.js"></script>
 </head>
 
-<body>
+<body style="background-image: url('@(ViewBag.RegisterImage ?? ViewBag.LoginImage)'); background-size: cover; background-position: center;">
     <div class="container-xxl">
         <div class="authentication-wrapper authentication-basic container-p-y">
             <div class="authentication-inner">
@@ -39,9 +39,9 @@
                     <div class="card-body">
                         <!-- Logo -->
                         <div class="app-brand justify-content-center">
-                            <a href="index.html" class="app-brand-link gap-2">
+                            <a class="app-brand-link gap-2">
                                 <span class="app-brand-logo demo">
-                                    <img src="~/assets/img/group 92.png" style="height: 100px;" />
+                                    <img src="@Context.Request.Cookies["siteLogo"]" style="height: 100px;" />
                                 </span>
                             </a>
                         </div>

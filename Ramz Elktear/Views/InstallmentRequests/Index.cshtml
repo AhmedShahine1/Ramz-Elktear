@@ -1,0 +1,144 @@
+﻿@model IEnumerable<DetailsInstallmentRequest>
+
+@{
+    ViewData["Title"] = "Installment Requests";
+}
+
+<h2><span class="text-truncate">Installment Requests</span></h2>
+
+<!-- Filters -->
+<div class="mb-3">
+    <div class="row">
+        <div class="col-md-3">
+            <select id="filterUserName" class="form-control">
+                <option value=""><span class="text-truncate">All Users</span></option>
+                @foreach (var user in Model.Select(m => m.User.FullName).Distinct())
+                {
+                    <option value="@user">@user</option>
+                }
+            </select>
+        </div>
+
+        <div class="col-md-3">
+            <select id="filterCarName" class="form-control">
+                <option value=""><span class="text-truncate">All Cars</span></option>
+                @foreach (var car in Model.Select(m => m.Car.NameEn).Distinct())
+                {
+                    <option value="@car">@car</option>
+                }
+            </select>
+        </div>
+
+        <div class="col-md-3">
+            <select id="filterCarModel" class="form-control">
+                <option value=""><span class="text-truncate">All Model Years</span></option>
+                @foreach (var modelyear in Model.Select(m => m.Car.ModelYear.Name).Distinct())
+                {
+                    <option value="@modelyear">@modelyear</option>
+                }
+            </select>
+        </div>
+
+        <div class="col-md-3">
+            <select id="filterStatus" class="form-control">
+                <option value=""><span class="text-truncate">All Status</span></option>
+                @foreach (var status in Enum.GetValues(typeof(InstallmentStatus)))
+                {
+                    <option value="@status"><span class="text-truncate">@status</span></option>
+                }
+            </select>
+        </div>
+    </div>
+</div>
+
+<!-- Table -->
+<table class="table table-bordered" id="installmentTable">
+    <thead>
+        <tr>
+            <th><span class="text-truncate">User</span></th>
+            <th><span class="text-truncate">Car</span></th>
+            <th><span class="text-truncate">Model Year</span></th>
+            <th><span class="text-truncate">Bank</span></th>
+            <th><span class="text-truncate">Job</span></th>
+            <th><span class="text-truncate">Status</span></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td class="user-name">@item.User.FullName</td>
+                <td class="car-name">@item.Car.NameEn</td>
+                <td class="car-model">@item.Car.ModelYear.Name</td>
+                <td>@item.Bank.Name</td>
+                <td>@item.Job.Name</td>
+                <td class="status">
+                    <select class="form-control status-dropdown" data-id="@item.Id">
+                        @foreach (var status in Enum.GetValues(typeof(InstallmentStatus)))
+                        {
+                            <option value="@status" selected="@(item.Status == (InstallmentStatus)status ? "selected" : null)">
+                                <span class="text-truncate">@status</span>
+                            </option>
+                        }
+                    </select>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@section Scripts {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            toastr.options = {
+                closeButton: true,
+                progressBar: true,
+                positionClass: "toast-top-right",
+                timeOut: "3000"
+            };
+
+            $(".status-dropdown").change(function () {
+                var requestId = $(this).data("id");
+                var newStatus = $(this).val();
+
+                $.ajax({
+                    url: "/InstallmentRequests/UpdateStatus",
+                    type: "POST",
+                    data: { id: requestId, newStatus: newStatus },
+                    success: function () {
+                        toastr.success("Status updated successfully!");
+                    },
+                    error: function () {
+                        toastr.error("Error updating status. Please try again.");
+                    }
+                });
+            });
+
+            function filterTable() {
+                var userName = $("#filterUserName").val().toLowerCase().trim();
+                var carName = $("#filterCarName").val().toLowerCase().trim();
+                var carModel = $("#filterCarModel").val().toLowerCase().trim();
+                var status = $("#filterStatus").val().toLowerCase().trim();
+
+                $("#installmentTable tbody tr").each(function () {
+                    var rowUser = $(this).find(".user-name").text().toLowerCase().trim();
+                    var rowCar = $(this).find(".car-name").text().toLowerCase().trim();
+                    var rowModel = $(this).find(".car-model").text().toLowerCase().trim();
+                    var rowStatus = $(this).find(".status option:selected").text().toLowerCase().trim();
+
+                    var showRow =
+                        (userName === "" || rowUser === userName) &&
+                        (carName === "" || rowCar === carName) &&
+                        (carModel === "" || rowModel === carModel) &&
+                        (status === "" || rowStatus === status);
+
+                    $(this).toggle(showRow);
+                });
+            }
+
+            $("#filterUserName, #filterCarName, #filterCarModel, #filterStatus").on("change", filterTable);
+        });
+    </script>
+}

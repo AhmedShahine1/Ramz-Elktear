@@ -1,0 +1,129 @@
+﻿@model IEnumerable<DetailsInstallmentRequest>
+@using Ramz_Elktear.core.DTO.InstallmentRequestModels
+
+<h3>Installment Requests</h3>
+
+<!-- Filter Form -->
+<form method="get" asp-action="Index">
+    <div class="row mb-3">
+        <div class="col-md-2">
+            <input type="text" name="Id" class="form-control" placeholder="Request ID" value="@Context.Request.Query["Id"]" />
+        </div>
+        <div class="col-md-2">
+            <input type="text" name="UserId" class="form-control" placeholder="User ID" value="@Context.Request.Query["UserId"]" />
+        </div>
+        <div class="col-md-2">
+            <select name="Status" class="form-control">
+                <option value="">All Statuses</option>
+                @foreach (var status in Enum.GetValues(typeof(InstallmentStatus)))
+                {
+                    <option value="@status" selected="@(Context.Request.Query["Status"] == status.ToString())">@status</option>
+                }
+            </select>
+        </div>
+        <div class="col-md-2">
+            <button type="submit" class="btn btn-primary">Filter</button>
+        </div>
+    </div>
+</form>
+
+<!-- Installment Requests Table -->
+<table class="table">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>User ID</th>
+            <th>Car ID</th>
+            <th>Bank ID</th>
+            <th>Status</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null && Model.Any())
+        {
+            int index = 1;
+            foreach (var request in Model)
+            {
+                <tr>
+                    <td>@index</td>
+                    <td>@request.User.FullName</td>
+                    <td>@request.Car.NameAr</td>
+                    <td>@request.Bank.Name</td>
+                    <td>
+                        <select class="form-control status-dropdown" data-id="@request.Id">
+                            @foreach (var status in Enum.GetValues(typeof(InstallmentStatus)))
+                            {
+                                <option value="@status" selected="@(request.Status == (InstallmentStatus)status)"><span class="text-truncate">@status</span></option>
+                            }
+                        </select>
+                    </td>
+                    <td>
+                        <button class="btn btn-danger delete-btn" data-id="@request.Id">Delete</button>
+                    </td>
+                </tr>
+                index++;
+            }
+        }
+        else
+        {
+            <tr><td colspan="6" class="text-center">No installment requests found.</td></tr>
+        }
+    </tbody>
+</table>
+
+<script>
+    async function updateStatus(requestId, newStatus) {
+        try {
+                let response = awaitfetch(`/InstallmentRequest/UpdateStatus?id=${requestId}&status=${newStatus}`d, {
+                method: 'GET'
+            });
+            let data = await response.json();
+            if (data.success) {
+                alert('Status updated successfully');
+            } else {
+                alert('Failed to update status');
+            }
+        } catch (error) {
+            console.error("Error updating status:", error);
+            alert('Error occurred while updating status');
+        }
+    }
+
+    async function deleteRequest(requestId) {
+        try {
+            if (confirm('Are you sure you want to delete this request?')) {
+                let response = await fetch(`/InstallmentRequest/Delete?id=${requestId}`, {
+                    method: 'GET'
+                });
+                let data = await response.json();
+                if (data.success) {
+                    alert('Request deleted successfully');
+                    location.reload();
+                } else {
+                    alert('Failed to delete request');
+                }
+            }
+        } catch (error) {
+            console.error("Error deleting request:", error);
+            alert('Error occurred while deleting request');
+        }
+    }
+
+    document.querySelectorAll('.status-dropdown').forEach(item => {
+        item.addEventListener('change', async function () {
+            let requestId = this.getAttribute('data-id');
+            let newStatus = this.value;
+            await updateStatus(requestId, newStatus); // Ensure update completes before proceeding
+        });
+    });
+
+    document.querySelectorAll('.delete-btn').forEach(item => {
+        item.addEventListener('click', async function () {
+            let requestId = this.getAttribute('data-id');
+            await deleteRequest(requestId); // Ensure delete completes before proceeding
+        });
+    });
+</script>
+
+

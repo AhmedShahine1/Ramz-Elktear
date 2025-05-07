@@ -43,6 +43,7 @@ namespace Ramz_Elktear.BusinessLayer.Services
             {
                 OfferId = carOfferDto.OfferId,
                 CarId = carOfferDto.CarId,
+                SellingPrice = carOfferDto.SellingPrice,
                 CreatedDate = DateTime.UtcNow,
                 IsActive = true,
                 IsDeleted = false

@@ -6,19 +6,18 @@ namespace Ramz_Elktear.core.DTO.CarModels
     {
         public string NameAr { get; set; }
         public string NameEn { get; set; }
-        public string DescrptionAr { get; set; }
-        public string DescrptionEn { get; set; }
+        public string? DescrptionAr { get; set; }
+        public string? DescrptionEn { get; set; }
         public decimal? SellingPrice { get; set; }
         public decimal? InstallmentPrice { get; set; }
         public int? QuantityInStock { get; set; }
         public string SubCategoryId { get; set; }
-        public string CarCode { get; set; }
-        public string CarSKU { get; set; }
+        public string? CarCode { get; set; }
+        public string? CarSKU { get; set; }
         public IFormFile Image { get; set; }
         public IFormFile ImageWithoutBackground { get; set; } 
         public List<IFormFile> Images { get; set; } = new List<IFormFile>();
         public List<IFormFile> InsideCarImages { get; set; } = new List<IFormFile>(); 
-        public List<string>? OfferId { get; set; } = new List<string>();
         public List<string> ColorId { get; set; } = new List<string>();
         public List<string> SpecificationsId { get; set; } = new List<string>();
         public string BrandId { get; set; }

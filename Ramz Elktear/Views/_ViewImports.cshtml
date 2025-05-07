@@ -19,5 +19,15 @@
 @using Ramz_Elktear.core.DTO
 @using Ramz_Elktear.core.DTO.HomeModels
 @using Ramz_Elktear.core.DTO.NotificationModels
+@using Ramz_Elktear.core.DTO.InstallmentModels
+@using Ramz_Elktear.core.DTO.InsurancePercentageModels
 @using Ramz_Elktear.core.DTO.PromotionModels
+@using Ramz_Elktear.core.DTO.InstallmentRequestModels
+@using Ramz_Elktear.core.Helper
+@using Ramz_Elktear.core.Entities.ApplicationData
+@using Ramz_Elktear.core.DTO.ContactForms
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers

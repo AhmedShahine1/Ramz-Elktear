@@ -1,0 +1,33 @@
+﻿@model IEnumerable<Ramz_Elktear.core.DTO.SettingModels.SettingDetails>
+
+<h2><span class="text-truncate">Settings</span></h2>
+
+<a asp-action="Create" class="btn btn-primary">
+    <span class="text-truncate">Add New Setting</span>
+</a>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th><span class="text-truncate">Image Type</span></th>
+            <th><span class="text-truncate">Preview</span></th>
+            <th><span class="text-truncate">Actions</span></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var setting in Model)
+        {
+            <tr>
+                <td>@setting.ImageType</td>
+                <td>
+                    <img src="@setting.ImageUrl" width="100" height="50" />
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@setting.Id" class="btn btn-warning">
+                        <span class="text-truncate">Edit</span>
+                    </a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

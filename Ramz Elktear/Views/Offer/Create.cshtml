@@ -1,47 +1,75 @@
 ﻿@model AddOffer
 
-<h3>Add New Offer</h3>
+<h3 class="text-truncate">Add New Offer</h3>
 
-<form asp-action="Create" method="post" enctype="multipart/form-data">
+<form asp-action="Create" method="post" enctype="multipart/form-data" id="offerForm">
     @Html.AntiForgeryToken()
 
     <div class="form-group">
-        <label for="NameAr">Offer Name (Arabic)</label>
+        <label for="NameAr" class="text-truncate">Offer Name (Arabic)</label>
         <input type="text" class="form-control" asp-for="NameAr" required />
     </div>
 
     <div class="form-group">
-        <label for="NameEn">Offer Name (English)</label>
+        <label for="NameEn" class="text-truncate">Offer Name (English)</label>
         <input type="text" class="form-control" asp-for="NameEn" required />
     </div>
 
     <div class="form-group">
-        <label for="NewPrice">New Price</label>
+        <label for="NewPrice" class="text-truncate">New Price</label>
         <input type="number" class="form-control" asp-for="NewPrice" required step="0.01" />
     </div>
 
     <div class="form-group">
-        <label for="Image">Offer Image</label>
-        <input type="file" class="form-control" asp-for="Image" accept="image/*" />
+        <label for="Image" class="text-truncate">Offer Image</label>
+        <input type="file" class="form-control" asp-for="Image" accept="image/*" id="imageUpload" onchange="validateImage()" />
+        <small id="imageError" class="form-text text-danger" style="display:none;">Image must be 1920x683 pixels.</small>
     </div>
 
     <div class="form-group">
-        <label for="StartDate">Start Date</label>
+        <label for="StartDate" class="text-truncate">Start Date</label>
         <input type="date" class="form-control" asp-for="StartDate" required />
     </div>
 
     <div class="form-group">
-        <label for="EndDate">End Date</label>
+        <label for="EndDate" class="text-truncate">End Date</label>
         <input type="date" class="form-control" asp-for="EndDate" required />
     </div>
 
     <div class="form-group form-check">
         <input type="checkbox" class="form-check-input" asp-for="Delivery" />
-        <label class="form-check-label" for="Delivery">Delivery Available</label>
+        <label class="form-check-label text-truncate" for="Delivery">Delivery Available</label>
     </div>
 
     <div class="form-group">
-        <button type="submit" class="btn btn-success">Add Offer</button>
-        <a href="@Url.Action("Index")" class="btn btn-secondary">Back to Offer List</a>
+        <button type="submit" class="btn btn-success text-truncate" id="submitBtn">Add Offer</button>
+        <a href="@Url.Action("Index")" class="btn btn-secondary text-truncate">Back to Offer List</a>
     </div>
 </form>
+
+<script>
+    function validateImage() {
+        const fileInput = document.getElementById('imageUpload');
+        const imageError = document.getElementById('imageError');
+        const submitButton = document.getElementById('submitBtn');
+        const file = fileInput.files[0];
+
+        if (file) {
+            const img = new Image();
+            img.onload = function () {
+                const width = img.width;
+                const height = img.height;
+
+                // Check if the image dimensions are 1920x683
+                if (width === 1920 && height === 683) {
+                    imageError.style.display = 'none';  // Hide error message if valid
+                    submitButton.disabled = false;  // Enable submit button
+                } else {
+                    imageError.style.display = 'block';  // Show error message
+                    submitButton.disabled = true;  // Disable submit button
+                }
+            };
+            img.src = URL.createObjectURL(file);  // Load the image for validation
+        }
+    }
+</script>

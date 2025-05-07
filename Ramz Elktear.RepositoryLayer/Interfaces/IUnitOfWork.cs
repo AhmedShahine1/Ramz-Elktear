@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Ramz_Elktear.core.Entities;
 using Ramz_Elktear.core.Entities.ApplicationData;
 using Ramz_Elktear.core.Entities.Booking;
 using Ramz_Elktear.core.Entities.Branchs;
@@ -45,6 +46,10 @@ namespace Ramz_Elktear.RepositoryLayer.Interfaces
         public IBaseRepository<CarSpecification> CarSpecificationRepository { get; }
         public IBaseRepository<Specification> SpecificationRepository { get; }
         public IBaseRepository<Promotion> PromotionRepository { get; }
+        public IBaseRepository<InsurancePercentage> InsurancePercentageRepository { get; }
+        public IBaseRepository<InstallmentRequest> InstallmentRequestsRepository { get; }
+        public IBaseRepository<ContactForm> ContactFormsRepository { get; }
+        public IBaseRepository<Setting> SettingsRepository { get; }
 
         //-----------------------------------------------------------------------------------
         int SaveChanges();

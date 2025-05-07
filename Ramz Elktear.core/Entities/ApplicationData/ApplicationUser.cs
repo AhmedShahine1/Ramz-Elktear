@@ -19,5 +19,9 @@ namespace Ramz_Elktear.core.Entities.ApplicationData
         [ForeignKey(nameof(Profile))]
         public string ProfileId { get; set; }
         public Images Profile { get; set; } // صورة الملف الشخصي للمستخدم.
+
+        [ForeignKey(nameof(Manager))]
+        public string? ManagerId { get; set; }
+        public ApplicationUser? Manager { get; set; }
     }
 }

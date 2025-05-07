@@ -66,8 +66,12 @@ public class OfferService : IOfferService
         var offer = await _unitOfWork.OffersRepository.GetByIdAsync(offerDto.Id);
         if (offer == null) throw new ArgumentException("Offer not found");
 
-        _mapper.Map(offerDto, offer);
-
+        offer.NameAr = offerDto.NameAr;
+        offer.NameEn = offerDto.NameEn;
+        offer.NewPrice = offerDto.NewPrice;
+        offer.StartDate = offerDto.StartDate;
+        offer.EndDate = offerDto.EndDate;
+        offer.delivery = offerDto.Delivery;
         if (offerDto.Image != null)
         {
             await UpdateOfferImage(offer, offerDto.Image);

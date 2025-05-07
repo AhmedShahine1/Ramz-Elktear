@@ -1,0 +1,32 @@
+﻿@model SalesDashboardDto
+
+<h2 class="text-truncate">Sales Dashboard</h2>
+
+<div>
+    <p><strong class="text-truncate">Total Sales:</strong> @Model.TotalSales</p>
+</div>
+
+<div class="col-md-6">
+    <canvas id="salesByMonthChart"></canvas>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        var salesByMonthCtx = document.getElementById('salesByMonthChart').getContext('2d');
+        new Chart(salesByMonthCtx, {
+            type: 'line',
+            data: {
+                labels: @Html.Raw(Json.Serialize(Model.MonthlySales.Select(m => $"{m.Month}/{m.Year}"))),
+                datasets: [{
+                    label: 'Sales Per Month',
+                    data: @Html.Raw(Json.Serialize(Model.MonthlySales.Select(m => m.SalesCount))),
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    borderWidth: 1
+                }]
+            },
+            options: { responsive: true, scales: { y: { beginAtZero: true } } }
+        });
+    </script>
+}

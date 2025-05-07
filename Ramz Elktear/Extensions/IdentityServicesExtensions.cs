@@ -48,6 +48,7 @@ namespace Ramz_Elktear.Extensions
                 options.AddPolicy("Support Developer", policy => policy.RequireRole("Support Developer"));
                 options.AddPolicy("Customer", policy => policy.RequireRole("Customer", "Admin", "Support Developer"));
                 options.AddPolicy("Sales", policy => policy.RequireRole("Sales", "Admin", "Support Developer"));
+                options.AddPolicy("Manager", policy => policy.RequireRole("Manager", "Admin", "Support Developer"));
             });
 
             return services;

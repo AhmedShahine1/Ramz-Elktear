@@ -78,7 +78,7 @@ namespace Ramz_Elktear.BusinessLayer.Services
         public async Task<string> GetFile(string imageId)
         {
             var image = await unitOfWork.ImagesRepository
-                .FindByQuery(x => x.Id == imageId)
+                .FindByQuery(x => x.Id == imageId,isNoTracking:true)
                 .Include(s => s.path)
                 .FirstOrDefaultAsync();
 

@@ -22,8 +22,10 @@ using Ramz_Elktear.core.DTO.OptionModels;
 using Ramz_Elktear.core.DTO.OriginModels;
 using Ramz_Elktear.core.DTO.RegisterModels;
 using Ramz_Elktear.core.DTO.RoleModels;
+using Ramz_Elktear.core.DTO.SettingModels;
 using Ramz_Elktear.core.DTO.SpecificationModels;
 using Ramz_Elktear.core.DTO.TransmissionTypeModels;
+using Ramz_Elktear.core.Entities;
 using Ramz_Elktear.core.Entities.ApplicationData;
 using Ramz_Elktear.core.Entities.Booking;
 using Ramz_Elktear.core.Entities.Branchs;
@@ -62,6 +64,11 @@ namespace Ramz_Elktear.BusinessLayer.Mapping
             CreateMap<ApplicationUser, RegisterAdmin>()
                     .ReverseMap()
                     .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.PhoneNumber));
+            //--------------------------------------------------------------------------------------------------------
+            // Mapping for ApplicationUser <-> RegisterAdmin
+            CreateMap<ApplicationUser, RegisterUser>()
+                    .ReverseMap()
+                    .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.PhoneNumber));
 
             //--------------------------------------------------------------------------------------------------------
             // Mapping for ApplicationUser <-> RegisterSales
@@ -93,8 +100,8 @@ namespace Ramz_Elktear.BusinessLayer.Mapping
             CreateMap<Bank, BankDetails>().ReverseMap();
 
             // Job Mappings
-            CreateMap<AddJob, Job>().ReverseMap();
-            CreateMap<Job, JobDetails>().ReverseMap();
+            CreateMap<AddJobDTO, Job>().ReverseMap();
+            CreateMap<Job, JobDTO>().ReverseMap();
             CreateMap<Job, UpdateJob>().ReverseMap();
 
             // Branch Mappings
@@ -241,7 +248,6 @@ namespace Ramz_Elktear.BusinessLayer.Mapping
                 .ForMember(dest => dest.CarCode, opt => opt.MapFrom(src => src.CarCode))
                 .ForMember(dest => dest.CarSKU, opt => opt.MapFrom(src => src.CarSKU))
                 .ForMember(dest => dest.ImagesUrl, opt => opt.MapFrom(src => src.Images.Select(i => i.FileName).ToList())) // Assuming you're storing file names in Images
-                .ForMember(dest => dest.Offer, opt => opt.MapFrom(src => src.OfferId))
                 .ForMember(dest => dest.Color, opt => opt.MapFrom(src => src.ColorId))
                 .ForMember(dest => dest.Specifications, opt => opt.MapFrom(src => src.SpecificationsId))
                 .ForMember(dest => dest.Brand, opt => opt.MapFrom(src => new BrandDetails { Id = src.BrandId })) // Assuming you're populating the Brand object later
@@ -268,7 +274,6 @@ namespace Ramz_Elktear.BusinessLayer.Mapping
                 .ForMember(dest => dest.CarCode, opt => opt.MapFrom(src => src.CarCode))
                 .ForMember(dest => dest.CarSKU, opt => opt.MapFrom(src => src.CarSKU))
                 .ForMember(dest => dest.Images, opt => opt.Ignore()) // Assuming you're handling file conversions
-                .ForMember(dest => dest.OfferId, opt => opt.MapFrom(src => src.Offer.Select(o => o.Id).ToList())) // Assuming Offer is a list of OfferDTO objects
                 .ForMember(dest => dest.ColorId, opt => opt.MapFrom(src => src.Color.Select(c => c.Id).ToList())) // Same for Color
                 .ForMember(dest => dest.SpecificationsId, opt => opt.MapFrom(src => src.Specifications))
                 .ForMember(dest => dest.BrandId, opt => opt.MapFrom(src => src.Brand.Id)) // Assuming Brand has an Id property
@@ -304,9 +309,53 @@ namespace Ramz_Elktear.BusinessLayer.Mapping
                 .ForMember(dest => dest.EnginePositionId, opt => opt.MapFrom(src => src.EnginePositionId))
                 .ForMember(dest => dest.Kilometers, opt => opt.MapFrom(src => src.Kilometers))
                 .ForMember(dest => dest.IsSpecial, opt => opt.MapFrom(src => src.IsSpecial));
+            // Mapping from AddCar to Car
+            CreateMap<UpdateCarDTO, Car>()
+                .ForMember(dest => dest.NameAr, opt => opt.MapFrom(src => src.NameAr))
+                .ForMember(dest => dest.NameEn, opt => opt.MapFrom(src => src.NameEn))
+                .ForMember(dest => dest.DescrptionAr, opt => opt.MapFrom(src => src.DescrptionAr))
+                .ForMember(dest => dest.DescrptionEn, opt => opt.MapFrom(src => src.DescrptionEn))
+                .ForMember(dest => dest.SellingPrice, opt => opt.MapFrom(src => src.SellingPrice))
+                .ForMember(dest => dest.InstallmentPrice, opt => opt.MapFrom(src => src.InstallmentPrice))
+                .ForMember(dest => dest.QuantityInStock, opt => opt.MapFrom(src => src.QuantityInStock))
+                .ForMember(dest => dest.CarCode, opt => opt.MapFrom(src => src.CarCode))
+                .ForMember(dest => dest.CarSKU, opt => opt.MapFrom(src => src.CarSKU))
+                .ForMember(dest => dest.Image, opt => opt.Ignore()) // Assuming you're handling file names and other properties
+                .ForMember(dest => dest.BrandId, opt => opt.MapFrom(src => src.BrandId))
+                .ForMember(dest => dest.OptionId, opt => opt.MapFrom(src => src.OptionId))
+                .ForMember(dest => dest.TransmissionTypeId, opt => opt.MapFrom(src => src.TransmissionTypeId))
+                .ForMember(dest => dest.FuelTypeId, opt => opt.MapFrom(src => src.FuelTypeId))
+                .ForMember(dest => dest.EngineSizeId, opt => opt.MapFrom(src => src.EngineSizeId))
+                .ForMember(dest => dest.OriginId, opt => opt.MapFrom(src => src.OriginId))
+                .ForMember(dest => dest.ModelYearId, opt => opt.MapFrom(src => src.ModelYearId))
+                .ForMember(dest => dest.EnginePositionId, opt => opt.MapFrom(src => src.EnginePositionId))
+                .ForMember(dest => dest.Kilometers, opt => opt.MapFrom(src => src.Kilometers))
+                .ForMember(dest => dest.IsSpecial, opt => opt.MapFrom(src => src.IsSpecial));
 
             // Mapping from Car to AddCar
             CreateMap<Car, AddCar>()
+                .ForMember(dest => dest.NameAr, opt => opt.MapFrom(src => src.NameAr))
+                .ForMember(dest => dest.NameEn, opt => opt.MapFrom(src => src.NameEn))
+                .ForMember(dest => dest.DescrptionAr, opt => opt.MapFrom(src => src.DescrptionAr))
+                .ForMember(dest => dest.DescrptionEn, opt => opt.MapFrom(src => src.DescrptionEn))
+                .ForMember(dest => dest.SellingPrice, opt => opt.MapFrom(src => src.SellingPrice))
+                .ForMember(dest => dest.InstallmentPrice, opt => opt.MapFrom(src => src.InstallmentPrice))
+                .ForMember(dest => dest.QuantityInStock, opt => opt.MapFrom(src => src.QuantityInStock))
+                .ForMember(dest => dest.CarCode, opt => opt.MapFrom(src => src.CarCode))
+                .ForMember(dest => dest.CarSKU, opt => opt.MapFrom(src => src.CarSKU))
+                .ForMember(dest => dest.Image, opt => opt.Ignore()) // Assuming you want to keep a single image
+                .ForMember(dest => dest.BrandId, opt => opt.MapFrom(src => src.BrandId))
+                .ForMember(dest => dest.OptionId, opt => opt.MapFrom(src => src.OptionId))
+                .ForMember(dest => dest.TransmissionTypeId, opt => opt.MapFrom(src => src.TransmissionTypeId))
+                .ForMember(dest => dest.FuelTypeId, opt => opt.MapFrom(src => src.FuelTypeId))
+                .ForMember(dest => dest.EngineSizeId, opt => opt.MapFrom(src => src.EngineSizeId))
+                .ForMember(dest => dest.OriginId, opt => opt.MapFrom(src => src.OriginId))
+                .ForMember(dest => dest.ModelYearId, opt => opt.MapFrom(src => src.ModelYearId))
+                .ForMember(dest => dest.EnginePositionId, opt => opt.MapFrom(src => src.EnginePositionId))
+                .ForMember(dest => dest.Kilometers, opt => opt.MapFrom(src => src.Kilometers))
+                .ForMember(dest => dest.IsSpecial, opt => opt.MapFrom(src => src.IsSpecial));
+            
+            CreateMap<Car, UpdateCarDTO>()
                 .ForMember(dest => dest.NameAr, opt => opt.MapFrom(src => src.NameAr))
                 .ForMember(dest => dest.NameEn, opt => opt.MapFrom(src => src.NameEn))
                 .ForMember(dest => dest.DescrptionAr, opt => opt.MapFrom(src => src.DescrptionAr))
@@ -541,6 +590,15 @@ namespace Ramz_Elktear.BusinessLayer.Mapping
                 .ForMember(dest => dest.CreatedDate, opt => opt.Ignore()) // Typically handled by system
                 .ForMember(dest => dest.LastModifiedBy, opt => opt.Ignore()) // Typically handled by system
                 .ForMember(dest => dest.LastModifiedDate, opt => opt.Ignore()); // Typically handled by system
+
+            CreateMap<AddSettingDto, Setting>();
+
+            // Map UpdateSettingDto → Setting
+            CreateMap<UpdateSettingDto, Setting>();
+
+            // Map Setting → SettingDetails
+            CreateMap<Setting, SettingDetails>()
+                .ForMember(dest => dest.ImageUrl, opt => opt.Ignore());
 
         }
     }

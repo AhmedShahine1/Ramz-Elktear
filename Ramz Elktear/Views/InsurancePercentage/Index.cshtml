@@ -1,0 +1,57 @@
+﻿@model IEnumerable<InsurancePercentageDTO>
+
+<div class="card">
+    <div class="headerIndex">
+        <h3 class="text-truncate">Insurance Percentage List</h3>
+        <a href="@Url.Action("Create")" class="btn btn-success mb-3">
+            <i class="bx bx-plus"></i> <span class="text-truncate">Add New</span>
+        </a>
+    </div>
+    <div class="table-responsive text-nowrap">
+        <table class="table">
+            <thead class="table-light">
+                <tr>
+                    <th>#</th>
+                    <th class="text-truncate">Min Age</th>
+                    <th class="text-truncate">Max Age</th>
+                    <th class="text-truncate">Gender</th>
+                    <th class="text-truncate">Percentage</th>
+                    <th class="text-truncate">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model != null && Model.Any())
+                {
+                    int index = 1;
+                    foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@index</td>
+                            <td>@item.MinAge</td>
+                            <td>@item.MaxAge</td>
+                            <td>@item.Gender</td>
+                            <td>@item.Percentage%</td>
+                            <td>
+                                <a href="@Url.Action("Edit", new { id = item.Id })" class="btn btn-primary">
+                                    <span class="text-truncate">Edit</span>
+                                </a>
+                                <form method="post" asp-action="Delete" asp-route-id="@item.Id" style="display:inline;">
+                                    <button type="submit" class="btn btn-danger">
+                                        <span class="text-truncate">Delete</span>
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                        index++;
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="6" class="text-center text-truncate">No data found.</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

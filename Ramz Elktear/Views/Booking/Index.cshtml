@@ -1,12 +1,8 @@
 ﻿@model IEnumerable<BookingDto>
-
 <div class="card">
     <div class="headerIndex">
         <h3><span class="text-truncate">Booking List</span></h3>
         <div>
-            <a href="@Url.Action("Create")" class="btn btn-success mb-3">
-                <i class="bx bx-plus"></i> <span class="text-truncate">Add New Booking</span>
-            </a>
             <a href="@Url.Action("AllBooking","Report")" class="btn btn-info mb-3">
                 <i class="bx bx-file"></i> <span class="text-truncate">Report</span>
             </a>
@@ -21,7 +17,14 @@
                     <th><span class="text-truncate">Booking Status</span></th>
                     <th><span class="text-truncate">User</span></th>
                     <th><span class="text-truncate">Car</span></th>
-                    <th><span class="text-truncate">Sales</span></th> <!-- NEW COLUMN -->
+                    @{
+                        var user = await UserManager.GetUserAsync(User);
+                        var roles = await UserManager.GetRolesAsync(user);
+                        if (roles.Contains("Manager"))
+                        {
+                            <th><span class="text-truncate">Sales</span></th>
+                        }
+                    }
                     <th><span class="text-truncate">Actions</span></th>
                 </tr>
             </thead>
@@ -33,31 +36,32 @@
                     {
                         <tr>
                             <td>@index</td>
-                            <td>@booking.BookingStatus</td>
-                            <td>@(booking.Buyer?.FullName ?? "N/A")</td> <!-- Show user's phone number -->
+                            <td><span class="text-truncate">@booking.BookingStatus</span></td>
+                            <td>@(booking.Buyer?.FullName ?? "N/A")</td>
                             <td>@booking.Car.NameAr</td>
-
-                            <!-- Sales Rep Column -->
-                            <td>
-                                <div class="sales-container" data-booking-id="@booking.Id">
-                                    <select class="form-select sales-dropdown" data-booking-id="@booking.Id">
-                                        @if (booking.Seller != null)
-                                        {
-                                            <option value="@booking.Seller.Id">@booking.Seller.FullName (Current)</option>
-                                        }
-                                        <option value="">Select Sales</option>
-                                        @foreach (var sales in ViewBag.SalesList as List<AuthDTO>)
-                                        {
-                                            if (booking.Seller == null || sales.Id != booking.Seller.Id)
-                                            {
-                                                <option value="@sales.Id">@sales.FullName</option>
-                                            }
-                                        }
-                                    </select>
-                                </div>
-                            </td>
-
-                            <!-- Actions Column -->
+                            @{
+                                if (roles.Contains("Manager"))
+                                {
+                                    <td>
+                                        <div class="sales-container" data-booking-id="@booking.Id">
+                                            <select class="form-select sales-dropdown" data-booking-id="@booking.Id">
+                                                @if (booking.Seller != null)
+                                                {
+                                                    <option value="@booking.Seller.Id">@booking.Seller.FullName (Current)</option>
+                                                }
+                                                <option value="">Select Sales</option>
+                                                @foreach (var sales in ViewBag.SalesList as List<AuthDTO>)
+                                                {
+                                                    if (booking.Seller == null || sales.Id != booking.Seller.Id)
+                                                    {
+                                                        <option value="@sales.Id">@sales.FullName</option>
+                                                    }
+                                                }
+                                            </select>
+                                        </div>
+                                    </td>
+                                }
+                            }
                             <td>
                                 <div class="dropdown">
                                     <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
@@ -65,10 +69,10 @@
                                     </button>
                                     <div class="dropdown-menu">
                                         <a class="dropdown-item" href="@Url.Action("Details", "Booking", new { id = booking.Id })">
-                                            <i class="bx bx-show me-1"></i> View
+                                            <i class="bx bx-show me-1"></i> <span class="text-truncate">View</span>
                                         </a>
                                         <button class="dropdown-item update-status" data-booking-id="@booking.Id">
-                                            <i class="bx bx-refresh me-1"></i> Change Status
+                                            <i class="bx bx-refresh me-1"></i> <span class="text-truncate">Change Status</span>
                                         </button>
                                     </div>
                                 </div>
@@ -80,7 +84,7 @@
                 else
                 {
                     <tr>
-                        <td colspan="7" class="text-center">No bookings found.</td>
+                        <td colspan="7" class="text-center text-truncate">No bookings found.</td>
                     </tr>
                 }
             </tbody>

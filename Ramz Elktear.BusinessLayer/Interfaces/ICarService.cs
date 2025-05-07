@@ -14,7 +14,13 @@ namespace Ramz_Elktear.BusinessLayer.Interfaces
         Task<CarComparisonResult> CompareCarsAsync(CompareCarsRequest request);
         Task<InstallmentData> GetInstallmentAsync();
         Task<IEnumerable<CarDTO>> GetAllCarsAsync(int size = 20);
-        Task<IEnumerable<CarDTO>> SearchCarsAsync(string brandId, string categoryId, decimal? minPrice, decimal? maxPrice, int size = 20);
+        Task<(IEnumerable<CarDTO> cars, int totalCount)> SearchCarsAsync(
+                    string brandId,
+                    string categoryId,
+                    decimal? minPrice,
+                    decimal? maxPrice,
+                    int pageNumber,
+                    int pageSize);
         Task<IEnumerable<CarDTO>> SearchCarsbyPageAsync(string brandId, string categoryId, string modelId, int page, int size);
         Task<IEnumerable<CarDTO>> GetCarsByOfferIdAsync(string offerId);
     }

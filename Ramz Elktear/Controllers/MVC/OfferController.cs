@@ -57,8 +57,11 @@ namespace Ramz_Elktear.Web.Controllers
                 return NotFound();
             }
 
-            var addOfferDto = new AddOffer
+            var addOfferDto = new UpdateOffer
             {
+                Id = offerId,
+                NameAr = offer.NameAr,
+                NameEn = offer.NameEn,
                 NewPrice = offer.NewPrice,
                 StartDate = offer.StartDate,
                 EndDate = offer.EndDate,

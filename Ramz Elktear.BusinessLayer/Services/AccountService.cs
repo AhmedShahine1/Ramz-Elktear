@@ -54,12 +54,74 @@ namespace Ramz_Elktear.BusinessLayer.Services
                 .FirstOrDefaultAsync(x => x.Id == id && x.Status);
             return user;
         }
+        public async Task<List<ApplicationUser>> GetAllUsers()
+        {
+            return await _userManager.Users.ToListAsync();
+        }
+
+        public async Task<List<ApplicationRole>> GetAllRoles()
+        {
+            return await _roleManager.Roles.ToListAsync();
+        }
+
+        public async Task<List<UserRoleDTO>> GetAllUsersWithRoles()
+        {
+            var users = await _userManager.Users.ToListAsync();
+            var userRoles = new List<UserRoleDTO>();
+
+            foreach (var user in users)
+            {
+                var roles = await _userManager.GetRolesAsync(user);
+                userRoles.Add(new UserRoleDTO
+                {
+                    UserId = user.Id,
+                    FullName = user.FullName,
+                    PhoneNumber = user.PhoneNumber,
+                    Roles = roles.ToList()
+                });
+            }
+
+            return userRoles;
+        }
+
+        // ✅ Get users in a specific role
+        public async Task<List<ApplicationUser>> GetUsersInRole(string roleName)
+        {
+            var role = await _roleManager.FindByNameAsync(roleName);
+            if (role == null) return new List<ApplicationUser>();
+
+            return (await _userManager.GetUsersInRoleAsync(roleName)).ToList();
+        }
+
+        // ✅ Assign Sales to a Manager
+        public async Task<bool> AssignManagerToSalesAsync(string salesId, string managerId)
+        {
+            var salesUser = await _userManager.FindByIdAsync(salesId);
+            var managerUser = await _userManager.FindByIdAsync(managerId);
+
+            if (salesUser == null || managerUser == null)
+                return false;
+
+            // Assign manager's ID to a custom field (if applicable in DB)
+            salesUser.ManagerId = managerId; // Assuming your user entity has `ManagerId` field
+            var result = await _userManager.UpdateAsync(salesUser);
+
+            return result.Succeeded;
+        }
         //------------------------------------------------------------------------------------------------------------
         // Check if email or phone number already exists before creating or updating the user
         private async Task<bool> IsPhoneExistAsync(string Email, string userId = null)
         {
             var usersWithPhone = await _userManager.Users
             .Where(u => u.Email == Email && u.Id != userId)
+            .ToListAsync();
+
+            return (usersWithPhone.Count() == 0) ? false : true;
+        }
+        public async Task<bool> IsPhoneAsync(string Phone)
+        {
+            var usersWithPhone = await _userManager.Users
+            .Where(u => u.PhoneNumber == Phone)
             .ToListAsync();
 
             return (usersWithPhone.Count() == 0) ? false : true;
@@ -214,6 +276,27 @@ namespace Ramz_Elktear.BusinessLayer.Services
                 await _userManager.AddToRoleAsync(user, "Sales");
             }
             else
+            {
+                throw new InvalidOperationException($"Failed to create user: {string.Join(", ", result.Errors.Select(e => e.Description))}");
+            }
+
+            return result;
+        }
+
+        public async Task<IdentityResult> Register(RegisterUser model)
+        {
+            if (await IsPhoneExistAsync(model.PhoneNumber))
+            {
+                throw new ArgumentException("Phone number already exists.");
+            }
+
+            var user = mapper.Map<ApplicationUser>(model);
+            await SetProfileImage(user, model.ImageProfile);
+            user.PhoneNumberConfirmed = true;
+
+            var result = await _userManager.CreateAsync(user, model.Password);
+
+            if (!result.Succeeded)
             {
                 throw new InvalidOperationException($"Failed to create user: {string.Join(", ", result.Errors.Select(e => e.Description))}");
             }
@@ -467,29 +550,32 @@ namespace Ramz_Elktear.BusinessLayer.Services
             return path;
         }
         //------------------------------------------------------------------------------------------------------------
-        public async Task<string> AddRoleAsync(RoleUserModel model)
+        public async Task<IdentityResult> AssignRolesToUser(RoleUserModel model)
         {
             var user = await _userManager.FindByIdAsync(model.UserId);
-            if (user is null)
-                return "Vendor not found!";
+            if (user == null)
+                throw new ArgumentException("User not found.");
 
-            if (model.RoleId != null && model.RoleId.Count() > 0)
+            var existingRoles = await _userManager.GetRolesAsync(user);
+            var validRoles = await _roleManager.Roles
+                                               .Where(r => model.RoleId.Contains(r.Id))
+                                               .Select(r => r.Name)
+                                               .ToListAsync();
+
+            if (!validRoles.Any())
+                throw new ArgumentException("No valid roles found.");
+
+            // Get roles to add (exclude existing ones)
+            var rolesToAdd = validRoles.Except(existingRoles).ToList();
+
+            if (rolesToAdd.Any())
             {
-                var roleUser = _userManager.GetRolesAsync(user).Result;
-                IEnumerable<string> roles = new List<string>();
-                foreach (var roleid in model.RoleId)
-                {
-                    var role = _roleManager.FindByIdAsync(roleid).Result.Name;
-                    if (roleUser.Contains(role))
-                    {
-                        roles.Append(role);
-                    }
-                }
-                var result = await _userManager.AddToRolesAsync(user, roles);
-
-                return result.Succeeded ? string.Empty : "Something went wrong";
+                var result = await _userManager.AddToRolesAsync(user, rolesToAdd);
+                if (!result.Succeeded)
+                    throw new InvalidOperationException($"Failed to assign roles: {string.Join(", ", result.Errors.Select(e => e.Description))}");
             }
-            return " Role is empty";
+
+            return IdentityResult.Success;
         }
 
         public Task<List<string>> GetRoles()
@@ -497,10 +583,46 @@ namespace Ramz_Elktear.BusinessLayer.Services
             return _roleManager.Roles.Select(x => x.Name).ToListAsync();
         }
 
+        public async Task<List<AuthDTO>> GetUsersWithSalesReturnRole(string UserId)
+        {
+            var usersInRole = await _userManager.GetUsersInRoleAsync("Sales");
+            return mapper.Map<List<AuthDTO>>(usersInRole.Where(q => q.ManagerId == UserId));
+        }
         public async Task<List<AuthDTO>> GetUsersWithSalesReturnRole()
         {
             var usersInRole = await _userManager.GetUsersInRoleAsync("Sales");
             return mapper.Map<List<AuthDTO>>(usersInRole);
+        }
+
+        public async Task<ApplicationUser> GetManagerWithLeastBookingsAsync()
+        {
+            var managers = await _userManager.GetUsersInRoleAsync("Manager");
+
+            if (managers == null || !managers.Any())
+                throw new InvalidOperationException("No managers found.");
+
+            var managerBookings = new Dictionary<ApplicationUser, int>();
+
+            foreach (var manager in managers)
+            {
+                var count = await _unitOfWork.BookingRepository.CountAsync(b => b.Seller.ManagerId == manager.Id);
+                managerBookings[manager] = count;
+            }
+
+            return managerBookings.OrderBy(mb => mb.Value).FirstOrDefault().Key;
+        }
+
+        public async Task<bool> AssignManagerToSalesAsync(string salesId)
+        {
+            var salesPerson = await _unitOfWork.UserRepository.GetByIdAsync(salesId);
+            if (salesPerson == null) throw new ArgumentException("Salesperson not found");
+
+            var manager = await GetManagerWithLeastBookingsAsync();
+            salesPerson.ManagerId = manager.Id;
+
+            _unitOfWork.UserRepository.Update(salesPerson);
+            await _unitOfWork.SaveChangesAsync();
+            return true;
         }
 
         //------------------------------------------------------------------------------------------------------------

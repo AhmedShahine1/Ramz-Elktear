@@ -213,11 +213,22 @@ namespace Ramz_Elktear.Web.Controllers
                 Id = car.Id,
                 NameAr = car.NameAr,
                 NameEn = car.NameEn,
-                BrandId = car.Brand?.Id,
-                TransmissionTypeId = car.TransmissionType?.Id,
-                FuelTypeId = car.FuelType?.Id,
+                DescrptionAr = car.DescrptionAr,
+                DescrptionEn = car.DescrptionEn,
+                CarCode = car.CarCode,
+                CarSKU = car.CarSKU,
+                Kilometers = car.Kilometers,
+                SellingPrice = car.SellingPrice,
+                InstallmentPrice = car.InstallmentPrice,
+                QuantityInStock = car.QuantityInStock,
+                ImageURL = car.ImageUrl,
+                ImageWithoutBackgroundURL = car.ImageWithoutBackgroundUrl,
+                ImagesURL = car.ImagesUrl,
+                InsideCarImagesURL = car.InsideCarImagesUrl,
+                ColorId = car.Color.Select(c => c.Id).ToList(),
+                SpecificationsId = car.Specifications.Select(s => s.Id).ToList(),
                 IsSpecial = car.IsSpecial,
-                // Add other necessary properties here
+                IsActive = car.IsActive
             };
 
             return View(editCarDto);

@@ -1,0 +1,26 @@
+﻿@model Ramz_Elktear.core.DTO.SettingModels.UpdateSettingDto
+
+<h2><span class="text-truncate">Edit Setting</span></h2>
+
+<form asp-action="Edit" method="post" enctype="multipart/form-data">
+    <input type="hidden" asp-for="Id" />
+
+    <div class="mb-3">
+        <label><span class="text-truncate">Image Type</span></label>
+        <select asp-for="ImageType" class="form-control" asp-items="@(new SelectList(ViewBag.SettingTypes))">
+            <option value=""><span class="text-truncate">-- Select Type --</span></option>
+        </select>
+    </div>
+
+    <div class="mb-3">
+        <label><span class="text-truncate">Upload Image</span></label>
+        <input type="file" asp-for="Image" class="form-control" />
+    </div>
+
+    <button type="submit" class="btn btn-primary">
+        <span class="text-truncate">Update</span>
+    </button>
+    <a asp-action="Index" class="btn btn-secondary">
+        <span class="text-truncate">Cancel</span>
+    </a>
+</form>

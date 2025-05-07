@@ -13,6 +13,7 @@ namespace Ramz_Elktear.core.Entities.Offer
         public string CarId { get; set; }
         public Car Car { get; set; }
 
+        public decimal SellingPrice { get; set; }
         public string? CreatedBy { get; set; }
         public DateTime CreatedDate { get; set; }
         public string? LastModifiedBy { get; set; }

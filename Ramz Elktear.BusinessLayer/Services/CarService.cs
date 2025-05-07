@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using DevExpress.XtraRichEdit.Model;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Ramz_Elktear.BusinessLayer.Interfaces;
@@ -80,7 +81,12 @@ namespace Ramz_Elktear.BusinessLayer.Services
 
         public async Task<IEnumerable<CarDTO>> GetAllCarsAsync()
         {
-            var cars = await _unitOfWork.CarRepository.GetAllAsync();
+            var cars = await _unitOfWork.CarRepository
+                .FindAllAsync(x => !x.IsDeleted && x.IsActive,
+                              orderBy: q => q
+                                  .OrderByDescending(c => c.IsSpecial)
+                                  .ThenByDescending(c => c.CreatedDate));
+
             var carDtos = new List<CarDTO>();
 
             foreach (var car in cars)
@@ -93,7 +99,12 @@ namespace Ramz_Elktear.BusinessLayer.Services
 
         public async Task<IEnumerable<CarDTO>> GetCarsByBrandIdAsync(string brandId)
         {
-            var cars = await _unitOfWork.CarRepository.FindAllAsync(x => x.BrandId == brandId && !x.IsDeleted && x.IsActive);
+            var cars = await _unitOfWork.CarRepository
+                .FindAllAsync(x => x.BrandId == brandId && !x.IsDeleted && x.IsActive,
+                              orderBy: q => q
+                                  .OrderByDescending(c => c.IsSpecial)
+                                  .ThenByDescending(c => c.CreatedDate));
+
             if (!cars.Any()) return Enumerable.Empty<CarDTO>();
 
             var carDtos = new List<CarDTO>();
@@ -151,10 +162,6 @@ namespace Ramz_Elktear.BusinessLayer.Services
             {
                 await _carColorService.AddCarColorAsync(new AddCarColor { CarId = car.Id, ColorId = color, IsActive = true });
             }
-            foreach (var Offer in carDto.OfferId)
-            {
-                await _carOfferService.AddCarOfferAsync(new AddCarOffer { CarId = car.Id, OfferId = Offer });
-            }
             foreach (var Image in carDto.Images)
             {
                 await _imageCarService.AddCarImageAsync(new AddImageCar { CarId = car.Id, Image = Image, paths = await GetPathByName("CarImages") });
@@ -178,8 +185,18 @@ namespace Ramz_Elktear.BusinessLayer.Services
             if (car == null) throw new ArgumentException("Car not found");
 
             // Map updated properties
-            _mapper.Map(carDto, car);
-
+            car.NameAr = carDto.NameAr;
+            car.NameEn = carDto.NameEn;
+            car.DescrptionAr = carDto.DescrptionAr;
+            car.DescrptionEn = carDto.DescrptionEn;
+            car.CarCode = carDto.CarCode;
+            car.CarSKU = carDto.CarSKU;
+            car.Kilometers = carDto.Kilometers;
+            car.SellingPrice = carDto.SellingPrice;
+            car.InstallmentPrice = carDto.InstallmentPrice;
+            car.QuantityInStock = carDto.QuantityInStock;
+            car.IsSpecial = carDto.IsSpecial;
+            car.IsActive = carDto.IsActive;
             // Handle updating main car image
             if (carDto.Image != null)
             {
@@ -337,8 +354,10 @@ namespace Ramz_Elktear.BusinessLayer.Services
                     include: q => q.Include(c => c.Brand)
                                    .Include(c => c.SubCategory)
                                    .Include(c => c.ModelYear)
-                                   .Include(c => c.CarColors)
-                );
+                                   .Include(c => c.CarColors),
+                    orderBy: q => q
+                        .OrderByDescending(c => c.IsSpecial)
+                        .ThenByDescending(c => c.CreatedDate));
 
                 // Group cars by category
                 var categories = cars.GroupBy(c => c.SubCategory).Select(catGroup =>
@@ -380,7 +399,7 @@ namespace Ramz_Elktear.BusinessLayer.Services
             return new InstallmentData
             {
                 Banks = _mapper.Map<IEnumerable<BankDetails>>(banks),
-                Jobs = _mapper.Map<IEnumerable<JobDetails>>(jobs),
+                Jobs = _mapper.Map<IEnumerable<JobDTO>>(jobs),
                 BrandDetails = compareData,
             };
         }
@@ -418,7 +437,13 @@ namespace Ramz_Elktear.BusinessLayer.Services
         }
 
         // Search cars based on filters
-        public async Task<IEnumerable<CarDTO>> SearchCarsAsync(string brandId, string categoryId, decimal? minPrice, decimal? maxPrice, int size = 20)
+        public async Task<(IEnumerable<CarDTO> cars, int totalCount)> SearchCarsAsync(
+            string brandId,
+            string categoryId,
+            decimal? minPrice,
+            decimal? maxPrice,
+            int pageNumber,
+            int pageSize)
         {
             var query = await _unitOfWork.CarRepository.GetAllAsync(include: q => q.Include(a => a.SubCategory));
 
@@ -427,9 +452,56 @@ namespace Ramz_Elktear.BusinessLayer.Services
             if (minPrice.HasValue) query = query.Where(c => c.SellingPrice >= minPrice.Value);
             if (maxPrice.HasValue) query = query.Where(c => c.SellingPrice <= maxPrice.Value);
 
-            query = query.Take(size);
+            int totalCount = query.Count();
 
-            var cars = query.ToList();
+            var cars = query.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToList();
+
+            // Populate DTOs
+            var populatedCars = new List<CarDTO>();
+            foreach (var car in cars)
+            {
+                var carDto = await DetailsCarViewAsync(car);
+                populatedCars.Add(carDto);
+            }
+
+            return (populatedCars, totalCount);
+        }
+
+
+        private async Task<CarDTO> DetailsCarViewAsync(Car car)
+        {
+            var carDto = _mapper.Map<CarDTO>(car);
+            carDto.ImageUrl = await _fileHandling.GetFile(car.ImageId) ?? string.Empty;
+            carDto.Brand = await _brandService.GetBrandByIdAsync(car.BrandId) ?? new BrandDetails();
+            carDto.Option = await _optionService.GetOptionByIdAsync(car.OptionId) ?? new OptionDTO();
+            carDto.TransmissionType = await _transmissionTypeService.GetTransmissionTypeByIdAsync(car.TransmissionTypeId) ?? new TransmissionTypeDTO();
+            carDto.FuelType = await _fuelTypeService.GetFuelTypeByIdAsync(car.FuelTypeId) ?? new FuelTypeDTO();
+            carDto.EnginePosition = await _enginePositionService.GetEnginePositionByIdAsync(car.EnginePositionId) ?? new EnginePositionDTO();
+            carDto.EngineSize = await _engineSizeService.GetEngineSizeByIdAsync(car.EngineSizeId) ?? new EngineSizeDTO();
+            carDto.Origin = await _originService.GetOriginByIdAsync(car.OriginId) ?? new OriginDTO();
+            carDto.ModelYear = await _modelYearService.GetModelYearByIdAsync(car.ModelYearId) ?? new ModelYearDTO();
+            return carDto;
+        }
+
+        public async Task<IEnumerable<CarDTO>> SearchCarsbyPageAsync(string? brandId, string? categoryId, string? modelId, int page, int size)
+        {
+            // Query database efficiently
+            var query = _unitOfWork.CarRepository.GetAll(
+                include: q => q.Include(a => a.SubCategory).Include(a => a.ModelYear)
+            );
+
+            // Apply filters only if values exist
+            if (brandId != null)
+                query = query.Where(c => c.BrandId == brandId);
+
+            if (categoryId != null)
+                query = query.Where(c => c.SubCategory.CategoryId == categoryId);
+
+            if (modelId != null)
+                query = query.Where(c => c.ModelYearId == modelId);
+
+            // Apply pagination
+            var cars = query.Skip((page - 1) * size).Take(size).ToList();
 
             // Populate each car DTO with additional data
             var populatedCars = new List<CarDTO>();
@@ -440,28 +512,6 @@ namespace Ramz_Elktear.BusinessLayer.Services
             }
 
             return populatedCars;
-        }
-
-        public async Task<IEnumerable<CarDTO>> SearchCarsbyPageAsync(string brandId, string categoryId, string modelId, int page, int size)
-        {
-            var query = await _unitOfWork.CarRepository.GetAllAsync(
-                include: q => q.Include(a => a.SubCategory).Include(a => a.ModelYear) // Make sure to include relevant navigation properties
-            );
-
-            if (!string.IsNullOrEmpty(brandId))
-                query = query.Where(c => c.BrandId == brandId);
-
-            if (!string.IsNullOrEmpty(categoryId))
-                query = query.Where(c => c.SubCategory.CategoryId == categoryId);
-
-            if (!string.IsNullOrEmpty(modelId))
-                query = query.Where(c => c.ModelYearId == modelId);
-
-            // Implement pagination
-            query = query.Skip((page - 1) * size).Take(size);
-
-            var cars = query.ToList(); // Make sure to execute the query asynchronously
-            return _mapper.Map<IEnumerable<CarDTO>>(cars);
         }
 
         public async Task<IEnumerable<CarDTO>> GetCarsByOfferIdAsync(string offerId)

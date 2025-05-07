@@ -16,7 +16,7 @@ namespace Ramz_Elktear.RepositoryLayer.Interfaces
         //------------------------------------------------------------------------------------------------
         T Find(Expression<Func<T, bool>> criteria, Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null, bool isNoTracking = false);
 
-        Task<T> FindAsync(Expression<Func<T, bool>> criteria, Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null, bool isNoTracking = false);
+        Task<T> FindAsync(Expression<Func<T, bool>> criteria, Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null, Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null, bool isNoTracking = false);
 
         IEnumerable<T> FindAll(
             Expression<Func<T, bool>> criteria,

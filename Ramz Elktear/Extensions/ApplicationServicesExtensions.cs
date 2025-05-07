@@ -47,6 +47,10 @@ namespace Ramz_Elktear.Extensions
             services.AddTransient<IDashboardService, DashboardService>();
             services.AddTransient<IFirebaseNotificationService, FirebaseNotificationService>();
             services.AddTransient<IPromotionService, PromotionService>();
+            services.AddTransient<IInstallmentRequestService, InstallmentRequestService>();
+            services.AddTransient<IInsurancePercentageService, InsurancePercentageService>();
+            services.AddTransient<IContactFormService, ContactFormService>();
+            services.AddTransient<ISettingService, SettingService>();
 
             services.AddHttpClient();
             services.AddAutoMapper(typeof(MappingProfile));

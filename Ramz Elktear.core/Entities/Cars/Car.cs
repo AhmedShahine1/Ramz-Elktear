@@ -26,21 +26,19 @@ public class Car
     [Required]
     public string NameEn { get; set; }
 
-    public string DescrptionAr { get; set; }
-    public string DescrptionEn { get; set; }
-    public decimal? SellingPrice { get; set; }
-    public decimal? InstallmentPrice { get; set; }
-    public int? QuantityInStock { get; set; }
+    public string? DescrptionAr { get; set; }
+    public string? DescrptionEn { get; set; }
+    public decimal SellingPrice { get; set; }
+    public decimal InstallmentPrice { get; set; }
+    public int QuantityInStock { get; set; }
 
     [ForeignKey("SubCategory")]
     public string? SubCategoryId { get; set; }
     public virtual SubCategory SubCategory { get; set; }
 
-    [Required]
-    public string CarCode { get; set; }
+    public string? CarCode { get; set; }
 
-    [Required]
-    public string CarSKU { get; set; }
+    public string? CarSKU { get; set; }
 
     [ForeignKey("Image")]
     public string? ImageId { get; set; }
@@ -67,8 +65,8 @@ public class Car
     public virtual EngineSize EngineSize { get; set; }
 
     [ForeignKey("Origin")]
-    public string OriginId { get; set; }
-    public virtual Origin Origin { get; set; }
+    public string? OriginId { get; set; }  // Nullable string
+    public virtual Origin? Origin { get; set; }  // Nullable navigation property (optional)
 
     [ForeignKey("ModelYear")]
     public string ModelYearId { get; set; }

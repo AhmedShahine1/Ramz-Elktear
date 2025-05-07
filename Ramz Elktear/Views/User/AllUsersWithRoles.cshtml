@@ -1,0 +1,23 @@
+﻿@model List<UserRoleDTO>
+
+<h2><span class="text-truncate">All Users with Roles</span></h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th><span class="text-truncate">Name</span></th>
+            <th><span class="text-truncate">Phone Number</span></th>
+            <th><span class="text-truncate">Role</span></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var user in Model)
+        {
+            <tr>
+                <td>@user.FullName</td>
+                <td>@user.PhoneNumber</td>
+                <td>@string.Join(", ", user.Roles)</td>
+            </tr>
+        }
+    </tbody>
+</table>

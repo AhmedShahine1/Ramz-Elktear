@@ -1,15 +1,15 @@
 ﻿@model IEnumerable<AuthDTO>
 
 <div class="card">
-    <h5 class="card-header">Sales Return Users</h5>
+    <h5 class="card-header"><span class="text-truncate">Sales Return Users</span></h5>
     <div class="table-responsive text-nowrap">
         <table class="table">
             <thead class="table-light">
                 <tr>
                     <th>#</th>
+                    <th><span class="text-truncate">Name</span></th>
                     <th><span class="text-truncate">Phone Number</span></th>
                     <th><span class="text-truncate">Role</span></th>
-
                 </tr>
             </thead>
             <tbody class="table-border-bottom-0">
@@ -20,8 +20,9 @@
                     {
                         <tr>
                             <td>@index</td>
+                            <td>@user.FullName</td>
                             <td>@user.PhoneNumber</td>
-                            <td>Sales</td> <!-- Fixed string "Sales" -->
+                            <td><span class="text-truncate">Sales</span></td> <!-- Fixed string "Sales" -->
                         </tr>
                         index++;
                     }
@@ -29,7 +30,7 @@
                 else
                 {
                     <tr>
-                        <td colspan="3" class="text-center">No users found in Sales Return role.</td>
+                        <td colspan="3" class="text-center"><span class="text-truncate">No users found in Sales Return role.</span></td>
                     </tr>
                 }
             </tbody>

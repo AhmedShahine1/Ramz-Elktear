@@ -1,79 +1,85 @@
 ﻿using AutoMapper;
 using Ramz_Elktear.core.DTO.InstallmentModels;
 using Ramz_Elktear.core.Entities.Installment;
+using Ramz_Elktear.core.Helper;
 using Ramz_Elktear.RepositoryLayer.Interfaces;
+using System;
 
 namespace Ramz_Elktear.BusinessLayer.Services
 {
     public class JobService : IJobService
     {
         private readonly IUnitOfWork _unitOfWork;
-        private readonly IMapper _mapper;
 
-        public JobService(IUnitOfWork unitOfWork, IMapper mapper)
+        public JobService(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
-            _mapper = mapper;
         }
 
-        public async Task<IEnumerable<JobDetails>> GetAllJobsAsync()
+        public async Task<IEnumerable<JobDTO>> GetAllAsync()
         {
             var jobs = await _unitOfWork.JobRepository.GetAllAsync();
-            return jobs.Select(job => _mapper.Map<JobDetails>(job)).ToList();
+            return jobs.Select(j => new JobDTO
+            {
+                Id = j.Id,
+                Name = j.Name,
+                Description = j.Description,
+                IsConvertable = j.IsConvertable,
+                Percentage = j.Percentage
+            });
         }
 
-        public async Task<JobDetails> GetJobByIdAsync(string jobId)
+        public async Task<JobDTO> GetByIdAsync(string id)
         {
-            var job = await _unitOfWork.JobRepository.GetByIdAsync(jobId);
-            if (job == null) throw new ArgumentException("Job not found");
+            var job = await _unitOfWork.JobRepository.GetByIdAsync(id);
+            if (job == null) return null;
 
-            return _mapper.Map<JobDetails>(job);
+            return new JobDTO
+            {
+                Id = job.Id,
+                Name = job.Name,
+                Description = job.Description,
+                IsConvertable = job.IsConvertable,
+                Percentage = job.Percentage
+
+            };
         }
 
-        public async Task<JobDetails> AddJobAsync(AddJob jobDto)
+        public async Task<bool> AddAsync(AddJobDTO dto)
         {
-            var job = _mapper.Map<Job>(jobDto);
+            var job = new Job
+            {
+                Name = dto.Name,
+                Description = dto.Description,
+                IsConvertable = dto.IsConvertable,
+                Percentage = dto.Percentage
+            };
+
             await _unitOfWork.JobRepository.AddAsync(job);
-            await _unitOfWork.SaveChangesAsync();
-
-            return _mapper.Map<JobDetails>(job);
+            return await _unitOfWork.SaveChangesAsync() > 0;
         }
 
-        public async Task<bool> UpdateJobAsync(UpdateJob jobDto)
+        public async Task<bool> UpdateAsync(JobDTO dto)
         {
-            var job = await _unitOfWork.JobRepository.GetByIdAsync(jobDto.Id);
-            if (job == null) throw new ArgumentException("Job not found");
+            var job = await _unitOfWork.JobRepository.GetByIdAsync(dto.Id);
+            if (job == null) return false;
 
-            _mapper.Map(jobDto, job);
+            job.Name = dto.Name;
+            job.Description = dto.Description;
+            job.IsConvertable = dto.IsConvertable;
+            job.Percentage = dto.Percentage;
+
             _unitOfWork.JobRepository.Update(job);
-
-            try
-            {
-                await _unitOfWork.SaveChangesAsync();
-                return true;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("An error occurred while updating the job: " + ex.Message, ex);
-            }
+            return await _unitOfWork.SaveChangesAsync() > 0;
         }
 
-        public async Task<bool> DeleteJobAsync(string jobId)
+        public async Task<bool> DeleteAsync(string id)
         {
-            var job = await _unitOfWork.JobRepository.GetByIdAsync(jobId);
-            if (job == null) throw new ArgumentException("Job not found");
+            var job = await _unitOfWork.JobRepository.GetByIdAsync(id);
+            if (job == null) return false;
 
             _unitOfWork.JobRepository.Delete(job);
-
-            try
-            {
-                await _unitOfWork.SaveChangesAsync();
-                return true;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("An error occurred while deleting the job: " + ex.Message, ex);
-            }
+            return await _unitOfWork.SaveChangesAsync() > 0;
         }
     }
 }

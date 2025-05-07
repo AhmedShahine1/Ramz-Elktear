@@ -1,5 +1,4 @@
 ﻿using Ramz_Elktear.core.Entities.ApplicationData;
-using Ramz_Elktear.core.Entities.Cars;
 using Ramz_Elktear.core.Helper;
 
 namespace Ramz_Elktear.core.Entities.Booking

@@ -1,84 +1,458 @@
 ﻿@model IEnumerable<CarDTO>
 
-<div class="headerIndex">
-    <h3><span class="text-truncate">Car List</span></h3>
-    <div>
-        <a href="@Url.Action("Create")" class="btn btn-success mb-3">
-            <i class="bx bx-plus"></i> <span class="text-truncate">Add New Car</span>
-        </a>
-        <a href="@Url.Action("AllCars","Report")" class="btn btn-info mb-3">
-            <i class="bx bx-file"></i> <span class="text-truncate">Report</span>
-        </a>
+<div class="card">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <h5 class="mb-0"><i class="bx bx-car me-2"></i><span class="text-truncate">Car List</span></h5>
+        <div>
+            <a href="@Url.Action("Create")" class="btn btn-success btn-sm me-2">
+                <i class="bx bx-plus me-1"></i><span class="text-truncate">Add New Car</span>
+            </a>
+            <a href="@Url.Action("AllCars","Report")" class="btn btn-info btn-sm">
+                <i class="bx bx-file me-1"></i><span class="text-truncate">Report</span>
+            </a>
+        </div>
+    </div>
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-hover mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th>#</th>
+                        <th>
+                            <i class="bx bx-text me-1"></i>
+                            <span class="text-truncate d-inline-block w-100">Name (Arabic)</span>
+                        </th>
+                        <th>
+                            <i class="bx bx-text me-1"></i>
+                            <span class="text-truncate d-inline-block w-100">Name (English)</span>
+                        </th>
+                        <th>
+                            <i class="bx bx-info-circle me-1"></i>
+                            <span class="text-truncate d-inline-block w-100">Description (Arabic)</span>
+                        </th>
+                        <th>
+                            <i class="bx bx-info-circle me-1"></i>
+                            <span class="text-truncate d-inline-block w-100">Description (English)</span>
+                        </th>
+                        <th>
+                            <i class="bx bx-money me-1"></i>
+                            <span class="text-truncate d-inline-block w-100">Selling Price</span>
+                        </th>
+                        <th>
+                            <i class="bx bx-image me-1"></i>
+                            <span class="text-truncate d-inline-block w-100">Image</span>
+                        </th>
+                        <th>
+                            <i class="bx bx-cog me-1"></i>
+                            <span class="text-truncate d-inline-block w-100">Actions</span>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model != null && Model.Any())
+                    {
+                        int index = 1;
+                        foreach (var car in Model)
+                        {
+                            <tr>
+                                <td>@index</td>
+                                <td>@car.NameAr</td>
+                                <td>@car.NameEn</td>
+                                <td class="text-truncate" style="max-width: 150px;">@car.DescrptionAr</td>
+                                <td class="text-truncate" style="max-width: 150px;">@car.DescrptionEn</td>
+                                <td>@car.SellingPrice.ToString("C", new System.Globalization.CultureInfo("ar-SA"))</td>
+                                <td>
+                                    @if (!string.IsNullOrEmpty(car.ImageUrl))
+                                    {
+                                        <img src="@car.ImageUrl" alt="@car.NameEn" class="rounded shadow-sm" width="80" height="60" style="object-fit: cover;" />
+                                    }
+                                    else
+                                    {
+                                        <div class="text-center text-muted">
+                                            <i class="bx bx-image-alt d-block fs-4"></i>
+                                            <small>No Image</small>
+                                        </div>
+                                    }
+                                </td>
+                                <td>
+                                    <div class="dropdown">
+                                        <button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                        </button>
+                                        <ul class="dropdown-menu dropdown-menu-end shadow-sm">
+                                            <li>
+                                                <a class="dropdown-item d-flex align-items-center" href="@Url.Action("Edit", new { id = car.Id })">
+                                                    <i class="bx bx-edit-alt me-2 text-primary"></i><span class="text-truncate">Edit</span>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a class="dropdown-item d-flex align-items-center" href="@Url.Action("Details", new { id = car.Id })">
+                                                    <i class="bx bx-info-circle me-2 text-info"></i><span class="text-truncate">View Details</span>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a class="dropdown-item d-flex align-items-center add-to-offer-btn" href="#"
+                                                   data-car-id="@car.Id" data-car-name="@car.NameEn" data-car-price="@car.SellingPrice">
+                                                    <i class="bx bx-tag me-2 text-warning"></i><span class="text-truncate">Add to Offer</span>
+                                                </a>
+                                            </li>
+                                            <li><hr class="dropdown-divider"></li>
+                                            <li>
+                                                <form action="@Url.Action("Delete", new { id = car.Id })" method="post" id="delete-form-@car.Id">
+                                                    @Html.AntiForgeryToken()
+                                                    <button type="button" class="dropdown-item d-flex align-items-center delete-car-btn"
+                                                            data-car-id="@car.Id" data-car-name="@car.NameEn">
+                                                        <i class="bx bx-trash me-2 text-danger"></i><span class="text-truncate">Delete</span>
+                                                    </button>
+                                                </form>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </td>
+                            </tr>
+                            index++;
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="8" class="text-center py-4">
+                                <div class="text-muted">
+                                    <i class="bx bx-car-crash fs-1"></i>
+                                    <p class="mt-2">No cars available</p>
+                                    <a href="@Url.Action("Create")" class="btn btn-sm btn-outline-primary mt-2">
+                                        <i class="bx bx-plus me-1"></i>Add your first car
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>
 
+<!-- Delete Confirmation Modal -->
+<div class="modal fade" id="deleteConfirmModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title">
+                    <i class="bx bx-error-circle me-2"></i>Confirm Deletion
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body py-4">
+                <p>Are you sure you want to delete <strong id="carNameToDelete"></strong>?</p>
+                <p class="text-danger mb-0"><small>This action cannot be undone.</small></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                    <i class="bx bx-x me-1"></i>Cancel
+                </button>
+                <button type="button" class="btn btn-danger" id="confirmDeleteBtn">
+                    <i class="bx bx-trash me-1"></i>Delete
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
 
-<table class="table table-bordered">
-    <thead>
-        <tr>
-            <th>#</th>
-            <th><i class="bx bx-text"></i> <span class="text-truncate">Name (Arabic)</span></th>
-            <th><i class="bx bx-text"></i> <span class="text-truncate">Name (English)</span></th>
-            <th><i class="bx bx-info-circle"></i> <span class="text-truncate">Description (Arabic)</span></th>
-            <th><i class="bx bx-info-circle"></i> <span class="text-truncate">Description (English)</span></th>
-            <th><i class="bx bx-money"></i> <span class="text-truncate">Selling Price</span></th>
-            <th><i class="bx bx-image"></i> <span class="text-truncate">Image</span></th>
-            <th><i class="bx bx-cog"></i> <span class="text-truncate">Actions</span></th>
-        </tr>
-    </thead>
-    <tbody>
-        @if (Model != null && Model.Any())
-        {
-            int index = 1;
-            foreach (var car in Model)
-            {
-                <tr>
-                    <td>@index</td>
-                    <td>@car.NameAr</td>
-                    <td>@car.NameEn</td>
-                    <td>@car.DescrptionAr</td>
-                    <td>@car.DescrptionEn</td>
-                    <td>@car.SellingPrice?.ToString("C")</td>
-                    <td>
-                        @if (!string.IsNullOrEmpty(car.ImageUrl))
-                        {
-                            <img src="@car.ImageUrl" alt="Car Image" width="100" class="rounded shadow" />
-                        }
-                        else
-                        {
-                            <i class="bx bx-image-alt text-muted"></i> <p>No Image</p>
-                        }
-                    </td>
-                    <td>
-                        <div class="dropdown">
-                            <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
-                                <i class="bx bx-dots-vertical-rounded"></i>
-                            </button>
-                            <div class="dropdown-menu">
-                                <a class="dropdown-item" href="@Url.Action("Edit", new { id = car.Id })">
-                                    <i class="bx bx-edit-alt me-1"></i> Edit
-                                </a>
-                                <form action="@Url.Action("Delete", new { id = car.Id })" method="post" class="dropdown-item">
-                                    @Html.AntiForgeryToken()
-                                    <button type="submit" class="btn p-0" style="border: none; background: transparent; color: inherit;">
-                                        <i class="bx bx-trash me-1"></i> Delete
-                                    </button>
-                                </form>
-                                <a class="dropdown-item" href="@Url.Action("Details", new { id = car.Id })">
-                                    <i class="bx bx-info-circle me-1"></i> View Details
-                                </a>
+<!-- Add to Offer Modal -->
+<div class="modal fade" id="addOfferModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow">
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title">
+                    <i class="bx bx-tag me-2"></i>Add Car to Offer
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-4">
+                <input type="hidden" id="carIdForOffer" />
+
+                <!-- Selected Car Info -->
+                <div class="card bg-light mb-4">
+                    <div class="card-body">
+                        <label class="text-muted small mb-1">Selected Car</label>
+                        <div class="d-flex align-items-center">
+                            <div class="me-3">
+                                <i class="bx bx-car fs-2 text-primary"></i>
+                            </div>
+                            <div>
+                                <h6 class="mb-0" id="carNameDisplay"></h6>
+                                <div class="small text-muted">Regular Price: <span id="carPriceDisplay"></span></div>
                             </div>
                         </div>
-                    </td>
-                </tr>
-                index++;
+                    </div>
+                </div>
+
+                <!-- Offer Selection -->
+                <div class="mb-4">
+                    <label for="offerSelect" class="form-label">
+                        <i class="bx bx-purchase-tag me-1"></i>Select Offer
+                    </label>
+                    <select class="form-select form-select-lg" id="offerSelect">
+                        <option value="">-- Select an offer --</option>
+                    </select>
+                    <div class="invalid-feedback">Please select an offer</div>
+                </div>
+
+                <!-- Price Input -->
+                <div class="mb-3">
+                    <label for="offerPrice" class="form-label">
+                        <i class="bx bx-money me-1"></i>Special Offer Price
+                    </label>
+                    <div class="input-group">
+                        <span class="input-group-text bg-light">$</span>
+                        <input type="number" class="form-control form-control-lg" id="offerPrice" step="0.01" min="0"
+                               placeholder="Enter special price for this offer" />
+                    </div>
+                    <div class="invalid-feedback">Please enter a valid price</div>
+                    <div class="form-text mt-2 d-flex align-items-center">
+                        <i class="bx bx-info-circle me-1"></i>
+                        <span id="discountMessage">Enter the special price for this car in this offer</span>
+                    </div>
+                </div>
+
+                <!-- Progress indicator - Hidden by default -->
+                <div id="offerSaveProgress" class="progress mt-4 d-none">
+                    <div class="progress-bar progress-bar-striped progress-bar-animated bg-primary"
+                         role="progressbar" style="width: 100%"></div>
+                </div>
+            </div>
+            <div class="modal-footer bg-light">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                    <i class="bx bx-x me-1"></i>Cancel
+                </button>
+                <button type="button" class="btn btn-primary" id="saveOfferBtn">
+                    <i class="bx bx-check me-1"></i>Save
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            // Configure toastr notification
+            toastr.options = {
+                closeButton: true,
+                progressBar: true,
+                positionClass: "toast-top-right",
+                timeOut: 3000
+            };
+
+            // Click handler for "Add to Offer" button
+            $('.add-to-offer-btn').on('click', function(e) {
+                e.preventDefault();
+                const carId = $(this).data('car-id');
+                const carName = $(this).data('car-name');
+                const carPrice = $(this).data('car-price');
+                const formattedPrice = new Intl.NumberFormat('en-US', {
+                    style: 'currency',
+                    currency: 'USD'
+                }).format(carPrice);
+
+                $('#carIdForOffer').val(carId);
+                $('#carNameDisplay').text(carName);
+                $('#carPriceDisplay').text(formattedPrice);
+
+                // Calculate a suggested offer price (10% discount as default)
+                const suggestedPrice = carPrice * 0.9;
+                $('#offerPrice').val(suggestedPrice.toFixed(2));
+                updateDiscountMessage(carPrice, suggestedPrice);
+
+                // Reset validation styling
+                $('#offerSelect').removeClass('is-invalid');
+                $('#offerPrice').removeClass('is-invalid');
+
+                // Fetch offers and populate dropdown
+                fetchOffers();
+            });
+
+            // Price input change handler to show discount percentage
+            $('#offerPrice').on('input', function() {
+                const regularPrice = parseFloat($('.add-to-offer-btn[data-car-id="' + $('#carIdForOffer').val() + '"]').data('car-price'));
+                const offerPrice = parseFloat($(this).val());
+
+                if (!isNaN(regularPrice) && !isNaN(offerPrice) && regularPrice > 0) {
+                    updateDiscountMessage(regularPrice, offerPrice);
+                }
+            });
+
+            // Helper function to update discount message
+            function updateDiscountMessage(regularPrice, offerPrice) {
+                if (regularPrice > 0 && offerPrice > 0) {
+                    const discountPercent = ((regularPrice - offerPrice) / regularPrice * 100).toFixed(1);
+                    const discountAmount = (regularPrice - offerPrice).toFixed(2);
+
+                    if (discountPercent > 0) {
+                        $('#discountMessage').html(`You're offering a <strong class="text-success">${discountPercent}% discount</strong> (Save $${discountAmount})`);
+                    } else if (discountPercent < 0) {
+                        $('#discountMessage').html(`<span class="text-warning">Price is higher than regular price by ${Math.abs(discountPercent)}%</span>`);
+                    } else {
+                        $('#discountMessage').html(`No discount applied (same as regular price)`);
+                    }
+                } else {
+                    $('#discountMessage').html(`Enter the special price for this car in this offer`);
+                }
             }
-        }
-        else
-        {
-            <tr>
-                <td colspan="8" class="text-center">No cars available.</td>
-            </tr>
-        }
-    </tbody>
-</table>
+
+            // Function to fetch offers
+            function fetchOffers() {
+                $.ajax({
+                    url: '@Url.Action("GetAllOffers", "Car")',
+                    type: 'GET',
+                    beforeSend: function() {
+                        $('#offerSelect').html('<option value="">Loading offers...</option>');
+                    },
+                    success: function(response) {
+                        $('#offerSelect').empty();
+                        $('#offerSelect').append('<option value="">-- Select an offer --</option>');
+
+                        if (response.status) {
+                            const offers = response.data;
+                            if (offers && offers.length > 0) {
+                                offers.forEach(function(offer) {
+                                    $('#offerSelect').append(`<option value="${offer.id}">${offer.nameEn}</option>`);
+                                });
+
+                                // Show the modal after offers are loaded
+                                $('#addOfferModal').modal('show');
+                            } else {
+                                $('#offerSelect').append('<option value="" disabled>No offers available</option>');
+                                $('#addOfferModal').modal('show');
+                                toastr.warning("No offers available. Please create an offer first.");
+                            }
+                        } else {
+                            toastr.error(response.ErrorMessage || "Failed to load offers");
+                        }
+                    },
+                    error: function(xhr) {
+                        let errorMessage = "Failed to load offers. Please try again.";
+
+                        if (xhr && xhr.responseJSON) {
+                            errorMessage = xhr.responseJSON.ErrorMessage || errorMessage;
+                        }
+
+                        console.error('Error fetching offers:', xhr);
+                        toastr.error(errorMessage);
+                    }
+                });
+            }
+
+            // Save button click handler
+            $('#saveOfferBtn').on('click', function() {
+                const carId = $('#carIdForOffer').val();
+                const offerId = $('#offerSelect').val();
+                const sellingPrice = $('#offerPrice').val();
+                let isValid = true;
+
+                // Validate offer selection
+                if (!offerId) {
+                    $('#offerSelect').addClass('is-invalid');
+                    isValid = false;
+                } else {
+                    $('#offerSelect').removeClass('is-invalid');
+                }
+
+                // Validate price
+                if (!sellingPrice || parseFloat(sellingPrice) <= 0) {
+                    $('#offerPrice').addClass('is-invalid');
+                    isValid = false;
+                } else {
+                    $('#offerPrice').removeClass('is-invalid');
+                }
+
+                if (!isValid) return;
+
+                // Show loading state
+                const saveBtn = $('#saveOfferBtn');
+                const originalHtml = saveBtn.html();
+                saveBtn.html('<i class="bx bx-loader bx-spin me-1"></i> Saving...');
+                saveBtn.prop('disabled', true);
+                $('#offerSaveProgress').removeClass('d-none');
+
+                // Prepare data object
+                const requestData = {
+                    carId: carId,
+                    offerId: offerId,
+                    sellingPrice: parseFloat(sellingPrice)
+                };
+
+                // Send AJAX request to add car to offer
+                $.ajax({
+                    url: '@Url.Action("AddCarOffer", "Car")',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify(requestData),
+                    headers: {
+                        'RequestVerificationToken': $('input[name="__RequestVerificationToken"]').val()
+                    },
+                    success: function(response) {
+                        // Reset button state
+                        saveBtn.html(originalHtml);
+                        saveBtn.prop('disabled', false);
+                        $('#offerSaveProgress').addClass('d-none');
+
+                        // Handle BaseResponse format
+                        if (response && response.status) {
+                            toastr.success(response.ErrorMessage || "Car added to offer successfully!");
+                            $('#addOfferModal').modal('hide');
+
+                            // Reset form fields
+                            $('#offerSelect').val('');
+                            $('#offerPrice').val('');
+                        } else {
+                            toastr.error(response.ErrorMessage || "Failed to add car to offer.");
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        // Reset button state
+                        saveBtn.html(originalHtml);
+                        saveBtn.prop('disabled', false);
+                        $('#offerSaveProgress').addClass('d-none');
+
+                        let errorMessage = "An error occurred. Please try again.";
+
+                        // Try to extract error message from response
+                        if (xhr && xhr.responseJSON) {
+                            errorMessage = xhr.responseJSON.ErrorMessage || errorMessage;
+                        }
+
+                        console.error('Error adding car to offer:', xhr);
+                        toastr.error(errorMessage);
+                    }
+                });
+            });
+
+            // Delete car button click handler
+            $('.delete-car-btn').on('click', function(e) {
+                e.preventDefault();
+                const carId = $(this).data('car-id');
+                const carName = $(this).data('car-name');
+
+                $('#carNameToDelete').text(carName);
+                $('#deleteConfirmModal').modal('show');
+
+                // Set up the confirm delete button
+                $('#confirmDeleteBtn').off('click').on('click', function() {
+                    $(`#delete-form-${carId}`).submit();
+                });
+            });
+
+            // Reset modals when closed
+            $('#addOfferModal').on('hidden.bs.modal', function() {
+                $('#offerSelect').val('');
+                $('#offerPrice').val('');
+                $('#offerSelect').removeClass('is-invalid');
+                $('#offerPrice').removeClass('is-invalid');
+                $('#discountMessage').html('Enter the special price for this car in this offer');
+            });
+        });
+    </script>
+}
