@@ -1,0 +1,290 @@
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+@inject Microsoft.AspNetCore.Identity.UserManager<ApplicationUser> UserManager
+@inject Microsoft.AspNetCore.Identity.SignInManager<ApplicationUser> SignInManager
+
+@if (SignInManager.IsSignedIn(User))
+{
+    var user = await UserManager.GetUserAsync(User);
+    var roles = await UserManager.GetRolesAsync(user);
+
+    <ul class="menu-inner py-1">
+        @if (roles.Contains("Admin"))
+        {
+            <li class="menu-item">
+                <a href="@Url.Action("Index", "Home")" class="menu-link">
+                    <i class="menu-icon tf-icons bx bx-home"></i>
+                    <div class="text-truncate">@Localizer["Dashboard"]</div>
+                </a>
+            </li>
+
+            <!-- Basic Information Dropdown -->
+            <li class="menu-item">
+                <a href="javascript:void(0);" class="menu-link menu-toggle">
+                    <i class="menu-icon tf-icons bx bx-table"></i>
+                    <div class="text-truncate">@Localizer["Basic Information"]</div>
+                </a>
+                <ul class="menu-sub">
+                    <li class="menu-item">
+                        <a href="@Url.Action("Index", "ModelYear")" class="menu-link">
+                            <div class="text-truncate">@Localizer["Model Year"]</div>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="@Url.Action("Index", "Offer")" class="menu-link">
+                            <div class="text-truncate">@Localizer["Offers"]</div>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="@Url.Action("Index", "Option")" class="menu-link">
+                            <div class="text-truncate">@Localizer["Options"]</div>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="@Url.Action("Index", "Origin")" class="menu-link">
+                            <div class="text-truncate">@Localizer["Origins"]</div>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="@Url.Action("Index", "FuelType")" class="menu-link">
+                            <div class="text-truncate">@Localizer["Fuel Types"]</div>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="@Url.Action("Index", "EngineSize")" class="menu-link">
+                            <div class="text-truncate">@Localizer["Engine Sizes"]</div>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="@Url.Action("Index", "EnginePosition")" class="menu-link">
+                            <div class="text-truncate">@Localizer["Engine Positions"]</div>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="@Url.Action("Index", "Color")" class="menu-link">
+                            <div class="text-truncate">@Localizer["Colors"]</div>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="@Url.Action("Index", "Category")" class="menu-link">
+                            <div class="text-truncate">@Localizer["Categories"]</div>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="@Url.Action("Index", "Brand")" class="menu-link">
+                            <div class="text-truncate">@Localizer["Brands"]</div>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="@Url.Action("Index", "Bank")" class="menu-link">
+                            <div class="text-truncate">@Localizer["Banks"]</div>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="@Url.Action("Index", "Job")" class="menu-link">
+                            <div class="text-truncate">@Localizer["Job"]</div>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="@Url.Action("Index", "Branch")" class="menu-link">
+                            <div class="text-truncate">@Localizer["Branches"]</div>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="@Url.Action("Index", "Promotion")" class="menu-link">
+                            <div class="text-truncate">@Localizer["Promotion"]</div>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="@Url.Action("Index", "TransmissionType")" class="menu-link">
+                            <div class="text-truncate">@Localizer["Transmission Types"]</div>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="@Url.Action("Index", "SubCategory")" class="menu-link">
+                            <div class="text-truncate">@Localizer["Sub Categories"]</div>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="@Url.Action("Index", "Specification")" class="menu-link">
+                            <div class="text-truncate">@Localizer["Specifications"]</div>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+
+            <!-- Cars Dropdown -->
+            <li class="menu-item">
+                <a href="javascript:void(0);" class="menu-link menu-toggle">
+                    <i class="menu-icon tf-icons bx bx-car"></i>
+                    <div class="text-truncate">@Localizer["Cars"]</div>
+                </a>
+                <ul class="menu-sub">
+                    <li class="menu-item">
+                        <a href="@Url.Action("Index", "Car")" class="menu-link">
+                            <div class="text-truncate">@Localizer["All Cars"]</div>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="@Url.Action("Create", "Car")" class="menu-link">
+                            <div class="text-truncate">@Localizer["Add New Car"]</div>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+
+            <!-- Other menus for Admin -->
+            <li class="menu-item">
+                <a href="@Url.Action("Send", "Notification")" class="menu-link">
+                    <i class="menu-icon tf-icons bx bx-bell"></i>
+                    <div class="text-truncate">@Localizer["Notification"]</div>
+                </a>
+            </li>
+
+            <!-- Bookings -->
+            <li class="menu-item">
+                <a href="javascript:void(0);" class="menu-link menu-toggle">
+                    <i class="menu-icon tf-icons bx bx-calendar"></i>
+                    <div class="text-truncate">@Localizer["Bookings"]</div>
+                </a>
+                <ul class="menu-sub">
+                    <li class="menu-item">
+                        <a href="@Url.Action("All", "Booking")" class="menu-link">
+                            <div class="text-truncate">@Localizer["All Bookings"]</div>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="@Url.Action("Recieve", "Booking")" class="menu-link">
+                            <div class="text-truncate">@Localizer["Received Bookings"]</div>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="@Url.Action("Send", "Booking")" class="menu-link">
+                            <div class="text-truncate">@Localizer["Sent Bookings"]</div>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+
+            <!-- Reports -->
+            <li class="menu-item">
+                <a href="@Url.Action("Index", "Report")" class="menu-link">
+                    <i class="menu-icon tf-icons bx bx-file"></i>
+                    <div class="text-truncate">@Localizer["Reports"]</div>
+                </a>
+            </li>
+
+            <!-- Users Management -->
+            <li class="menu-item">
+                <a href="javascript:void(0);" class="menu-link menu-toggle">
+                    <i class="menu-icon tf-icons bx bx-user"></i>
+                    <div class="text-truncate">@Localizer["Users"]</div>
+                </a>
+                <ul class="menu-sub">
+                    <li class="menu-item">
+                        <a href="@Url.Action("Sales", "User")" class="menu-link">
+                            <div class="text-truncate">@Localizer["Sales Users"]</div>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="@Url.Action("Register", "Auth")" class="menu-link">
+                            <div class="text-truncate">@Localizer["Add User"]</div>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="@Url.Action("AssignUserRoles", "User")" class="menu-link">
+                            <div class="text-truncate">@Localizer["Assign User to Roles"]</div>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="@Url.Action("AssignSalesToManager", "User")" class="menu-link">
+                            <div class="text-truncate">@Localizer["Assign Sales to Manager"]</div>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="@Url.Action("AllUsersWithRoles", "User")" class="menu-link">
+                            <div class="text-truncate">@Localizer["All Users with Roles"]</div>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+
+            <!-- Contact Forms -->
+            <li class="menu-item">
+                <a href="@Url.Action("Index", "ContactForm")" class="menu-link">
+                    <i class="menu-icon tf-icons bx bx-envelope"></i>
+                    <div class="text-truncate">@Localizer["Contact Forms"]</div>
+                </a>
+            </li>
+
+            <!-- Settings -->
+            <li class="menu-item">
+                <a href="@Url.Action("Index", "Setting")" class="menu-link">
+                    <i class="menu-icon tf-icons bx bx-cog"></i>
+                    <div class="text-truncate">@Localizer["Settings"]</div>
+                </a>
+            </li>
+
+            <!-- Localization -->
+            <li class="menu-item">
+                <a href="@Url.Action("Index", "LocalizationManager")" class="menu-link">
+                    <i class="menu-icon tf-icons bx bx-globe"></i>
+                    <div class="text-truncate">@Localizer["Localization"]</div>
+                </a>
+            </li>
+
+            <!-- Insurance Settings -->
+            <li class="menu-item">
+                <a href="@Url.Action("Index", "InsurancePercentage")" class="menu-link">
+                    <i class="menu-icon tf-icons bx bx-shield-quarter"></i>
+                    <div class="text-truncate">@Localizer["Insurance Settings"]</div>
+                </a>
+            </li>
+        }
+
+        @if (roles.Contains("Manager"))
+        {
+            <li class="menu-item">
+                <a href="@Url.Action("Index", "Home")" class="menu-link">
+                    <i class="menu-icon tf-icons bx bx-home"></i>
+                    <div class="text-truncate">@Localizer["Dashboard"]</div>
+                </a>
+            </li>
+            <li class="menu-item">
+                <a href="@Url.Action("SalesByManager", "User")" class="menu-link">
+                    <i class="menu-icon tf-icons bx bx-user"></i>
+                    <span class="text-truncate">@Localizer["Manage Sales"]</span>
+                </a>
+            </li>
+            <li class="menu-item">
+                <a href="@Url.Action("SalesBookings", "Booking")" class="menu-link">
+                    <i class="menu-icon tf-icons bx bx-calendar-check"></i>
+                    <span class="text-truncate">@Localizer["Sales Bookings"]</span>
+                </a>
+            </li>
+        }
+
+        @if (roles.Contains("Sales"))
+        {
+            <li class="menu-item">
+                <a href="@Url.Action("Index", "Home")" class="menu-link">
+                    <i class="menu-icon tf-icons bx bx-home"></i>
+                    <div class="text-truncate">@Localizer["Dashboard"]</div>
+                </a>
+            </li>
+            <li class="menu-item">
+                <a href="@Url.Action("MyBookings", "Booking")" class="menu-link">
+                    <i class="menu-icon tf-icons bx bx-calendar"></i>
+                    <div class="text-truncate">@Localizer["My Bookings"]</div>
+                </a>
+            </li>
+        }
+
+        <!-- Installment Requests - Available to all signed-in users -->
+        <li class="menu-item">
+            <a href="@Url.Action("Index", "InstallmentRequests")" class="menu-link">
+                <i class="menu-icon tf-icons bx bx-file"></i>
+                <div class="text-truncate">@Localizer["InstallmentRequests"]</div>
+            </a>
+        </li>
+    </ul>
+}

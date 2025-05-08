@@ -14,6 +14,7 @@ using Ramz_Elktear.core.Entities.Categories;
 using Ramz_Elktear.core.Entities.Specificate;
 using Ramz_Elktear.core.Entities.Promotion;
 using Ramz_Elktear.core.Entities;
+using Ramz_Elktear.core.Entities.Localization;
 
 namespace Ramz_Elktear.RepositoryLayer.Repositories
 {
@@ -55,6 +56,8 @@ namespace Ramz_Elktear.RepositoryLayer.Repositories
         public IBaseRepository<InstallmentRequest> InstallmentRequestsRepository { get; set; }
         public IBaseRepository<ContactForm> ContactFormsRepository { get; set; }
         public IBaseRepository<Setting> SettingsRepository { get; set; }
+        public IBaseRepository<LocalizationResource> LocalizationResourceRepository { get; set; }
+        public IBaseRepository<LocalizationChangeLog> LocalizationChangeLogRepository { get; set; }
 
         public UnitOfWork(ApplicationDbContext context)
         {
@@ -92,6 +95,8 @@ namespace Ramz_Elktear.RepositoryLayer.Repositories
             InstallmentRequestsRepository = new BaseRepository<InstallmentRequest>(context);
             ContactFormsRepository = new BaseRepository<ContactForm>(context);
             SettingsRepository = new BaseRepository<Setting>(context);
+            LocalizationResourceRepository = new BaseRepository<LocalizationResource>(context);
+            LocalizationChangeLogRepository = new BaseRepository<LocalizationChangeLog>(context);
         }
 
         public int SaveChanges()

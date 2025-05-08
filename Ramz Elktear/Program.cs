@@ -1,8 +1,10 @@
+using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Ramz_Elktear.core;
 using Ramz_Elktear.Extensions;
 using Ramz_Elktear.Middleware;
+using System.Globalization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,9 +20,16 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 builder.Services.Configure<ApiBehaviorOptions>(options => options.SuppressModelStateInvalidFilter = true); // Validation Error API
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
+// Add localization BEFORE AddControllersWithViews
+builder.Services.AddLocalizationServices();
+
 // Add SignalR and other services
 builder.Services.AddMemoryCache();
-builder.Services.AddControllersWithViews().AddRazorRuntimeCompilation();
+
+builder.Services.AddControllersWithViews()
+    .AddRazorRuntimeCompilation()
+    .AddViewLocalization() // Add view localization
+    .AddDataAnnotationsLocalization(); // Add data annotations localization
 
 // Register the services [IAccountService, IPhotoHandling, AddAutoMapper, Hangfire, etc.]
 // Register Application and Identity services only once
@@ -59,11 +68,15 @@ else
     app.UseExceptionHandler("/Home/Error");
 }
 
+// IMPORTANT: Apply localization middleware EARLY in the pipeline
+// Must be before routing and other middleware that depends on culture
+app.UseLocalizationMiddleware();
+
 app.UseSwaggerDocumentation();
 app.UseCors("CORSPolicy");
-app.UseRouting();
 app.UseStaticFiles();
 app.UseHttpsRedirection();
+app.UseRouting();
 app.UseAuthentication();
 app.UseApplicationMiddleware();
 app.UseAuthorization();

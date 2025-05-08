@@ -1,4 +1,6 @@
-﻿using Ramz_Elktear.BusinessLayer.Interfaces;
+﻿using Microsoft.Extensions.Localization;
+using Ramz_Elktear.BusinessLayer.Interfaces;
+using Ramz_Elktear.BusinessLayer.Localization;
 using Ramz_Elktear.BusinessLayer.Mapping;
 using Ramz_Elktear.BusinessLayer.Services;
 
@@ -51,6 +53,7 @@ namespace Ramz_Elktear.Extensions
             services.AddTransient<IInsurancePercentageService, InsurancePercentageService>();
             services.AddTransient<IContactFormService, ContactFormService>();
             services.AddTransient<ISettingService, SettingService>();
+            services.AddTransient<ILocalizationService, LocalizationService>();
 
             services.AddHttpClient();
             services.AddAutoMapper(typeof(MappingProfile));

@@ -15,6 +15,7 @@ using Ramz_Elktear.core.Entities.Categories;
 using Ramz_Elktear.core.Entities.Specificate;
 using Ramz_Elktear.core.Entities.Promotion;
 using Ramz_Elktear.core.Entities;
+using Ramz_Elktear.core.Entities.Localization;
 
 namespace Ramz_Elktear.core
 {
@@ -62,7 +63,9 @@ namespace Ramz_Elktear.core
         public virtual DbSet<InstallmentRequest> InstallmentRequests { get; set; }
         public virtual DbSet<ContactForm> ContactForms { get; set; }
         public virtual DbSet<Setting> Settings { get; set; }
-
+        public DbSet<LocalizationResource> LocalizationResources { get; set; }
+        public DbSet<LocalizationValue> LocalizationValues { get; set; }
+        public DbSet<LocalizationChangeLog> LocalizationChangeLogs { get; set; }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
@@ -206,6 +209,24 @@ namespace Ramz_Elktear.core
                 .HasOne(c => c.EnginePosition)
                 .WithMany(ep => ep.Cars)
                 .HasForeignKey(c => c.EnginePositionId);
+
+            modelBuilder.Entity<LocalizationResource>()
+               .HasMany(r => r.Values)
+               .WithOne(v => v.Resource)
+               .HasForeignKey(v => v.ResourceId)
+               .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<LocalizationValue>()
+                .HasIndex(v => new { v.ResourceId, v.CultureCode })
+                .IsUnique();
+
+            // Create indexes for better performance
+            modelBuilder.Entity<LocalizationResource>()
+                .HasIndex(r => r.ResourceKey)
+                .IsUnique();
+
+            modelBuilder.Entity<LocalizationResource>()
+                .HasIndex(r => r.ResourceGroup);
         }
     }
 }

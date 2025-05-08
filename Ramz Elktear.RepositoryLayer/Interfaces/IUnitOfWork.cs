@@ -9,6 +9,7 @@ using Ramz_Elktear.core.Entities.Categories;
 using Ramz_Elktear.core.Entities.Color;
 using Ramz_Elktear.core.Entities.Files;
 using Ramz_Elktear.core.Entities.Installment;
+using Ramz_Elktear.core.Entities.Localization;
 using Ramz_Elktear.core.Entities.Offer;
 using Ramz_Elktear.core.Entities.Promotion;
 using Ramz_Elktear.core.Entities.Specificate;
@@ -50,6 +51,8 @@ namespace Ramz_Elktear.RepositoryLayer.Interfaces
         public IBaseRepository<InstallmentRequest> InstallmentRequestsRepository { get; }
         public IBaseRepository<ContactForm> ContactFormsRepository { get; }
         public IBaseRepository<Setting> SettingsRepository { get; }
+        public IBaseRepository<LocalizationResource> LocalizationResourceRepository { get; }
+        public IBaseRepository<LocalizationChangeLog> LocalizationChangeLogRepository { get; }
 
         //-----------------------------------------------------------------------------------
         int SaveChanges();
