@@ -1,0 +1,42 @@
+# This workflow will build a .NET project
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-net
+
+name: .NET
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 8.0.x
+    - name: Restore dependencies
+      run: dotnet restore
+    - name: Build
+      run: dotnet build --no-restore
+    - name: Test
+      run: dotnet test --no-build --verbosity normal
+
+    - name: Publish
+      run: dotnet publish -c Release -o ./publish
+
+    - name: Simply Web Deploy in Windows
+      uses: djad442/simply-web-deploy-powershell@v1.0.2
+      with:
+        website-name: "RamzElktear"
+        server-computer-name: ${{ secrets.DEPLOY_SERVER_NAME }}
+        server-username: ${{ secrets.DEPLOY_USERNAME }}
+        server-password: ${{ secrets.DEPLOY_PASSWORD }}
+        source-path: "./publish"
+        target-path: "C:\\inetpub\\wwwroot\\RamezWebSite\\Api"
+        target-delete: true  # optional, cleans out old files
