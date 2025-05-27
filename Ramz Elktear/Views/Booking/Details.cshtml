@@ -1,48 +1,44 @@
 ﻿@model Ramz_Elktear.core.DTO.BookingModels.BookingDto
-
 @{
-    ViewData["Title"] = "Booking Details";
+    ViewData["Title"] = Localizer["BookingDetails", "Booking"];
 }
-
-<h2 class="text-center text-truncate">Booking Details</h2>
-
+<h2 class="text-center text-truncate" dir="@(CultureInfo.CurrentCulture.TextInfo.IsRightToLeft ? "rtl" : "ltr")">@Localizer["BookingDetails", "Booking"]</h2>
 @if (Model != null)
 {
     <div class="card">
-        <div class="card-body">
-            <h4 class="card-title"><span class="text-truncate">Status:</span> @Model.BookingStatusDisplay</h4>
+        <div class="card-body" dir="@(CultureInfo.CurrentCulture.TextInfo.IsRightToLeft ? "rtl" : "ltr")">
+            <h4 class="card-title"><span class="text-truncate">@Localizer["Status", "Booking"]:</span> @Model.BookingStatusDisplay</h4>
 
-            <h5 class="text-truncate">Buyer Information</h5>
-            <ul>
-                <li><strong class="text-truncate">Name:</strong> @Model.Buyer.FullName</li>
-                <li><strong class="text-truncate">Phone:</strong> @Model.Buyer.PhoneNumber</li>
+            <h5 class="text-truncate">@Localizer["BuyerInformation", "Booking"]</h5>
+            <ul class="@(CultureInfo.CurrentCulture.TextInfo.IsRightToLeft ? "text-right" : "")">
+                <li><strong class="text-truncate">@Localizer["Name", "Booking"]:</strong> @Model.Buyer.FullName</li>
+                <li><strong class="text-truncate">@Localizer["Phone", "Booking"]:</strong> @Model.Buyer.PhoneNumber</li>
             </ul>
 
-            <h5 class="text-truncate">Seller Information</h5>
-            <ul>
-                <li><strong class="text-truncate">Name:</strong> @Model.Seller.FullName</li>
-                <li><strong class="text-truncate">Phone:</strong> @Model.Seller.PhoneNumber</li>
+            <h5 class="text-truncate">@Localizer["SellerInformation", "Booking"]</h5>
+            <ul class="@(CultureInfo.CurrentCulture.TextInfo.IsRightToLeft ? "text-right" : "")">
+                <li><strong class="text-truncate">@Localizer["Name", "Booking"]:</strong> @Model.Seller.FullName</li>
+                <li><strong class="text-truncate">@Localizer["Phone", "Booking"]:</strong> @Model.Seller.PhoneNumber</li>
             </ul>
 
-            <h5 class="text-truncate">Car Details</h5>
-            <ul>
-                <li><strong class="text-truncate">Name:</strong> @Model.Car.NameEn (@Model.Car.NameAr)</li>
-                <li><strong class="text-truncate">Price:</strong> $@Model.Car.SellingPrice</li>
-                <li><strong class="text-truncate">Kilometers:</strong> @Model.Car.Kilometers</li>
-                <li><strong class="text-truncate">Transmission:</strong> @Model.Car.TransmissionType.NameAr</li>
-                <li><strong class="text-truncate">Fuel Type:</strong> @Model.Car.FuelType.NameAr</li>
-                <li><strong class="text-truncate">Brand:</strong> @Model.Car.Brand.NameAr</li>
+            <h5 class="text-truncate">@Localizer["CarDetails", "Booking"]</h5>
+            <ul class="@(CultureInfo.CurrentCulture.TextInfo.IsRightToLeft ? "text-right" : "")">
+                <li><strong class="text-truncate">@Localizer["CarName", "Booking"]:</strong> @(CultureInfo.CurrentCulture.TextInfo.IsRightToLeft ? Model.Car.NameAr : Model.Car.NameEn)</li>
+                <li><strong class="text-truncate">@Localizer["Price", "Booking"]:</strong> @Localizer["Currency", "Booking"]@Model.Car.SellingPrice</li>
+                <li><strong class="text-truncate">@Localizer["Kilometers", "Booking"]:</strong> @Model.Car.Kilometers</li>
+                <li><strong class="text-truncate">@Localizer["Transmission", "Booking"]:</strong> @(CultureInfo.CurrentCulture.TextInfo.IsRightToLeft ? Model.Car.TransmissionType.NameAr : Model.Car.TransmissionType.NameEn)</li>
+                <li><strong class="text-truncate">@Localizer["FuelType", "Booking"]:</strong> @(CultureInfo.CurrentCulture.TextInfo.IsRightToLeft ? Model.Car.FuelType.NameAr : Model.Car.FuelType.NameEn)</li>
+                <li><strong class="text-truncate">@Localizer["Brand", "Booking"]:</strong> @(CultureInfo.CurrentCulture.TextInfo.IsRightToLeft ? Model.Car.Brand.NameAr : Model.Car.Brand.NameEn)</li>
             </ul>
 
-            <h5 class="text-truncate">Car Image</h5>
-            <img src="@Model.Car.ImageUrl" alt="Car Image" class="img-fluid" width="300" />
-
+            <h5 class="text-truncate">@Localizer["CarImage", "Booking"]</h5>
+            <img src="@Model.Car.ImageUrl" alt="@Localizer["CarImageAlt", "Booking"]" class="img-fluid" width="300" />
             <br /><br />
-            <a href="@Url.Action("Index", "Booking")" class="btn btn-secondary text-truncate">Back to Bookings</a>
+            <a href="@Url.Action("Index", "Booking")" class="btn btn-secondary text-truncate">@Localizer["BackToBookings", "Booking"]</a>
         </div>
     </div>
 }
 else
 {
-    <p class="text-danger text-truncate">Booking details not available.</p>
+    <p class="text-danger text-truncate" dir="@(CultureInfo.CurrentCulture.TextInfo.IsRightToLeft ? "rtl" : "ltr")">@Localizer["BookingNotAvailable", "Booking"]</p>
 }

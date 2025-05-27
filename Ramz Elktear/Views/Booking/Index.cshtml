@@ -1,156 +1,44 @@
-﻿@model IEnumerable<BookingDto>
-<div class="card">
-    <div class="headerIndex">
-        <h3><span class="text-truncate">Booking List</span></h3>
-        <div>
-            <a href="@Url.Action("AllBooking","Report")" class="btn btn-info mb-3">
-                <i class="bx bx-file"></i> <span class="text-truncate">Report</span>
-            </a>
+﻿@model Ramz_Elktear.core.DTO.BookingModels.BookingDto
+@{
+    ViewData["Title"] = Localizer["BookingDetails", "Booking"];
+}
+<h2 class="text-center text-truncate" dir="@(CultureInfo.CurrentCulture.TextInfo.IsRightToLeft ? "rtl" : "ltr")">@Localizer["BookingDetails", "Booking"]</h2>
+@if (Model != null)
+{
+    <div class="card">
+        <div class="card-body" dir="@(CultureInfo.CurrentCulture.TextInfo.IsRightToLeft ? "rtl" : "ltr")">
+            <h4 class="card-title"><span class="text-truncate">@Localizer["Status", "Booking"]:</span> @Model.BookingStatusDisplay</h4>
+
+            <h5 class="text-truncate">@Localizer["BuyerInformation", "Booking"]</h5>
+            <ul class="@(CultureInfo.CurrentCulture.TextInfo.IsRightToLeft ? "text-right" : "")">
+                <li><strong class="text-truncate">@Localizer["Name", "Booking"]:</strong> @Model.Buyer.FullName</li>
+                <li><strong class="text-truncate">@Localizer["Phone", "Booking"]:</strong> @Model.Buyer.PhoneNumber</li>
+            </ul>
+
+            <h5 class="text-truncate">@Localizer["SellerInformation", "Booking"]</h5>
+            <ul class="@(CultureInfo.CurrentCulture.TextInfo.IsRightToLeft ? "text-right" : "")">
+                <li><strong class="text-truncate">@Localizer["Name", "Booking"]:</strong> @Model.Seller.FullName</li>
+                <li><strong class="text-truncate">@Localizer["Phone", "Booking"]:</strong> @Model.Seller.PhoneNumber</li>
+            </ul>
+
+            <h5 class="text-truncate">@Localizer["CarDetails", "Booking"]</h5>
+            <ul class="@(CultureInfo.CurrentCulture.TextInfo.IsRightToLeft ? "text-right" : "")">
+                <li><strong class="text-truncate">@Localizer["Name", "Booking"]:</strong> @(CultureInfo.CurrentCulture.TextInfo.IsRightToLeft ? Model.Car.NameAr : Model.Car.NameEn)</li>
+                <li><strong class="text-truncate">@Localizer["Price", "Booking"]:</strong> @Model.Car.SellingPrice @Localizer["Currency", "Booking"]</li>
+                <li><strong class="text-truncate">@Localizer["Kilometers", "Booking"]:</strong> @Model.Car.Kilometers</li>
+                <li><strong class="text-truncate">@Localizer["Transmission", "Booking"]:</strong> @Model.Car.TransmissionType.NameAr</li>
+                <li><strong class="text-truncate">@Localizer["FuelType", "Booking"]:</strong> @Model.Car.FuelType.NameAr</li>
+                <li><strong class="text-truncate">@Localizer["Brand", "Booking"]:</strong> @Model.Car.Brand.NameAr</li>
+            </ul>
+
+            <h5 class="text-truncate">@Localizer["CarImage", "Booking"]</h5>
+            <img src="@Model.Car.ImageUrl" alt="@Localizer["CarImageAlt", "Booking"]" class="img-fluid" width="300" />
+            <br /><br />
+            <a href="@Url.Action("Index", "Booking")" class="btn btn-secondary text-truncate">@Localizer["BackToBookings", "Booking"]</a>
         </div>
     </div>
-
-    <div class="table-responsive text-nowrap">
-        <table class="table">
-            <thead class="table-light">
-                <tr>
-                    <th>#</th>
-                    <th><span class="text-truncate">Booking Status</span></th>
-                    <th><span class="text-truncate">User</span></th>
-                    <th><span class="text-truncate">Car</span></th>
-                    @{
-                        var user = await UserManager.GetUserAsync(User);
-                        var roles = await UserManager.GetRolesAsync(user);
-                        if (roles.Contains("Manager"))
-                        {
-                            <th><span class="text-truncate">Sales</span></th>
-                        }
-                    }
-                    <th><span class="text-truncate">Actions</span></th>
-                </tr>
-            </thead>
-            <tbody class="table-border-bottom-0">
-                @if (Model != null && Model.Any())
-                {
-                    int index = 1;
-                    foreach (var booking in Model)
-                    {
-                        <tr>
-                            <td>@index</td>
-                            <td><span class="text-truncate">@booking.BookingStatus</span></td>
-                            <td>@(booking.Buyer?.FullName ?? "N/A")</td>
-                            <td>@booking.Car.NameAr</td>
-                            @{
-                                if (roles.Contains("Manager"))
-                                {
-                                    <td>
-                                        <div class="sales-container" data-booking-id="@booking.Id">
-                                            <select class="form-select sales-dropdown" data-booking-id="@booking.Id">
-                                                @if (booking.Seller != null)
-                                                {
-                                                    <option value="@booking.Seller.Id">@booking.Seller.FullName (Current)</option>
-                                                }
-                                                <option value="">Select Sales</option>
-                                                @foreach (var sales in ViewBag.SalesList as List<AuthDTO>)
-                                                {
-                                                    if (booking.Seller == null || sales.Id != booking.Seller.Id)
-                                                    {
-                                                        <option value="@sales.Id">@sales.FullName</option>
-                                                    }
-                                                }
-                                            </select>
-                                        </div>
-                                    </td>
-                                }
-                            }
-                            <td>
-                                <div class="dropdown">
-                                    <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
-                                        <i class="bx bx-dots-vertical-rounded"></i>
-                                    </button>
-                                    <div class="dropdown-menu">
-                                        <a class="dropdown-item" href="@Url.Action("Details", "Booking", new { id = booking.Id })">
-                                            <i class="bx bx-show me-1"></i> <span class="text-truncate">View</span>
-                                        </a>
-                                        <button class="dropdown-item update-status" data-booking-id="@booking.Id">
-                                            <i class="bx bx-refresh me-1"></i> <span class="text-truncate">Change Status</span>
-                                        </button>
-                                    </div>
-                                </div>
-                            </td>
-                        </tr>
-                        index++;
-                    }
-                }
-                else
-                {
-                    <tr>
-                        <td colspan="7" class="text-center text-truncate">No bookings found.</td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-    </div>
-</div>
-
-@section Scripts {
-    <!-- Toastr CSS -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
-
-    <!-- jQuery (If not included already) -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
-    <!-- Toastr JS -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
-
-    <script>
-        $(document).ready(function () {
-            // Configure Toastr options
-            toastr.options = {
-                closeButton: true,
-                progressBar: true,
-                positionClass: "toast-top-right",
-                timeOut: "3000" // Auto close after 3 seconds
-            };
-
-            // Automatically update sales when selection changes
-            $(".sales-dropdown").change(function () {
-                var bookingId = $(this).data("booking-id");
-                var salesId = $(this).val();
-
-                if (!salesId) {
-                    toastr.warning("Please select a valid sales representative.");
-                    return;
-                }
-
-                $.ajax({
-                    url: "/booking/AssignSales",
-                    type: "POST",
-                    data: { bookingId: bookingId, salesId: salesId },
-                    success: function () {
-                        toastr.success("Sales updated successfully!");
-                    },
-                    error: function () {
-                        toastr.error("Error updating sales. Please try again.");
-                    }
-                });
-            });
-
-            // Update Booking Status
-            $(".update-status").click(function () {
-                var bookingId = $(this).data("booking-id");
-
-                $.ajax({
-                    url: "/booking/UpdateStatus",
-                    type: "POST",
-                    data: { bookingId: bookingId },
-                    success: function () {
-                        toastr.success("Booking status updated!");
-                    },
-                    error: function () {
-                        toastr.error("Error updating status.");
-                    }
-                });
-            });
-        });
-    </script>
+}
+else
+{
+    <p class="text-danger text-truncate" dir="@(CultureInfo.CurrentCulture.TextInfo.IsRightToLeft ? "rtl" : "ltr")">@Localizer["BookingNotAvailable", "Booking"]</p>
 }

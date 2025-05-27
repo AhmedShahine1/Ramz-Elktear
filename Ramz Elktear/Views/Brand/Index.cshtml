@@ -1,73 +1,176 @@
 ﻿@model IEnumerable<BrandDetails>
 
-<div class="headerIndex">
-    <h3><span class="text-truncate">Brand List</span></h3>
-    <a href="@Url.Action("Create")" class="btn btn-success mb-3">
-        <i class="bx bx-plus"></i> <span class="text-truncate">Add New Brand</span>
-    </a>
-</div>
-<table class="table table-bordered">
-    <thead>
-        <tr>
-            <th>#</th>
-            <th><i class="bx bx-text"></i> <span class="text-truncate">Name (Arabic)</span></th>
-            <th><i class="bx bx-text"></i> <span class="text-truncate">Name (English)</span></th>
-            <th><i class="bx bx-info-circle"></i> <span class="text-truncate">Description (Arabic)</span></th>
-            <th><i class="bx bx-info-circle"></i> <span class="text-truncate">Description (English)</span></th>
-            <th><i class="bx bx-image"></i> <span class="text-truncate">Image</span></th>
-            <th><i class="bx bx-cog"></i> <span class="text-truncate">Actions</span></th>
+<div class="card" dir="@(CultureInfo.CurrentCulture.TextInfo.IsRightToLeft ? "rtl" : "ltr")">
+    <div class="headerIndex">
+        <h3><span class="text-truncate">@Localizer["BrandList", "Brand"]</span></h3>
+        <div>
+            <a href="@Url.Action("Create")" class="btn btn-success mb-3">
+                <i class="bx bx-plus"></i> <span class="text-truncate">@Localizer["AddNewBrand", "Brand"]</span>
+            </a>
+        </div>
+    </div>
 
-        </tr>
-    </thead>
-    <tbody>
-        @if (Model != null && Model.Any())
-        {
-            int index = 1;
-            foreach (var brand in Model)
-            {
+    <div class="table-responsive text-nowrap">
+        <table class="table table-bordered">
+            <thead class="table-light">
                 <tr>
-                    <td>@index</td>
-                    <td>@brand.NameAr</td>
-                    <td>@brand.NameEn</td>
-                    <td>@brand.DescriptionAr</td>
-                    <td>@brand.DescriptionEn</td>
-                    <td>
-                        @if (!string.IsNullOrEmpty(brand.ImageUrl))
-                        {
-                            <img src="@brand.ImageUrl" alt="Brand Image" width="100" class="rounded shadow" />
-                        }
-                        else
-                        {
-                            <i class="bx bx-image-alt text-muted"></i> <p>No Image</p>
-                        }
-                    </td>
-                    <td>
-                        <div class="dropdown">
-                            <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
-                                <i class="bx bx-dots-vertical-rounded"></i>
-                            </button>
-                            <div class="dropdown-menu">
-                                <a class="dropdown-item" href="@Url.Action("Edit", new { id = brand.Id })">
-                                    <i class="bx bx-edit-alt me-1"></i> Edit
-                                </a>
-                                <form action="@Url.Action("Delete", new { id = brand.Id })" method="post" class="dropdown-item">
-                                    @Html.AntiForgeryToken()
-                                    <button type="submit" class="btn p-0" style="border: none; background: transparent; color: inherit;">
-                                        <i class="bx bx-trash me-1"></i> Delete
-                                    </button>
-                                </form>
-                            </div>
-                        </div>
-                    </td>
+                    <th>#</th>
+                    <th>
+                        <i class="bx bx-text"></i>
+                        <span class="text-truncate">@Localizer["NameArabic", "Brand"]</span>
+                    </th>
+                    <th>
+                        <i class="bx bx-text"></i>
+                        <span class="text-truncate">@Localizer["NameEnglish", "Brand"]</span>
+                    </th>
+                    <th>
+                        <i class="bx bx-info-circle"></i>
+                        <span class="text-truncate">@Localizer["DescriptionArabic", "Brand"]</span>
+                    </th>
+                    <th>
+                        <i class="bx bx-info-circle"></i>
+                        <span class="text-truncate">@Localizer["DescriptionEnglish", "Brand"]</span>
+                    </th>
+                    <th>
+                        <i class="bx bx-image"></i>
+                        <span class="text-truncate">@Localizer["Image", "Brand"]</span>
+                    </th>
+                    <th>
+                        <i class="bx bx-cog"></i>
+                        <span class="text-truncate">@Localizer["Actions", "Brand"]</span>
+                    </th>
                 </tr>
-                index++;
-            }
-        }
-        else
-        {
-            <tr>
-                <td colspan="7" class="text-center">No brands available.</td>
-            </tr>
-        }
-    </tbody>
-</table>
+            </thead>
+            <tbody class="table-border-bottom-0">
+                @if (Model != null && Model.Any())
+                {
+                    int index = 1;
+                    foreach (var brand in Model)
+                    {
+                        <tr>
+                            <td>@index</td>
+                            <td class="@(CultureInfo.CurrentCulture.TextInfo.IsRightToLeft ? "text-right" : "")">
+                                <span class="text-truncate d-inline-block" style="max-width: 200px;" title="@brand.NameAr">
+                                    @brand.NameAr
+                                </span>
+                            </td>
+                            <td class="@(CultureInfo.CurrentCulture.TextInfo.IsRightToLeft ? "text-right" : "")">
+                                <span class="text-truncate d-inline-block" style="max-width: 200px;" title="@brand.NameEn">
+                                    @brand.NameEn
+                                </span>
+                            </td>
+                            <td class="@(CultureInfo.CurrentCulture.TextInfo.IsRightToLeft ? "text-right" : "")">
+                                <span class="text-truncate d-inline-block" style="max-width: 200px;" title="@brand.DescriptionAr">
+                                    @brand.DescriptionAr
+                                </span>
+                            </td>
+                            <td class="@(CultureInfo.CurrentCulture.TextInfo.IsRightToLeft ? "text-right" : "")">
+                                <span class="text-truncate d-inline-block" style="max-width: 200px;" title="@brand.DescriptionEn">
+                                    @brand.DescriptionEn
+                                </span>
+                            </td>
+                            <td class="text-center">
+                                @if (!string.IsNullOrEmpty(brand.ImageUrl))
+                                {
+                                    <img src="@brand.ImageUrl"
+                                         alt="@Localizer["Image", "Brand"]"
+                                         width="60"
+                                         height="60"
+                                         class="rounded shadow-sm object-fit-cover"
+                                         style="cursor: pointer;"
+                                         data-bs-toggle="modal"
+                                         data-bs-target="#imageModal-@brand.Id" />
+
+                                    @* Image Modal *@
+                                    <div class="modal fade" id="imageModal-@brand.Id" tabindex="-1" aria-hidden="true">
+                                        <div class="modal-dialog modal-dialog-centered">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title">@brand.NameEn</h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body text-center">
+                                                    <img src="@brand.ImageUrl"
+                                                         alt="@brand.NameEn"
+                                                         class="img-fluid rounded" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="text-muted">
+                                        <i class="bx bx-image-alt fs-4"></i>
+                                        <br>
+                                        <small>@Localizer["NoImage", "Brand"]</small>
+                                    </div>
+                                }
+                            </td>
+                            <td>
+                                <div class="dropdown">
+                                    <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
+                                        <i class="bx bx-dots-vertical-rounded"></i>
+                                    </button>
+                                    <div class="dropdown-menu">
+                                        <a class="dropdown-item" href="@Url.Action("Edit", new { id = brand.Id })">
+                                            <i class="bx bx-edit-alt me-1"></i> @Localizer["Edit", "Brand"]
+                                        </a>
+                                        <button type="button"
+                                                class="dropdown-item text-danger"
+                                                data-bs-toggle="modal"
+                                                data-bs-target="#deleteModal-@brand.Id">
+                                            <i class="bx bx-trash me-1"></i> @Localizer["Delete", "Brand"]
+                                        </button>
+                                    </div>
+                                </div>
+
+                                @* Delete Confirmation Modal *@
+                                <div class="modal fade" id="deleteModal-@brand.Id" tabindex="-1" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title text-danger">
+                                                    <i class="bx bx-warning"></i> @Localizer["ConfirmDelete", "Common"]
+                                                </h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body @(CultureInfo.CurrentCulture.TextInfo.IsRightToLeft ? "text-right" : "")">
+                                                <p>@Localizer["DeleteConfirmationMessage", "Common"]</p>
+                                                <strong>@brand.NameEn (@brand.NameAr)</strong>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                                    @Localizer["Cancel", "Common"]
+                                                </button>
+                                                <form action="@Url.Action("Delete", new { id = brand.Id })" method="post" class="d-inline">
+                                                    @Html.AntiForgeryToken()
+                                                    <button type="submit" class="btn btn-danger">
+                                                        <i class="bx bx-trash"></i> @Localizer["Delete", "Brand"]
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        index++;
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="7" class="text-center @(CultureInfo.CurrentCulture.TextInfo.IsRightToLeft ? "text-right" : "")">
+                            <div class="text-muted py-4">
+                                <i class="bx bx-info-circle fs-1"></i>
+                                <br>
+                                @Localizer["NoBrandsAvailable", "Brand"]
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

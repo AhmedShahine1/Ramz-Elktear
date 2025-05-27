@@ -25,7 +25,6 @@ namespace Ramz_Elktear.Controllers.MVC
             _settingService = settingService;
         }
 
-        [Authorize(Policy = "Admin")]
         public async Task<IActionResult> Register()
         {
             var registerImage = await _settingService.GetSettingByTypeAsync(SettingType.Register);

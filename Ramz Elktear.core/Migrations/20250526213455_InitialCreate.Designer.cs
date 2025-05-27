@@ -12,8 +12,8 @@ using Ramz_Elktear.core;
 namespace Ramz_Elktear.core.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250420081829_updatecarmodel")]
-    partial class updatecarmodel
+    [Migration("20250526213455_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -1180,6 +1180,117 @@ namespace Ramz_Elktear.core.Migrations
                     b.ToTable("Jobs", "dbo");
                 });
 
+            modelBuilder.Entity("Ramz_Elktear.core.Entities.Localization.LocalizationChangeLog", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("ChangedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CultureCode")
+                        .IsRequired()
+                        .HasMaxLength(10)
+                        .HasColumnType("nvarchar(10)");
+
+                    b.Property<string>("NewValue")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("OldValue")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ResourceId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ResourceId");
+
+                    b.ToTable("LocalizationChangeLogs", "dbo");
+                });
+
+            modelBuilder.Entity("Ramz_Elktear.core.Entities.Localization.LocalizationResource", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<string>("ResourceGroup")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("ResourceKey")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ResourceGroup");
+
+                    b.HasIndex("ResourceKey")
+                        .IsUnique();
+
+                    b.ToTable("LocalizationResources", "dbo");
+                });
+
+            modelBuilder.Entity("Ramz_Elktear.core.Entities.Localization.LocalizationValue", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CultureCode")
+                        .IsRequired()
+                        .HasMaxLength(10)
+                        .HasColumnType("nvarchar(10)");
+
+                    b.Property<int>("ResourceId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Value")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ResourceId", "CultureCode")
+                        .IsUnique();
+
+                    b.ToTable("LocalizationValues", "dbo");
+                });
+
             modelBuilder.Entity("Ramz_Elktear.core.Entities.Offer.CarOffer", b =>
                 {
                     b.Property<string>("CarId")
@@ -1758,6 +1869,28 @@ namespace Ramz_Elktear.core.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("Ramz_Elktear.core.Entities.Localization.LocalizationChangeLog", b =>
+                {
+                    b.HasOne("Ramz_Elktear.core.Entities.Localization.LocalizationResource", "Resource")
+                        .WithMany()
+                        .HasForeignKey("ResourceId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Resource");
+                });
+
+            modelBuilder.Entity("Ramz_Elktear.core.Entities.Localization.LocalizationValue", b =>
+                {
+                    b.HasOne("Ramz_Elktear.core.Entities.Localization.LocalizationResource", "Resource")
+                        .WithMany("Values")
+                        .HasForeignKey("ResourceId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Resource");
+                });
+
             modelBuilder.Entity("Ramz_Elktear.core.Entities.Offer.CarOffer", b =>
                 {
                     b.HasOne("Car", "Car")
@@ -1924,6 +2057,11 @@ namespace Ramz_Elktear.core.Migrations
             modelBuilder.Entity("Ramz_Elktear.core.Entities.Files.Paths", b =>
                 {
                     b.Navigation("Images");
+                });
+
+            modelBuilder.Entity("Ramz_Elktear.core.Entities.Localization.LocalizationResource", b =>
+                {
+                    b.Navigation("Values");
                 });
 
             modelBuilder.Entity("Ramz_Elktear.core.Entities.Offer.Offers", b =>

@@ -1,10 +1,10 @@
 ﻿@model BranchDetails
 
-<div class="row">
+<div class="row" dir="@(CultureInfo.CurrentCulture.TextInfo.IsRightToLeft ? "rtl" : "ltr")">
     <div class="col-xxl">
         <div class="card mb-6">
             <div class="card-header d-flex align-items-center justify-content-between">
-                <h5 class="mb-0 text-truncate">Edit Branch</h5>
+                <h5 class="mb-0 text-truncate">@Localizer["EditBranch", "Branch"]</h5>
             </div>
             <div class="card-body">
                 <form asp-action="Edit" method="post" enctype="multipart/form-data">
@@ -15,47 +15,47 @@
 
                     <!-- Branch Name -->
                     <div class="row mb-6">
-                        <label class="col-sm-2 col-form-label text-truncate" for="name">Name</label>
+                        <label class="col-sm-2 col-form-label text-truncate @(CultureInfo.CurrentCulture.TextInfo.IsRightToLeft ? "text-right" : "")" for="name">@Localizer["Name", "Branch"]</label>
                         <div class="col-sm-10">
-                            <input type="text" class="form-control" id="name" name="Name" placeholder="Branch Name" value="@Model?.Name" required />
+                            <input type="text" class="form-control text-truncate @(CultureInfo.CurrentCulture.TextInfo.IsRightToLeft ? "text-right" : "")" id="name" name="Name" placeholder="@Localizer["BranchNamePlaceholder", "Branch"]" value="@Model?.Name" required />
                         </div>
                     </div>
 
                     <!-- Branch Address -->
                     <div class="row mb-6">
-                        <label class="col-sm-2 col-form-label text-truncate" for="address">Address</label>
+                        <label class="col-sm-2 col-form-label text-truncate @(CultureInfo.CurrentCulture.TextInfo.IsRightToLeft ? "text-right" : "")" for="address">@Localizer["Address", "Branch"]</label>
                         <div class="col-sm-10">
-                            <input type="text" class="form-control" id="address" name="Address" placeholder="Branch Address" value="@Model?.Address" required />
+                            <input type="text" class="form-control text-truncate @(CultureInfo.CurrentCulture.TextInfo.IsRightToLeft ? "text-right" : "")" id="address" name="Address" placeholder="@Localizer["AddressPlaceholder", "Branch"]" value="@Model?.Address" required />
                         </div>
                     </div>
 
                     <!-- Branch Email -->
                     <div class="row mb-6">
-                        <label class="col-sm-2 col-form-label text-truncate" for="email" >Email</label>
+                        <label class="col-sm-2 col-form-label text-truncate @(CultureInfo.CurrentCulture.TextInfo.IsRightToLeft ? "text-right" : "")" for="email">@Localizer["Email", "Branch"]</label>
                         <div class="col-sm-10">
-                            <input type="email" class="form-control" id="email" name="Email" placeholder="Branch Email" value="@Model?.Email" required />
+                            <input type="email" class="form-control text-truncate @(CultureInfo.CurrentCulture.TextInfo.IsRightToLeft ? "text-right" : "")" id="email" name="Email" placeholder="@Localizer["EmailPlaceholder", "Branch"]" value="@Model?.Email" required />
                         </div>
                     </div>
 
                     <!-- Start Work -->
                     <div class="row mb-6">
-                        <label class="col-sm-2 col-form-label text-truncate" for="startWork">Start Work</label>
+                        <label class="col-sm-2 col-form-label text-truncate @(CultureInfo.CurrentCulture.TextInfo.IsRightToLeft ? "text-right" : "")" for="startWork">@Localizer["StartWork", "Branch"]</label>
                         <div class="col-sm-10">
-                            <input type="time" class="form-control" id="startWork" name="StartWork" value="@Model?.StartWork" required />
+                            <input type="time" class="form-control text-truncate @(CultureInfo.CurrentCulture.TextInfo.IsRightToLeft ? "text-right" : "")" id="startWork" name="StartWork" value="@Model?.StartWork" required />
                         </div>
                     </div>
 
                     <!-- End Work -->
                     <div class="row mb-6">
-                        <label class="col-sm-2 col-form-label text-truncate" for="endWork">End Work</label>
+                        <label class="col-sm-2 col-form-label text-truncate @(CultureInfo.CurrentCulture.TextInfo.IsRightToLeft ? "text-right" : "")" for="endWork">@Localizer["EndWork", "Branch"]</label>
                         <div class="col-sm-10">
-                            <input type="time" class="form-control" id="endWork" name="EndWork" value="@Model?.EndWork" required />
+                            <input type="time" class="form-control text-truncate @(CultureInfo.CurrentCulture.TextInfo.IsRightToLeft ? "text-right" : "")" id="endWork" name="EndWork" value="@Model?.EndWork" required />
                         </div>
                     </div>
 
                     <!-- Location Map -->
                     <div class="row mb-6">
-                        <label class="col-sm-2 col-form-label text-truncate">Select Location</label>
+                        <label class="col-sm-2 col-form-label text-truncate @(CultureInfo.CurrentCulture.TextInfo.IsRightToLeft ? "text-right" : "")">@Localizer["SelectLocation", "Branch"]</label>
                         <div class="col-sm-10">
                             <div id="map" style="height: 300px; width: 100%;"></div>
                         </div>
@@ -63,7 +63,7 @@
 
                     <!-- Phone Numbers (Dynamic Input) -->
                     <div class="row mb-6">
-                        <label class="col-sm-2 col-form-label text-truncate">Phone Numbers</label>
+                        <label class="col-sm-2 col-form-label text-truncate @(CultureInfo.CurrentCulture.TextInfo.IsRightToLeft ? "text-right" : "")">@Localizer["PhoneNumbers", "Branch"]</label>
                         <div class="col-sm-10">
                             <div id="phoneNumbersContainer">
                                 @if (Model?.PhoneNumber != null && Model.PhoneNumber.Any())
@@ -71,26 +71,26 @@
                                     for (int i = 0; i < Model.PhoneNumber.Count; i++)
                                     {
                                         <div class="input-group mb-2 phone-number-group">
-                                            <input type="text" class="form-control" name="PhoneNumber" value="@Model.PhoneNumber[i]" required />
-                                            <button type="button" class="btn btn-danger remove-phone" onclick="removePhoneNumber(this)">X</button>
+                                            <input type="text" class="form-control text-truncate @(CultureInfo.CurrentCulture.TextInfo.IsRightToLeft ? "text-right" : "")" name="PhoneNumber" value="@Model.PhoneNumber[i]" required />
+                                            <button type="button" class="btn btn-danger remove-phone" onclick="removePhoneNumber(this)">@Localizer["Remove", "Branch"]</button>
                                         </div>
                                     }
                                 }
                                 else
                                 {
                                     <div class="input-group mb-2 phone-number-group">
-                                        <input type="text" class="form-control" name="PhoneNumber" required />
-                                        <button type="button" class="btn btn-danger remove-phone" onclick="removePhoneNumber(this)">X</button>
+                                        <input type="text" class="form-control text-truncate @(CultureInfo.CurrentCulture.TextInfo.IsRightToLeft ? "text-right" : "")" name="PhoneNumber" required />
+                                        <button type="button" class="btn btn-danger remove-phone" onclick="removePhoneNumber(this)">@Localizer["Remove", "Branch"]</button>
                                     </div>
                                 }
                             </div>
-                            <button type="button" class="btn btn-success mt-2" onclick="addPhoneNumber()"><span class="text-truncate">+ Add Phone</span></button>
+                            <button type="button" class="btn btn-success mt-2" onclick="addPhoneNumber()">@Localizer["AddPhone", "Branch"]</button>
                         </div>
                     </div>
 
                     <!-- Upload Image -->
                     <div class="row mb-6">
-                        <label class="col-sm-2 col-form-label text-truncate" for="image">Image</label>
+                        <label class="col-sm-2 col-form-label text-truncate @(CultureInfo.CurrentCulture.TextInfo.IsRightToLeft ? "text-right" : "")" for="image">@Localizer["Image", "Branch"]</label>
                         <div class="col-sm-10">
                             <input type="file" class="form-control" id="image" name="Image" />
                         </div>
@@ -99,7 +99,7 @@
                     <!-- Submit Button -->
                     <div class="row justify-content-end">
                         <div class="col-sm-10">
-                            <button type="submit" class="btn btn-primary"><span class="text-truncate">Save Branch</span></button>
+                            <button type="submit" class="btn btn-primary">@Localizer["UpdateBranch", "Branch"]</button>
                         </div>
                     </div>
 
@@ -150,9 +150,13 @@
         let div = document.createElement("div");
         div.classList.add("input-group", "mb-2", "phone-number-group");
 
+        let isRtl = '@CultureInfo.CurrentCulture.TextInfo.IsRightToLeft'.toLowerCase() === 'true';
+        let removeText = '@Localizer["Remove", "Branch"]';
+        let textClass = isRtl ? 'text-right' : '';
+
         div.innerHTML = `
-            <input type="text" class="form-control" name="PhoneNumber" required />
-            <button type="button" class="btn btn-danger remove-phone" onclick="removePhoneNumber(this)">X</button>
+            <input type="text" class="form-control text-truncate ${textClass}" name="PhoneNumber" required />
+            <button type="button" class="btn btn-danger remove-phone" onclick="removePhoneNumber(this)">${removeText}</button>
         `;
 
         container.appendChild(div);

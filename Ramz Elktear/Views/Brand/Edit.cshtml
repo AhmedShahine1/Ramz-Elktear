@@ -1,27 +1,89 @@
-﻿@model Ramz_Elktear.core.DTO.BrandModels.UpdateBrandDto
+﻿@model UpdateBrandDto
 
-<h3>Edit Brand</h3>
-<form asp-action="Edit" method="post" enctype="multipart/form-data">
-    <input type="hidden" asp-for="Id" />
-    <div class="form-group">
-        <label>Name (Arabic)</label>
-        <input asp-for="NameAr" class="form-control" required />
+<div class="card" dir="@(CultureInfo.CurrentCulture.TextInfo.IsRightToLeft ? "rtl" : "ltr")">
+    <div class="card-header">
+        <h3 class="mb-0">
+            <span class="text-truncate">@Localizer["EditBrand", "Brand"]</span>
+        </h3>
     </div>
-    <div class="form-group">
-        <label>Name (English)</label>
-        <input asp-for="NameEn" class="form-control" required />
+    <div class="card-body">
+        <form asp-action="Edit" method="post" enctype="multipart/form-data">
+            <input type="hidden" asp-for="Id" />
+
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <div class="form-group">
+                        <label class="form-label @(CultureInfo.CurrentCulture.TextInfo.IsRightToLeft ? "text-right" : "")">
+                            @Localizer["NameArabic", "Brand"]
+                        </label>
+                        <input asp-for="NameAr"
+                               class="form-control @(CultureInfo.CurrentCulture.TextInfo.IsRightToLeft ? "text-right" : "")"
+                               placeholder="@Localizer["BrandNameArPlaceholder", "Brand"]"
+                               required />
+                        <span asp-validation-for="NameAr" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <div class="form-group">
+                        <label class="form-label @(CultureInfo.CurrentCulture.TextInfo.IsRightToLeft ? "text-right" : "")">
+                            @Localizer["NameEnglish", "Brand"]
+                        </label>
+                        <input asp-for="NameEn"
+                               class="form-control"
+                               placeholder="@Localizer["BrandNameEnPlaceholder", "Brand"]"
+                               required />
+                        <span asp-validation-for="NameEn" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <div class="form-group">
+                        <label class="form-label @(CultureInfo.CurrentCulture.TextInfo.IsRightToLeft ? "text-right" : "")">
+                            @Localizer["DescriptionArabic", "Brand"]
+                        </label>
+                        <textarea asp-for="DescriptionAr"
+                                  class="form-control @(CultureInfo.CurrentCulture.TextInfo.IsRightToLeft ? "text-right" : "")"
+                                  rows="4"
+                                  placeholder="@Localizer["BrandDescriptionArPlaceholder", "Brand"]"
+                                  required></textarea>
+                        <span asp-validation-for="DescriptionAr" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <div class="form-group">
+                        <label class="form-label @(CultureInfo.CurrentCulture.TextInfo.IsRightToLeft ? "text-right" : "")">
+                            @Localizer["DescriptionEnglish", "Brand"]
+                        </label>
+                        <textarea asp-for="DescriptionEn"
+                                  class="form-control"
+                                  rows="4"
+                                  placeholder="@Localizer["BrandDescriptionEnPlaceholder", "Brand"]"
+                                  required></textarea>
+                        <span asp-validation-for="DescriptionEn" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-12">
+                    <div class="d-flex @(CultureInfo.CurrentCulture.TextInfo.IsRightToLeft ? "justify-content-start" : "justify-content-end") gap-2">
+                        <a href="@Url.Action("Index")" class="btn btn-secondary">
+                            <i class="bx bx-arrow-back"></i>
+                            <span class="text-truncate">@Localizer["Cancel", "Common"]</span>
+                        </a>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bx bx-save"></i>
+                            <span class="text-truncate">@Localizer["UpdateBrand", "Brand"]</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </form>
     </div>
-    <div class="form-group">
-        <label>Description (Arabic)</label>
-        <textarea asp-for="DescriptionAr" class="form-control" required></textarea>
-    </div>
-    <div class="form-group">
-        <label>Description (English)</label>
-        <textarea asp-for="DescriptionEn" class="form-control" required></textarea>
-    </div>
-    <div class="form-group">
-        <label>Image</label>
-        <input type="file" asp-for="Image" class="form-control" />
-    </div>
-    <button type="submit" class="btn btn-primary mt-3">Save Changes</button>
-</form>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
