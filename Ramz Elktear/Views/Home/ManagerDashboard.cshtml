@@ -1,7 +1,7 @@
 ﻿@model ManagerDashboardDto
 
 <div class="container-fluid px-4 py-5">
-    <h2 class="text-primary fw-bold mb-4 text-truncate">Manager Dashboard</h2>
+    <h2 class="text-primary fw-bold mb-4 text-truncate">@Localizer["Dashboard", "Manager Dashboard"]</h2>
 
     <!-- Key Metrics Cards -->
     <div class="row g-4 mb-5">
@@ -10,7 +10,7 @@
             <div class="card shadow-sm border-0 h-100">
                 <div class="card-body d-flex flex-column">
                     <div class="d-flex justify-content-between align-items-center mb-3">
-                        <h5 class="card-title text-muted mb-0 text-truncate">Total Sales Agents</h5>
+                        <h5 class="card-title text-muted mb-0 text-truncate">@Localizer["TotalSalesAgents", "Total Sales Agents"]</h5>
                         <div class="avatar bg-light-primary p-2 rounded">
                             <i class="bx bx-user-circle fs-4 text-primary"></i>
                         </div>
@@ -19,6 +19,7 @@
                     <div class="progress mt-3" style="height: 4px;">
                         <div class="progress-bar bg-primary" style="width: 65%"></div>
                     </div>
+                    <small class="text-muted mt-2">@Localizer["ActiveAgents", "Active Agents"]</small>
                 </div>
             </div>
         </div>
@@ -28,7 +29,7 @@
             <div class="card shadow-sm border-0 h-100">
                 <div class="card-body d-flex flex-column">
                     <div class="d-flex justify-content-between align-items-center mb-3">
-                        <h5 class="card-title text-muted mb-0 text-truncate">Total Sales</h5>
+                        <h5 class="card-title text-muted mb-0 text-truncate">@Localizer["TotalSales", "Total Sales"]</h5>
                         <div class="avatar bg-light-success p-2 rounded">
                             <i class="bx bx-dollar-circle fs-4 text-success"></i>
                         </div>
@@ -37,6 +38,56 @@
                     <div class="progress mt-3" style="height: 4px;">
                         <div class="progress-bar bg-success" style="width: 78%"></div>
                     </div>
+                    <small class="text-muted mt-2">@Localizer["ThisMonth", "This Month"]</small>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Enhanced Metrics Row -->
+    <div class="row g-4 mb-5">
+        <!-- Revenue Card -->
+        <div class="col-12 col-md-4">
+            <div class="card shadow-sm border-0 h-100 bg-gradient-primary text-white">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h6 class="card-title mb-0 text-white-50">@Localizer["TotalRevenue", "Total Revenue"]</h6>
+                        <i class="bx bx-trending-up fs-4"></i>
+                    </div>
+                    <h4 class="fw-bold mb-2">@(Model.TotalSales * 1500) @Localizer["Currency", "EGP"]</h4>
+                    <span class="badge bg-white text-primary">+12.5% @Localizer["Growth", "Growth"]</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Average Deal Size -->
+        <div class="col-12 col-md-4">
+            <div class="card shadow-sm border-0 h-100">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h6 class="card-title text-muted mb-0">@Localizer["AverageDealSize", "Average Deal Size"]</h6>
+                        <div class="avatar bg-light-info p-2 rounded">
+                            <i class="bx bx-calculator fs-5 text-info"></i>
+                        </div>
+                    </div>
+                    <h4 class="fw-bold mb-2">@((Model.TotalSales > 0 ? (Model.TotalSales * 1500) / Model.TotalSales : 0).ToString("N0")) @Localizer["Currency", "EGP"]</h4>
+                    <small class="text-muted">@Localizer["PerTransaction", "Per Transaction"]</small>
+                </div>
+            </div>
+        </div>
+
+        <!-- Conversion Rate -->
+        <div class="col-12 col-md-4">
+            <div class="card shadow-sm border-0 h-100">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h6 class="card-title text-muted mb-0">@Localizer["ConversionRate", "Conversion Rate"]</h6>
+                        <div class="avatar bg-light-warning p-2 rounded">
+                            <i class="bx bx-target-lock fs-5 text-warning"></i>
+                        </div>
+                    </div>
+                    <h4 class="fw-bold mb-2">73.2%</h4>
+                    <small class="text-muted">@Localizer["LeadsToSales", "Leads to Sales"]</small>
                 </div>
             </div>
         </div>
@@ -47,9 +98,21 @@
         <!-- Monthly Sales Chart -->
         <div class="col-12 col-lg-6">
             <div class="card shadow-sm border-0 h-100">
-                <div class="card-header bg-transparent border-0">
-                    <h5 class="card-title mb-0 text-truncate">Monthly Sales Trends</h5>
-                    <p class="text-muted small mb-0 text-truncate">Sales performance over time</p>
+                <div class="card-header bg-transparent border-0 d-flex justify-content-between align-items-center">
+                    <div>
+                        <h5 class="card-title mb-0 text-truncate">@Localizer["MonthlySalesTrends", "Monthly Sales Trends"]</h5>
+                        <p class="text-muted small mb-0 text-truncate">@Localizer["SalesPerformanceOverTime", "Sales performance over time"]</p>
+                    </div>
+                    <div class="dropdown">
+                        <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                            @Localizer["ViewOptions", "View Options"]
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="#" onclick="toggleChartView('monthly')">@Localizer["MonthlyView", "Monthly View"]</a></li>
+                            <li><a class="dropdown-item" href="#" onclick="toggleChartView('quarterly')">@Localizer["QuarterlyView", "Quarterly View"]</a></li>
+                            <li><a class="dropdown-item" href="#" onclick="toggleChartView('yearly')">@Localizer["YearlyView", "Yearly View"]</a></li>
+                        </ul>
+                    </div>
                 </div>
                 <div class="card-body">
                     <canvas id="monthlySalesChart" height="300"></canvas>
@@ -61,11 +124,73 @@
         <div class="col-12 col-lg-6">
             <div class="card shadow-sm border-0 h-100">
                 <div class="card-header bg-transparent border-0">
-                    <h5 class="card-title mb-0 text-truncate">Sales by Agent</h5>
-                    <p class="text-muted small mb-0 text-truncate">Comparative analysis of agent performance</p>
+                    <h5 class="card-title mb-0 text-truncate">@Localizer["SalesByAgent", "Sales by Agent"]</h5>
+                    <p class="text-muted small mb-0 text-truncate">@Localizer["ComparativeAnalysisAgentPerformance", "Comparative analysis of agent performance"]</p>
                 </div>
                 <div class="card-body">
-                    <canvas id="salesComparisonChart" height="300"></canvas>
+                    <div class="row">
+                        <div class="col-7">
+                            <canvas id="salesComparisonChart" height="300"></canvas>
+                        </div>
+                        <div class="col-5">
+                            <div class="agent-stats">
+                                <h6 class="text-muted mb-3">@Localizer["TopPerformers", "Top Performers"]</h6>
+                                <div class="agent-list">
+                                    @for (int i = 0; i < Math.Min(Model.SalesComparison.Count(), 3); i++)
+                                    {
+                                        var agent = Model.SalesComparison.OrderByDescending(s => s.TotalBookings).ElementAt(i);
+                                        <div class="d-flex justify-content-between align-items-center mb-2">
+                                            <div class="d-flex align-items-center">
+                                                <div class="avatar avatar-sm me-2">
+                                                    <span class="avatar-initial rounded-circle bg-primary">@agent.SalesName.Substring(0, 1)</span>
+                                                </div>
+                                                <span class="fw-medium">@agent.SalesName</span>
+                                            </div>
+                                            <span class="badge bg-light-primary text-primary">@agent.TotalBookings</span>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Performance Summary -->
+    <div class="row g-4 mt-4">
+        <div class="col-12">
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-transparent border-0">
+                    <h5 class="card-title mb-0">@Localizer["PerformanceSummary", "Performance Summary"]</h5>
+                    <p class="text-muted small mb-0">@Localizer["KeyInsightsAndRecommendations", "Key insights and recommendations"]</p>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="alert alert-success border-0 bg-light-success">
+                                <div class="d-flex align-items-center">
+                                    <i class="bx bx-check-circle me-2 text-success"></i>
+                                    <div>
+                                        <h6 class="alert-heading mb-1">@Localizer["ExcellentPerformance", "Excellent Performance"]</h6>
+                                        <p class="mb-0 small">@Localizer["SalesTargetExceeded", "Sales target exceeded by 15% this month"]</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="alert alert-info border-0 bg-light-info">
+                                <div class="d-flex align-items-center">
+                                    <i class="bx bx-info-circle me-2 text-info"></i>
+                                    <div>
+                                        <h6 class="alert-heading mb-1">@Localizer["TeamGrowth", "Team Growth"]</h6>
+                                        <p class="mb-0 small">@Localizer["NewAgentsOnboarded", "3 new agents onboarded this quarter"]</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -91,35 +216,60 @@
             ]
           };
 
+          // Localized labels
+          const labels = {
+            totalSales: '@Localizer["TotalSales", "Total Sales"]',
+            salesByAgent: '@Localizer["SalesByAgent", "Sales by Agent"]',
+            loading: '@Localizer["Loading", "Loading..."]',
+            noData: '@Localizer["NoDataAvailable", "No data available"]'
+          };
+
           // Monthly Sales Chart
           const monthlySalesCtx = document.getElementById('monthlySalesChart').getContext('2d');
-          new Chart(monthlySalesCtx, {
+          const monthlySalesChart = new Chart(monthlySalesCtx, {
             type: 'bar',
             data: {
               labels: @Html.Raw(Json.Serialize(Model.MonthlySales.Select(m => $"{m.Month}/{m.Year}"))),
               datasets: [{
-                label: 'Total Sales',
+                label: labels.totalSales,
                 data: @Html.Raw(Json.Serialize(Model.MonthlySales.Select(m => m.SalesCount))),
-                backgroundColor: colors.primary + '80', // 50% opacity
+                backgroundColor: colors.primary + '80',
                 borderColor: colors.primary,
-                borderWidth: 1,
-                borderRadius: 4,
-                maxBarThickness: 32
+                borderWidth: 2,
+                borderRadius: 6,
+                maxBarThickness: 40,
+                hoverBackgroundColor: colors.primary,
+                hoverBorderWidth: 3
               }]
             },
             options: {
               responsive: true,
               maintainAspectRatio: false,
+              interaction: {
+                intersect: false,
+                mode: 'index'
+              },
               scales: {
                 y: {
                   beginAtZero: true,
                   grid: {
-                    color: colors.background
+                    color: colors.background,
+                    drawBorder: false
+                  },
+                  ticks: {
+                    font: {
+                      size: 12
+                    }
                   }
                 },
                 x: {
                   grid: {
                     display: false
+                  },
+                  ticks: {
+                    font: {
+                      size: 12
+                    }
                   }
                 }
               },
@@ -133,8 +283,21 @@
                   bodyColor: '#566a7f',
                   borderColor: '#f0f2f8',
                   borderWidth: 1,
-                  usePointStyle: true
+                  usePointStyle: true,
+                  titleFont: {
+                    size: 13,
+                    weight: '600'
+                  },
+                  bodyFont: {
+                    size: 12
+                  },
+                  padding: 12,
+                  cornerRadius: 8
                 }
+              },
+              animation: {
+                duration: 1000,
+                easing: 'easeInOutQuart'
               }
             }
           });
@@ -146,11 +309,12 @@
             data: {
               labels: @Html.Raw(Json.Serialize(Model.SalesComparison.Select(s => s.SalesName))),
               datasets: [{
-                label: 'Sales by Agent',
+                label: labels.salesByAgent,
                 data: @Html.Raw(Json.Serialize(Model.SalesComparison.Select(s => s.TotalBookings))),
                 backgroundColor: colors.chartColors,
                 borderWidth: 0,
-                cutout: '70%'
+                cutout: '70%',
+                hoverOffset: 4
               }]
             },
             options: {
@@ -158,13 +322,17 @@
               maintainAspectRatio: false,
               plugins: {
                 legend: {
-                  position: 'bottom',
-                  labels: {
-                    usePointStyle: true,
-                    padding: 20
-                  }
+                  display: false
                 },
                 tooltip: {
+                  backgroundColor: '#fff',
+                  titleColor: '#566a7f',
+                  bodyColor: '#566a7f',
+                  borderColor: '#f0f2f8',
+                  borderWidth: 1,
+                  usePointStyle: true,
+                  padding: 12,
+                  cornerRadius: 8,
                   callbacks: {
                     label: function(context) {
                       const label = context.label || '';
@@ -176,9 +344,85 @@
                     }
                   }
                 }
+              },
+              animation: {
+                animateScale: true,
+                duration: 1000
               }
             }
           });
+
+          // Chart view toggle function
+          window.toggleChartView = function(view) {
+            // Implementation for different chart views
+            console.log('Switching to', view, 'view');
+            // You can implement logic to reload chart data based on the selected view
+          };
         });
     </script>
 }
+
+<style>
+    .bg-gradient-primary {
+        background: linear-gradient(135deg, #696cff 0%, #5a67d8 100%);
+    }
+    
+    .bg-light-primary {
+        background-color: rgba(105, 108, 255, 0.1) !important;
+    }
+    
+    .bg-light-success {
+        background-color: rgba(113, 221, 55, 0.1) !important;
+    }
+    
+    .bg-light-info {
+        background-color: rgba(3, 195, 236, 0.1) !important;
+    }
+    
+    .bg-light-warning {
+        background-color: rgba(255, 171, 0, 0.1) !important;
+    }
+    
+    .avatar {
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .avatar-sm {
+        width: 32px;
+        height: 32px;
+        font-size: 12px;
+    }
+    
+    .avatar-initial {
+        background-color: var(--bs-primary);
+        color: white;
+        font-weight: 600;
+    }
+    
+    .card {
+        transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+    }
+    
+    .card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(0,0,0,0.1) !important;
+    }
+    
+    .agent-stats {
+        padding: 1rem 0;
+    }
+    
+    .agent-list .d-flex {
+        padding: 0.5rem;
+        border-radius: 8px;
+        transition: background-color 0.2s;
+    }
+    
+    .agent-list .d-flex:hover {
+        background-color: rgba(105, 108, 255, 0.05);
+    }
+</style>

@@ -1,0 +1,227 @@
+[
+  {
+    "ResourceKey": "SalesDashboard",
+    "ResourceGroup": "SalesDashboard",
+    "Description": "Sales dashboard page title",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Sales Dashboard"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "لوحة معلومات المبيعات"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "TotalSales",
+    "ResourceGroup": "SalesDashboard",
+    "Description": "Total sales label",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Total Sales"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "إجمالي المبيعات"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "SalesPerMonth",
+    "ResourceGroup": "SalesDashboard",
+    "Description": "Sales per month chart label",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Sales Per Month"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "المبيعات شهرياً"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "SalesChart",
+    "ResourceGroup": "SalesDashboard",
+    "Description": "Sales chart title",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Sales Chart"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "مخطط المبيعات"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "MonthlySalesAnalysis",
+    "ResourceGroup": "SalesDashboard",
+    "Description": "Monthly sales analysis section title",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Monthly Sales Analysis"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "تحليل المبيعات الشهرية"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "SalesOverview",
+    "ResourceGroup": "SalesDashboard",
+    "Description": "Sales overview section title",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Sales Overview"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "نظرة عامة على المبيعات"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "SalesTrend",
+    "ResourceGroup": "SalesDashboard",
+    "Description": "Sales trend label",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Sales Trend"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "اتجاه المبيعات"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "MonthlyPerformance",
+    "ResourceGroup": "SalesDashboard",
+    "Description": "Monthly performance label",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Monthly Performance"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "الأداء الشهري"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "SalesData",
+    "ResourceGroup": "SalesDashboard",
+    "Description": "Sales data label",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Sales Data"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "بيانات المبيعات"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "NoSalesData",
+    "ResourceGroup": "SalesDashboard",
+    "Description": "No sales data message",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "No sales data available"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "لا توجد بيانات مبيعات متاحة"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "LoadingSalesData",
+    "ResourceGroup": "SalesDashboard",
+    "Description": "Loading sales data message",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Loading sales data..."
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "جاري تحميل بيانات المبيعات..."
+      }
+    ]
+  },
+  {
+    "ResourceKey": "SalesCount",
+    "ResourceGroup": "SalesDashboard",
+    "Description": "Sales count label",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Sales Count"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "عدد المبيعات"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "Month",
+    "ResourceGroup": "SalesDashboard",
+    "Description": "Month label",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Month"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "الشهر"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "Year",
+    "ResourceGroup": "SalesDashboard",
+    "Description": "Year label",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Year"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "السنة"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "ChartTooltipTemplate",
+    "ResourceGroup": "SalesDashboard",
+    "Description": "Chart tooltip template",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Sales: {0}"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "المبيعات: {0}"
+      }
+    ]
+  }
+]

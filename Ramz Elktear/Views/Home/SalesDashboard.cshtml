@@ -1,32 +1,289 @@
 ﻿@model SalesDashboardDto
 
-<h2 class="text-truncate">Sales Dashboard</h2>
+<div class="container-fluid px-4 py-5">
+    <h2 class="text-primary fw-bold mb-4 text-truncate">@Localizer["SalesDashboard", "Sales Dashboard"]</h2>
 
-<div>
-    <p><strong class="text-truncate">Total Sales:</strong> @Model.TotalSales</p>
-</div>
+    <!-- Sales Overview Section -->
+    <div class="row g-4 mb-5">
+        <div class="col-12 col-md-6">
+            <div class="card shadow-sm border-0 h-100">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h5 class="card-title text-muted mb-0 text-truncate">@Localizer["SalesOverview", "Sales Overview"]</h5>
+                        <div class="avatar bg-light-primary p-2 rounded">
+                            <i class="bx bx-bar-chart-alt-2 fs-4 text-primary"></i>
+                        </div>
+                    </div>
+                    <div class="sales-summary">
+                        <p class="mb-2">
+                            <strong class="text-truncate">@Localizer["TotalSales", "Total Sales"]:</strong>
+                            <span class="fs-4 fw-bold text-primary">@Model.TotalSales</span>
+                        </p>
+                        <div class="progress mt-3" style="height: 6px;">
+                            <div class="progress-bar bg-primary" style="width: 85%"></div>
+                        </div>
+                        <small class="text-muted mt-2">@Localizer["MonthlyPerformance", "Monthly Performance"]</small>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-<div class="col-md-6">
-    <canvas id="salesByMonthChart"></canvas>
+        <!-- Additional Stats Card -->
+        <div class="col-12 col-md-6">
+            <div class="card shadow-sm border-0 h-100 bg-gradient-primary text-white">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h6 class="card-title mb-0 text-white-50">@Localizer["SalesTrend", "Sales Trend"]</h6>
+                        <i class="bx bx-trending-up fs-4"></i>
+                    </div>
+                    <h4 class="fw-bold mb-2">
+                        @if (Model.MonthlySales != null && Model.MonthlySales.Any())
+                        {
+                            var currentMonth = Model.MonthlySales.LastOrDefault()?.SalesCount ?? 0;
+                            var previousMonth = Model.MonthlySales.Count() > 1 ? Model.MonthlySales.ElementAtOrDefault(Model.MonthlySales.Count() - 2)?.SalesCount ?? 0 : 0;
+                            var growthPercentage = previousMonth > 0 ? Math.Round((double)(currentMonth - previousMonth) / previousMonth * 100, 1) : 0;
+
+                            if (growthPercentage > 0)
+                            {
+                                <span class="text-success">+@growthPercentage%</span>
+                            }
+                            else if (growthPercentage < 0)
+                            {
+                                <span class="text-warning">@growthPercentage%</span>
+                            }
+                            else
+                            {
+                                <span>0%</span>
+                            }
+                        }
+                        else
+                        {
+                            <span>--</span>
+                        }
+                    </h4>
+                    <small class="text-white-50">@Localizer["Month", "Month"] vs @Localizer["Month", "Month"]</small>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sales Chart Section -->
+    <div class="row g-4">
+        <div class="col-12">
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-transparent border-0">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h5 class="card-title mb-0 text-truncate">@Localizer["MonthlySalesAnalysis", "Monthly Sales Analysis"]</h5>
+                            <p class="text-muted small mb-0 text-truncate">@Localizer["SalesPerMonth", "Sales Per Month"]</p>
+                        </div>
+                        <div class="chart-actions">
+                            <button class="btn btn-sm btn-outline-primary" onclick="refreshChart()">
+                                <i class="bx bx-refresh me-1"></i>
+                                Refresh
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    @if (Model.MonthlySales != null && Model.MonthlySales.Any())
+                    {
+                        <div class="chart-container" style="position: relative; height: 400px;">
+                            <canvas id="salesByMonthChart"></canvas>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="text-center py-5">
+                            <i class="bx bx-bar-chart-alt-2 fs-1 text-muted mb-3"></i>
+                            <h6 class="text-muted">@Localizer["NoSalesData", "No sales data available"]</h6>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 @section Scripts {
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
-        var salesByMonthCtx = document.getElementById('salesByMonthChart').getContext('2d');
-        new Chart(salesByMonthCtx, {
-            type: 'line',
-            data: {
-                labels: @Html.Raw(Json.Serialize(Model.MonthlySales.Select(m => $"{m.Month}/{m.Year}"))),
-                datasets: [{
-                    label: 'Sales Per Month',
-                    data: @Html.Raw(Json.Serialize(Model.MonthlySales.Select(m => m.SalesCount))),
-                    borderColor: 'rgba(75, 192, 192, 1)',
-                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                    borderWidth: 1
-                }]
-            },
-            options: { responsive: true, scales: { y: { beginAtZero: true } } }
+        document.addEventListener('DOMContentLoaded', function() {
+            // Localized labels
+            const labels = {
+                salesPerMonth: '@Localizer["SalesPerMonth", "Sales Per Month"]',
+                loadingSalesData: '@Localizer["LoadingSalesData", "Loading sales data..."]',
+                noSalesData: '@Localizer["NoSalesData", "No sales data available"]',
+                salesCount: '@Localizer["SalesCount", "Sales Count"]',
+                month: '@Localizer["Month", "Month"]',
+                year: '@Localizer["Year", "Year"]'
+            };
+
+            // Chart configuration
+            const chartConfig = {
+                colors: {
+                    primary: '#696cff',
+                    success: '#71dd37',
+                    background: 'rgba(105, 108, 255, 0.1)',
+                    border: 'rgba(105, 108, 255, 0.8)'
+                }
+            };
+
+            @if (Model.MonthlySales != null && Model.MonthlySales.Any())
+            {
+                    <text>
+                    // Sales by Month Chart
+                    const salesByMonthCtx = document.getElementById('salesByMonthChart').getContext('2d');
+                    const salesByMonthChart = new Chart(salesByMonthCtx, {
+                        type: 'line',
+                        data: {
+                            labels: @Html.Raw(Json.Serialize(Model.MonthlySales.Select(m => $"{m.Month}/{m.Year}"))),
+                            datasets: [{
+                                label: labels.salesPerMonth,
+                                data: @Html.Raw(Json.Serialize(Model.MonthlySales.Select(m => m.SalesCount))),
+                                borderColor: chartConfig.colors.border,
+                                backgroundColor: chartConfig.colors.background,
+                                borderWidth: 3,
+                                fill: true,
+                                tension: 0.4,
+                                pointBackgroundColor: chartConfig.colors.primary,
+                                pointBorderColor: '#fff',
+                                pointBorderWidth: 2,
+                                pointRadius: 6,
+                                pointHoverRadius: 8,
+                                pointHoverBackgroundColor: chartConfig.colors.primary,
+                                pointHoverBorderColor: '#fff',
+                                pointHoverBorderWidth: 3
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            interaction: {
+                                intersect: false,
+                                mode: 'index'
+                            },
+                            scales: {
+                                y: {
+                                    beginAtZero: true,
+                                    grid: {
+                                        color: chartConfig.colors.background,
+                                        drawBorder: false
+                                    },
+                                    ticks: {
+                                        font: {
+                                            size: 12
+                                        },
+                                        padding: 10
+                                    }
+                                },
+                                x: {
+                                    grid: {
+                                        display: false
+                                    },
+                                    ticks: {
+                                        font: {
+                                            size: 12
+                                        },
+                                        padding: 10
+                                    }
+                                }
+                            },
+                            plugins: {
+                                legend: {
+                                    display: true,
+                                    position: 'top',
+                                    align: 'end',
+                                    labels: {
+                                        font: {
+                                            size: 13
+                                        },
+                                        padding: 20,
+                                        usePointStyle: true
+                                    }
+                                },
+                                tooltip: {
+                                    backgroundColor: '#fff',
+                                    titleColor: '#566a7f',
+                                    bodyColor: '#566a7f',
+                                    borderColor: '#f0f2f8',
+                                    borderWidth: 1,
+                                    usePointStyle: true,
+                                    titleFont: {
+                                        size: 13,
+                                        weight: '600'
+                                    },
+                                    bodyFont: {
+                                        size: 12
+                                    },
+                                    padding: 12,
+                                    cornerRadius: 8,
+                                    callbacks: {
+                                        title: function(context) {
+                                            return labels.month + ': ' + context[0].label;
+                                        },
+                                        label: function(context) {
+                                            return labels.salesCount + ': ' + context.formattedValue;
+                                        }
+                                    }
+                                }
+                            },
+                            animation: {
+                                duration: 1000,
+                                easing: 'easeInOutQuart'
+                            }
+                        }
+                    });
+
+                    // Refresh chart function
+                    window.refreshChart = function() {
+                        salesByMonthChart.update('active');
+                    };
+                    </text>
+            }
         });
     </script>
 }
+
+<style>
+    .bg-gradient-primary {
+        background: linear-gradient(135deg, #696cff 0%, #5a67d8 100%);
+    }
+
+    .bg-light-primary {
+        background-color: rgba(105, 108, 255, 0.1) !important;
+    }
+
+    .avatar {
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .card {
+        transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+    }
+
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1) !important;
+        }
+
+    .sales-summary {
+        padding: 1rem 0;
+    }
+
+    .chart-container {
+        min-height: 400px;
+    }
+
+    .chart-actions .btn {
+        transition: all 0.2s ease-in-out;
+    }
+
+        .chart-actions .btn:hover {
+            transform: translateY(-1px);
+        }
+</style>

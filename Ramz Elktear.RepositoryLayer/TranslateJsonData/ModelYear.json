@@ -1,0 +1,377 @@
+[
+  {
+    "ResourceKey": "ModelYearList",
+    "ResourceGroup": "ModelYear",
+    "Description": "Model year list page title",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Model Year List"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "قائمة سنوات الموديل"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "AddNewModelYear",
+    "ResourceGroup": "ModelYear",
+    "Description": "Add new model year button text",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Add New Model Year"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "إضافة سنة موديل جديدة"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "SerialNumber",
+    "ResourceGroup": "ModelYear",
+    "Description": "Serial number column header",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "#"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "#"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "Name",
+    "ResourceGroup": "ModelYear",
+    "Description": "Name column header",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Name"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "الاسم"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "Active",
+    "ResourceGroup": "ModelYear",
+    "Description": "Active status column header",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Active"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "نشط"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "Actions",
+    "ResourceGroup": "ModelYear",
+    "Description": "Actions column header",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Actions"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "الإجراءات"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "ActiveStatus",
+    "ResourceGroup": "ModelYear",
+    "Description": "Active status badge text",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Active"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "نشط"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "InactiveStatus",
+    "ResourceGroup": "ModelYear",
+    "Description": "Inactive status badge text",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Inactive"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "غير نشط"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "Edit",
+    "ResourceGroup": "ModelYear",
+    "Description": "Edit action text",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Edit"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "تعديل"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "Delete",
+    "ResourceGroup": "ModelYear",
+    "Description": "Delete action text",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Delete"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "حذف"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "NoModelYearsAvailable",
+    "ResourceGroup": "ModelYear",
+    "Description": "No data available message",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "No model years available."
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "لا توجد سنوات موديل متاحة."
+      }
+    ]
+  },
+  {
+    "ResourceKey": "ConfirmDelete",
+    "ResourceGroup": "ModelYear",
+    "Description": "Delete confirmation message",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Are you sure you want to delete this model year?"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "هل أنت متأكد من حذف سنة الموديل هذه؟"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "EditModelYear",
+    "ResourceGroup": "ModelYear",
+    "Description": "Edit model year page title",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Edit Model Year"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "تعديل سنة الموديل"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "CreateModelYear",
+    "ResourceGroup": "ModelYear",
+    "Description": "Create model year page title",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Create Model Year"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "إنشاء سنة موديل"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "NameLabel",
+    "ResourceGroup": "ModelYear",
+    "Description": "Name field label",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Name"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "الاسم"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "NamePlaceholder",
+    "ResourceGroup": "ModelYear",
+    "Description": "Name field placeholder",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Enter model year name"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "أدخل اسم سنة الموديل"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "ActiveLabel",
+    "ResourceGroup": "ModelYear",
+    "Description": "Active field label",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Active"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "نشط"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "SaveChanges",
+    "ResourceGroup": "ModelYear",
+    "Description": "Save changes button text",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Save Changes"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "حفظ التغييرات"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "Create",
+    "ResourceGroup": "ModelYear",
+    "Description": "Create button text",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Create"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "إنشاء"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "Cancel",
+    "ResourceGroup": "ModelYear",
+    "Description": "Cancel button text",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Cancel"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "إلغاء"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "BackToList",
+    "ResourceGroup": "ModelYear",
+    "Description": "Back to list link text",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Back to List"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "العودة للقائمة"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "NameRequired",
+    "ResourceGroup": "ModelYear",
+    "Description": "Name field required validation message",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Name is required"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "الاسم مطلوب"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "AddModelYear",
+    "ResourceGroup": "ModelYear",
+    "Description": "Add model year button text",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Add Model Year"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "إضافة سنة الموديل"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "FormInstructions",
+    "ResourceGroup": "ModelYear",
+    "Description": "Form instructions text",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Please fill in the required information to create a new model year"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "يرجى ملء المعلومات المطلوبة لإنشاء سنة موديل جديدة"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "SuccessMessage",
+    "ResourceGroup": "ModelYear",
+    "Description": "Success message after creation",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Model year created successfully"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "تم إنشاء سنة الموديل بنجاح"
+      }
+    ]
+  }
+]

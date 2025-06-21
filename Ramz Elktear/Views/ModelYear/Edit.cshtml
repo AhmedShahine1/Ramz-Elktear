@@ -1,15 +1,84 @@
 ﻿@model UpdateModelYear
-
-<h3>Edit Model Year</h3>
-<form asp-action="Edit" method="post" enctype="multipart/form-data">
-    <input type="hidden" asp-for="Id" />
-    <div class="form-group">
-        <label>Name</label>
-        <input asp-for="Name" class="form-control" required />
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <!-- Breadcrumb -->
+            <nav aria-label="breadcrumb" class="mb-3">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item">
+                        <a href="@Url.Action("Index")">@Localizer["ModelYearList", "ModelYear"]</a>
+                    </li>
+                    <li class="breadcrumb-item active">@Localizer["Edit", "ModelYear"]</li>
+                </ol>
+            </nav>
+            <!-- Page Header -->
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h4 class="mb-0">@Localizer["EditModelYear", "ModelYear"]</h4>
+                <a href="@Url.Action("Index")" class="btn btn-outline-secondary btn-sm">
+                    @Localizer["BackToList", "ModelYear"]
+                </a>
+            </div>
+            <!-- Form -->
+            <div class="card">
+                <div class="card-body">
+                    <form asp-action="Edit" method="post" class="needs-validation" novalidate>
+                        <input type="hidden" asp-for="Id" />
+                        <div class="row">
+                            <div class="col-md-6">
+                                <!-- Name Field -->
+                                <div class="mb-3">
+                                    <label asp-for="Name" class="form-label">@Localizer["NameLabel", "ModelYear"] *</label>
+                                    <input asp-for="Name" class="form-control"
+                                           placeholder="@Localizer["NamePlaceholder", "ModelYear"]" required />
+                                    <span asp-validation-for="Name" class="text-danger small"></span>
+                                    <div class="invalid-feedback">
+                                        @Localizer["NameRequired", "ModelYear"]
+                                    </div>
+                                </div>
+                                <!-- Active Status -->
+                                <div class="mb-3">
+                                    <div class="form-check">
+                                        <input asp-for="IsActive" class="form-check-input" type="checkbox" />
+                                        <label asp-for="IsActive" class="form-check-label">
+                                            @Localizer["ActiveLabel", "ModelYear"]
+                                        </label>
+                                    </div>
+                                    <small class="text-muted">Toggle to change availability status</small>
+                                </div>
+                                <!-- Current Status -->
+                                <div class="mb-3">
+                                    <label class="form-label">Current Status:</label>
+                                    <div>
+                                        <span class="badge @(Model.IsActive ? "bg-success" : "bg-secondary")">
+                                            @(Model.IsActive? Localizer["ActiveStatus", "ModelYear"] : Localizer["InactiveStatus", "ModelYear"])
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Form Actions -->
+                        <div class="mt-4">
+                            <button type="submit" class="btn btn-primary">@Localizer["SaveChanges", "ModelYear"]</button>
+                            <button type="reset" class="btn btn-outline-secondary ms-2">Reset</button>
+                            <a href="@Url.Action("Index")" class="btn btn-outline-secondary ms-2">@Localizer["Cancel", "ModelYear"]</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
-    <div class="form-group">
-        <label>Active</label>
-        <input type="checkbox" asp-for="IsActive" class="form-check-input" />
-    </div>
-    <button type="submit" class="btn btn-primary mt-3">Save Changes</button>
-</form>
+</div>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const form = document.querySelector('.needs-validation');
+        if (form) {
+            form.addEventListener('submit', function(event) {
+                if (!form.checkValidity()) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                }
+                form.classList.add('was-validated');
+            });
+        }
+    });
+</script>
