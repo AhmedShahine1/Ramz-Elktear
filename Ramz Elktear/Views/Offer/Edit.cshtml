@@ -1,69 +1,56 @@
 ﻿@model UpdateOffer
-
-<h3>Update Offer</h3>
+<h3>@Localizer["UpdateOffer", "Offer"]</h3>
 <form asp-action="Edit" method="post" enctype="multipart/form-data" id="updateOfferForm">
-
     <input type="hidden" asp-for="Id" />
-
     <div class="form-group">
-        <label for="NameAr">Name (Arabic)</label>
+        <label for="NameAr">@Localizer["OfferNameArabicLabel", "Offer"]</label>
         <input type="text" asp-for="NameAr" class="form-control" />
         <span asp-validation-for="NameAr" class="text-danger"></span>
     </div>
-
     <div class="form-group">
-        <label for="NameEn">Name (English)</label>
+        <label for="NameEn">@Localizer["OfferNameEnglishLabel", "Offer"]</label>
         <input type="text" asp-for="NameEn" class="form-control" />
         <span asp-validation-for="NameEn" class="text-danger"></span>
     </div>
-
     <div class="form-group">
-        <label for="NewPrice">New Price</label>
+        <label for="NewPrice">@Localizer["NewPriceLabel", "Offer"]</label>
         <input type="number" asp-for="NewPrice" class="form-control" step="0.01" />
         <span asp-validation-for="NewPrice" class="text-danger"></span>
     </div>
-
     <div class="form-group">
-        <label for="StartDate">Start Date</label>
+        <label for="StartDate">@Localizer["StartDateLabel", "Offer"]</label>
         <input type="date" asp-for="StartDate" class="form-control" />
         <span asp-validation-for="StartDate" class="text-danger"></span>
     </div>
-
     <div class="form-group">
-        <label for="EndDate">End Date</label>
+        <label for="EndDate">@Localizer["EndDateLabel", "Offer"]</label>
         <input type="date" asp-for="EndDate" class="form-control" />
         <span asp-validation-for="EndDate" class="text-danger"></span>
     </div>
-
     <div class="form-group">
-        <label for="Delivery">Delivery</label>
+        <label for="Delivery">@Localizer["DeliveryLabel", "Offer"]</label>
         <input type="checkbox" asp-for="Delivery" class="form-check-input" />
         <span asp-validation-for="Delivery" class="text-danger"></span>
     </div>
-
     <div class="form-group">
-        <label for="Image">Image</label>
+        <label for="Image">@Localizer["OfferImageLabel", "Offer"]</label>
         <input type="file" asp-for="Image" class="form-control" id="imageUpload" onchange="validateImage()" />
         <span asp-validation-for="Image" class="text-danger"></span>
-        <small id="imageError" class="form-text text-danger" style="display:none;">Image must be 1920x683 pixels.</small>
+        <small id="imageError" class="form-text text-danger" style="display:none;">@Localizer["ImageValidationError", "Offer"]</small>
     </div>
-
-    <button type="submit" class="btn btn-primary" id="submitBtn">Save Changes</button>
+    <button type="submit" class="btn btn-primary" id="submitBtn">@Localizer["SaveChanges", "Offer"]</button>
 </form>
-
 <script>
     function validateImage() {
         const fileInput = document.getElementById('imageUpload');
         const imageError = document.getElementById('imageError');
         const submitButton = document.getElementById('submitBtn');
         const file = fileInput.files[0];
-
         if (file) {
             const img = new Image();
             img.onload = function () {
                 const width = img.width;
                 const height = img.height;
-
                 // Check if the image dimensions are 1920x683
                 if (width === 1920 && height === 683) {
                     imageError.style.display = 'none';  // Hide error message if valid

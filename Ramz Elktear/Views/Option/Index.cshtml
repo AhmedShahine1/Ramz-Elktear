@@ -1,20 +1,18 @@
 ﻿@model IEnumerable<OptionDTO>
-
 <div class="headerIndex">
-    <h3><span class="text-truncate">Option List</span></h3>
+    <h3><span class="text-truncate">@Localizer["OptionList", "Option"]</span></h3>
     <a href="@Url.Action("Create")" class="btn btn-success mb-3">
-        <i class="bx bx-plus"></i> <span class="text-truncate">Add New Option</span>
+        <i class="bx bx-plus"></i> <span class="text-truncate">@Localizer["AddNewOption", "Option"]</span>
     </a>
 </div>
 <table class="table table-bordered">
     <thead>
         <tr>
-            <th>#</th>
-            <th><span class="text-truncate">Name (Arabic)</span></th>
-            <th><span class="text-truncate">Name (English)</span></th>
-            <th><span class="text-truncate">Status</span></th>
-            <th><span class="text-truncate">Actions</span></th>
-
+            <th>@Localizer["SerialNumber", "Option"]</th>
+            <th><span class="text-truncate">@Localizer["NameArabic", "Option"]</span></th>
+            <th><span class="text-truncate">@Localizer["NameEnglish", "Option"]</span></th>
+            <th><span class="text-truncate">@Localizer["Status", "Option"]</span></th>
+            <th><span class="text-truncate">@Localizer["Actions", "Option"]</span></th>
         </tr>
     </thead>
     <tbody>
@@ -30,11 +28,11 @@
                     <td>
                         @if (option.IsActive)
                         {
-                            <span class="badge bg-label-primary">Active</span>
+                            <span class="badge bg-label-primary">@Localizer["Active", "Option"]</span>
                         }
                         else
                         {
-                            <span class="badge bg-label-danger">Inactive</span>
+                            <span class="badge bg-label-danger">@Localizer["Inactive", "Option"]</span>
                         }
                     </td>
                     <td>
@@ -44,12 +42,12 @@
                             </button>
                             <div class="dropdown-menu">
                                 <a class="dropdown-item" href="@Url.Action("Edit", new { id = option.Id })">
-                                    <i class="bx bx-edit-alt me-1"></i> Edit
+                                    <i class="bx bx-edit-alt me-1"></i> @Localizer["Edit", "Option"]
                                 </a>
-                                <form action="@Url.Action("Delete", new { id = option.Id })" method="post" class="dropdown-item">
+                                <form action="@Url.Action("Delete", new { id = option.Id })" method="post" class="dropdown-item" onsubmit="return confirm('@Localizer["ConfirmDelete", "Option"]')">
                                     @Html.AntiForgeryToken()
                                     <button type="submit" class="btn p-0" style="border: none; background: transparent; color: inherit;">
-                                        <i class="bx bx-trash me-1"></i> Delete
+                                        <i class="bx bx-trash me-1"></i> @Localizer["Delete", "Option"]
                                     </button>
                                 </form>
                             </div>
@@ -62,7 +60,7 @@
         else
         {
             <tr>
-                <td colspan="5" class="text-center">No options available.</td>
+                <td colspan="5" class="text-center">@Localizer["NoOptionsAvailable", "Option"]</td>
             </tr>
         }
     </tbody>

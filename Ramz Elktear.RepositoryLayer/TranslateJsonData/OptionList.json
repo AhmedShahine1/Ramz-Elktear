@@ -1,0 +1,347 @@
+[
+  {
+    "ResourceKey": "OptionList",
+    "ResourceGroup": "Option",
+    "Description": "Option list page title",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Option List"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "قائمة الخيارات"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "AddNewOption",
+    "ResourceGroup": "Option",
+    "Description": "Add new option button text",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Add New Option"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "إضافة خيار جديد"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "SerialNumber",
+    "ResourceGroup": "Option",
+    "Description": "Serial number column header",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "#"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "#"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "NameArabic",
+    "ResourceGroup": "Option",
+    "Description": "Name Arabic column header",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Name (Arabic)"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "الاسم (عربي)"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "NameEnglish",
+    "ResourceGroup": "Option",
+    "Description": "Name English column header",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Name (English)"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "الاسم (إنجليزي)"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "Status",
+    "ResourceGroup": "Option",
+    "Description": "Status column header",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Status"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "الحالة"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "Actions",
+    "ResourceGroup": "Option",
+    "Description": "Actions column header",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Actions"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "الإجراءات"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "Active",
+    "ResourceGroup": "Option",
+    "Description": "Active status text",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Active"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "نشط"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "Inactive",
+    "ResourceGroup": "Option",
+    "Description": "Inactive status text",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Inactive"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "غير نشط"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "Edit",
+    "ResourceGroup": "Option",
+    "Description": "Edit action text",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Edit"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "تعديل"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "Delete",
+    "ResourceGroup": "Option",
+    "Description": "Delete action text",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Delete"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "حذف"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "ConfirmDelete",
+    "ResourceGroup": "Option",
+    "Description": "Delete confirmation message",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Are you sure you want to delete this option?"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "هل أنت متأكد من حذف هذا الخيار؟"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "NoOptionsAvailable",
+    "ResourceGroup": "Option",
+    "Description": "No data available message",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "No options available."
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "لا توجد خيارات متاحة."
+      }
+    ]
+  },
+  {
+    "ResourceKey": "UpdateOption",
+    "ResourceGroup": "Option",
+    "Description": "Update option page title",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Update Option"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "تحديث الخيار"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "CreateOption",
+    "ResourceGroup": "Option",
+    "Description": "Create option page title",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Add New Option"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "إضافة خيار جديد"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "OptionNameArabicLabel",
+    "ResourceGroup": "Option",
+    "Description": "Option name Arabic field label",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Option Name (Arabic)"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "اسم الخيار (عربي)"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "OptionNameEnglishLabel",
+    "ResourceGroup": "Option",
+    "Description": "Option name English field label",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Option Name (English)"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "اسم الخيار (إنجليزي)"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "DescriptionArabicLabel",
+    "ResourceGroup": "Option",
+    "Description": "Description Arabic field label",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Description (Arabic)"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "الوصف (عربي)"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "DescriptionEnglishLabel",
+    "ResourceGroup": "Option",
+    "Description": "Description English field label",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Description (English)"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "الوصف (إنجليزي)"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "ActiveLabel",
+    "ResourceGroup": "Option",
+    "Description": "Active field label",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Active"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "نشط"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "SaveChanges",
+    "ResourceGroup": "Option",
+    "Description": "Save changes button text",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Save Changes"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "حفظ التغييرات"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "SuccessMessage",
+    "ResourceGroup": "Option",
+    "Description": "Success message after creation",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Option created successfully"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "تم إنشاء الخيار بنجاح"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "UpdateSuccessMessage",
+    "ResourceGroup": "Option",
+    "Description": "Success message after update",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Option updated successfully"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "تم تحديث الخيار بنجاح"
+      }
+    ]
+  }
+]

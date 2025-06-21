@@ -1,26 +1,26 @@
 ﻿@model AddOrigin
-
-<h3>Create New Origin</h3>
+<h3>@Localizer["CreateOrigin", "Origin"]</h3>
 <form asp-action="Create" method="post" enctype="multipart/form-data">
     <div class="form-group">
-        <label>Name (Arabic)</label>
+        <label>@Localizer["OriginNameArabicLabel", "Origin"]</label>
         <input asp-for="NameAr" class="form-control" required />
     </div>
     <div class="form-group">
-        <label>Name (English)</label>
+        <label>@Localizer["OriginNameEnglishLabel", "Origin"]</label>
         <input asp-for="NameEn" class="form-control" required />
     </div>
     <div class="form-group">
-        <label>Description (Arabic)</label>
+        <label>@Localizer["DescriptionArabicLabel", "Origin"]</label>
         <textarea asp-for="DescriptionAr" class="form-control"></textarea>
     </div>
     <div class="form-group">
-        <label>Description (English)</label>
+        <label>@Localizer["DescriptionEnglishLabel", "Origin"]</label>
         <textarea asp-for="DescriptionEn" class="form-control"></textarea>
     </div>
     <div class="form-group">
-        <label>Active</label>
+        <label>@Localizer["ActiveLabel", "Origin"]</label>
         <input type="checkbox" asp-for="IsActive" class="form-check-input" />
     </div>
-    <button type="submit" class="btn btn-primary mt-3">Create Origin</button>
+    <button type="submit" class="btn btn-primary mt-3">@Localizer["AddOrigin", "Origin"]</button>
 </form>
+<a href="@Url.Action("Index")" class="btn btn-secondary mt-2">@Localizer["BackToOriginList", "Origin"]</a>
