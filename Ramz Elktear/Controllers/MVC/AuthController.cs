@@ -4,8 +4,6 @@ using Ramz_Elktear.BusinessLayer.Interfaces;
 using Ramz_Elktear.core.DTO.RegisterModels;
 using Ramz_Elktear.core.DTO;
 using Ramz_Elktear.core.Entities.ApplicationData;
-using Microsoft.AspNetCore.Authorization;
-using Ramz_Elktear.core.DTO.RoleModels;
 using Ramz_Elktear.core.Helper;
 
 namespace Ramz_Elktear.Controllers.MVC

@@ -7,14 +7,16 @@
         </h3>
     </div>
     <div class="card-body">
-        <form asp-action="Edit" method="post" enctype="multipart/form-data">
+        <form asp-action="Edit" method="post" enctype="multipart/form-data" id="editBrandForm">
             <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="CurrentImageUrl" />
+            <input type="hidden" asp-for="RemoveCurrentImage" id="removeImageFlag" />
 
             <div class="row">
                 <div class="col-md-6 mb-3">
                     <div class="form-group">
                         <label class="form-label @(CultureInfo.CurrentCulture.TextInfo.IsRightToLeft ? "text-right" : "")">
-                            @Localizer["NameArabic", "Brand"]
+                            @Localizer["NameArabic", "Brand"] <span class="text-danger">*</span>
                         </label>
                         <input asp-for="NameAr"
                                class="form-control @(CultureInfo.CurrentCulture.TextInfo.IsRightToLeft ? "text-right" : "")"
@@ -26,7 +28,7 @@
                 <div class="col-md-6 mb-3">
                     <div class="form-group">
                         <label class="form-label @(CultureInfo.CurrentCulture.TextInfo.IsRightToLeft ? "text-right" : "")">
-                            @Localizer["NameEnglish", "Brand"]
+                            @Localizer["NameEnglish", "Brand"] <span class="text-danger">*</span>
                         </label>
                         <input asp-for="NameEn"
                                class="form-control"
@@ -41,7 +43,7 @@
                 <div class="col-md-6 mb-3">
                     <div class="form-group">
                         <label class="form-label @(CultureInfo.CurrentCulture.TextInfo.IsRightToLeft ? "text-right" : "")">
-                            @Localizer["DescriptionArabic", "Brand"]
+                            @Localizer["DescriptionArabic", "Brand"] <span class="text-danger">*</span>
                         </label>
                         <textarea asp-for="DescriptionAr"
                                   class="form-control @(CultureInfo.CurrentCulture.TextInfo.IsRightToLeft ? "text-right" : "")"
@@ -54,7 +56,7 @@
                 <div class="col-md-6 mb-3">
                     <div class="form-group">
                         <label class="form-label @(CultureInfo.CurrentCulture.TextInfo.IsRightToLeft ? "text-right" : "")">
-                            @Localizer["DescriptionEnglish", "Brand"]
+                            @Localizer["DescriptionEnglish", "Brand"] <span class="text-danger">*</span>
                         </label>
                         <textarea asp-for="DescriptionEn"
                                   class="form-control"
@@ -66,6 +68,67 @@
                 </div>
             </div>
 
+            <!-- Enhanced Image Section -->
+            <div class="row">
+                <div class="col-12 mb-4">
+                    <div class="form-group">
+                        <label class="form-label">
+                            @Localizer["Image", "Brand"]
+                        </label>
+
+                        <!-- Unified Image Display Container -->
+                        <div class="image-display-container mb-3" id="imageDisplayContainer"
+                             style="@(!string.IsNullOrEmpty(Model.CurrentImageUrl) ? "" : "display: none;")">
+                            <div class="card" style="max-width: 300px;">
+                                <div class="card-header d-flex justify-content-between align-items-center">
+                                    <small class="text-muted" id="imageLabel">
+                                        @(!string.IsNullOrEmpty(Model.CurrentImageUrl) ? Localizer["CurrentImage", "Brand"] : Localizer["NewImage", "Brand"])
+                                    </small>
+                                    <div class="btn-group">
+                                        <button type="button" id="removeImageBtn" class="btn btn-sm btn-outline-danger"
+                                                style="@(!string.IsNullOrEmpty(Model.CurrentImageUrl) ? "" : "display: none;")">
+                                            <i class="bx bx-trash"></i>
+                                        </button>
+                                        <button type="button" id="clearImageBtn" class="btn btn-sm btn-outline-secondary" style="display: none;">
+                                            <i class="bx bx-x"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="card-body text-center p-2">
+                                    <img id="displayedImage"
+                                         src="@Model.CurrentImageUrl"
+                                         alt="Brand Image"
+                                         class="img-fluid rounded"
+                                         style="max-height: 150px; cursor: pointer;"
+                                         data-bs-toggle="modal"
+                                         data-bs-target="#imageModal" />
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Image Upload Input -->
+                        <div class="image-upload-container">
+                            <input asp-for="Image"
+                                   type="file"
+                                   class="form-control"
+                                   accept="image/*"
+                                   id="imageUpload" />
+                            <div class="form-text">
+                                @Localizer["ImageUploadHint", "Brand"] (JPG, PNG, GIF - Max 5MB)
+                            </div>
+                            <span asp-validation-for="Image" class="text-danger"></span>
+                        </div>
+
+                        <!-- No Image Placeholder -->
+                        <div class="no-image-placeholder text-center p-4 border rounded bg-light" id="noImagePlaceholder"
+                             style="@(string.IsNullOrEmpty(Model.CurrentImageUrl) ? "" : "display: none;")">
+                            <i class="bx bx-image-add" style="font-size: 3rem; color: #ccc;"></i>
+                            <p class="text-muted mt-2">@Localizer["NoImageSelected", "Brand"]</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <div class="row">
                 <div class="col-12">
                     <div class="d-flex @(CultureInfo.CurrentCulture.TextInfo.IsRightToLeft ? "justify-content-start" : "justify-content-end") gap-2">
@@ -73,9 +136,10 @@
                             <i class="bx bx-arrow-back"></i>
                             <span class="text-truncate">@Localizer["Cancel", "Common"]</span>
                         </a>
-                        <button type="submit" class="btn btn-primary">
+                        <button type="submit" class="btn btn-primary" id="submitBtn">
                             <i class="bx bx-save"></i>
                             <span class="text-truncate">@Localizer["UpdateBrand", "Brand"]</span>
+                            <span class="spinner-border spinner-border-sm ms-2 d-none" id="submitSpinner"></span>
                         </button>
                     </div>
                 </div>
@@ -84,6 +148,222 @@
     </div>
 </div>
 
+<!-- Image Modal -->
+<div class="modal fade" id="imageModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalTitle">@Localizer["BrandImage", "Brand"]</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body text-center">
+                <img id="modalImage" class="img-fluid rounded" />
+            </div>
+        </div>
+    </div>
+</div>
+
 @section Scripts {
-    <partial name="_ValidationScriptsPartial" />
+    <!-- Include Toastr CSS and JS if not in layout -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            let hasCurrentImage = @((!string.IsNullOrEmpty(Model.CurrentImageUrl)).ToString().ToLower());
+            let currentImageUrl = '@Html.Raw(Model.CurrentImageUrl ?? "")';
+            let isCurrentImageRemoved = false;
+
+            // Configure toastr options
+            toastr.options = {
+                "closeButton": true,
+                "debug": false,
+                "newestOnTop": true,
+                "progressBar": true,
+                "positionClass": "toast-top-right",
+                "preventDuplicates": false,
+                "onclick": null,
+                "showDuration": "300",
+                "hideDuration": "1000",
+                "timeOut": "5000",
+                "extendedTimeOut": "1000",
+                "showEasing": "swing",
+                "hideEasing": "linear",
+                "showMethod": "fadeIn",
+                "hideMethod": "fadeOut"
+            };
+
+            // Display TempData messages using Toastr
+        @if (TempData["SuccessMessage"] != null)
+        {
+            <text>
+                    toastr.success('@Html.Raw(TempData["SuccessMessage"])');
+            </text>
+        }
+
+        @if (TempData["ErrorMessage"] != null)
+        {
+            <text>
+                    toastr.error('@Html.Raw(TempData["ErrorMessage"])');
+            </text>
+        }
+
+        @if (TempData["InfoMessage"] != null)
+        {
+            <text>
+                    toastr.info('@Html.Raw(TempData["InfoMessage"])');
+            </text>
+        }
+
+        @if (TempData["WarningMessage"] != null)
+        {
+            <text>
+                    toastr.warning('@Html.Raw(TempData["WarningMessage"])');
+            </text>
+        }
+
+            // Update display based on current state
+            function updateImageDisplay() {
+                const hasImage = hasCurrentImage && !isCurrentImageRemoved;
+                const hasNewImage = $('#imageUpload')[0].files.length > 0;
+
+                if (hasImage || hasNewImage) {
+                    $('#imageDisplayContainer').show();
+                    $('#noImagePlaceholder').hide();
+                } else {
+                    $('#imageDisplayContainer').hide();
+                    $('#noImagePlaceholder').show();
+                }
+
+                // Update button visibility
+                $('#removeImageBtn').toggle(hasImage && !hasNewImage);
+                $('#clearImageBtn').toggle(hasNewImage);
+
+                // Update image label
+                if (hasNewImage) {
+                    $('#imageLabel').text('@Localizer["NewImage", "Brand"]');
+                } else if (hasImage) {
+                    $('#imageLabel').text('@Localizer["CurrentImage", "Brand"]');
+                }
+            }
+
+            // Image upload preview
+            $('#imageUpload').on('change', function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    // Validate file type
+                    if (!file.type.match('image.*')) {
+                        toastr.error('@Localizer["InvalidImageType", "Brand"]');
+                        $(this).val('');
+                        updateImageDisplay();
+                        return;
+                    }
+
+                    // Validate file size (5MB)
+                    if (file.size > 5 * 1024 * 1024) {
+                        toastr.error('@Localizer["ImageTooLarge", "Brand"]');
+                        $(this).val('');
+                        updateImageDisplay();
+                        return;
+                    }
+
+                    // Show preview
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        $('#displayedImage').attr('src', e.target.result);
+                        $('#modalImage').attr('src', e.target.result);
+                        updateImageDisplay();
+                    };
+                    reader.readAsDataURL(file);
+                } else {
+                    // Reset to current image or hide if no current image
+                    if (hasCurrentImage && !isCurrentImageRemoved) {
+                        $('#displayedImage').attr('src', currentImageUrl);
+                        $('#modalImage').attr('src', currentImageUrl);
+                    }
+                    updateImageDisplay();
+                }
+            });
+
+            // Clear new image
+            $('#clearImageBtn').on('click', function() {
+                $('#imageUpload').val('');
+
+                // Reset to current image or hide if no current image
+                if (hasCurrentImage && !isCurrentImageRemoved) {
+                    $('#displayedImage').attr('src', currentImageUrl);
+                    $('#modalImage').attr('src', currentImageUrl);
+                }
+
+                updateImageDisplay();
+                toastr.info('New image selection cleared.');
+            });
+
+            // Remove current image
+            $('#removeImageBtn').on('click', function() {
+                if (confirm('@Localizer["ConfirmRemoveImage", "Brand"]')) {
+                    $('#removeImageFlag').val('true');
+                    isCurrentImageRemoved = true;
+
+                    // Clear the image upload input as well
+                    $('#imageUpload').val('');
+
+                    updateImageDisplay();
+                    toastr.info('@Localizer["ImageWillBeRemoved", "Brand"]');
+                }
+            });
+
+            // Update modal image when main image is clicked
+            $(document).on('click', '#displayedImage', function() {
+                $('#modalImage').attr('src', $(this).attr('src'));
+            });
+
+            // Form validation and submission
+            $('#editBrandForm').on('submit', function(e) {
+                let isValid = true;
+
+                // Check required fields
+                $(this).find('input[required], textarea[required]').each(function() {
+                    if (!$(this).val().trim()) {
+                        isValid = false;
+                        $(this).addClass('is-invalid');
+                    } else {
+                        $(this).removeClass('is-invalid');
+                    }
+                });
+
+                if (!isValid) {
+                    e.preventDefault();
+                    toastr.error('@Localizer["PleaseCompleteAllFields", "Common"]');
+                    return false;
+                }
+
+                // Show loading indicator
+                $('#submitBtn').prop('disabled', true);
+                $('#submitSpinner').removeClass('d-none');
+
+                // Set a timeout to re-enable the button in case of slow response
+                setTimeout(function() {
+                    $('#submitBtn').prop('disabled', false);
+                    $('#submitSpinner').addClass('d-none');
+                }, 10000); // 10 seconds
+            });
+
+            // Remove validation class on input
+            $('input, textarea').on('input', function() {
+                $(this).removeClass('is-invalid');
+            });
+
+            // Initialize display
+            updateImageDisplay();
+
+            // Handle browser back button and form reset
+            $(window).on('beforeunload', function() {
+                if ($('#submitBtn').prop('disabled')) {
+                    $('#submitBtn').prop('disabled', false);
+                    $('#submitSpinner').addClass('d-none');
+                }
+            });
+        });
+    </script>
 }

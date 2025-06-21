@@ -1,0 +1,842 @@
+[
+  {
+    "ResourceKey": "AllUsersWithRoles",
+    "ResourceGroup": "User",
+    "Description": "All users with roles page title",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "All Users with Roles"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "جميع المستخدمين مع الأدوار"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "FullName",
+    "ResourceGroup": "User",
+    "Description": "Full name column header",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Full Name"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "الاسم الكامل"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "PhoneNumber",
+    "ResourceGroup": "User",
+    "Description": "Phone number column header",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Phone Number"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "رقم الهاتف"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "Role",
+    "ResourceGroup": "User",
+    "Description": "Role column header",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Role"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "الدور"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "Actions",
+    "ResourceGroup": "Common",
+    "Description": "Actions column header",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Actions"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "الإجراءات"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "UpdateProfile",
+    "ResourceGroup": "User",
+    "Description": "Update profile tooltip and button text",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Update Profile"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "تحديث الملف الشخصي"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "ChangePassword",
+    "ResourceGroup": "User",
+    "Description": "Change password tooltip and button text",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Change Password"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "تغيير كلمة المرور"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "RequiredFieldsNote",
+    "ResourceGroup": "Common",
+    "Description": "Note about required fields",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Fields marked with * are required"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "الحقول المميزة بـ * مطلوبة"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "ProfileImage",
+    "ResourceGroup": "User",
+    "Description": "Profile image label",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Profile Image"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "صورة الملف الشخصي"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "ProfileImageNote",
+    "ResourceGroup": "User",
+    "Description": "Profile image upload note",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Max 5MB, JPG, PNG, GIF formats"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "حد أقصى 5 ميجابايت، صيغ JPG، PNG، GIF"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "UpdateImage",
+    "ResourceGroup": "User",
+    "Description": "Update image button text",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Update Image"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "تحديث الصورة"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "PersonalInformation",
+    "ResourceGroup": "User",
+    "Description": "Personal information section header",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Personal Information"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "المعلومات الشخصية"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "FullNamePlaceholder",
+    "ResourceGroup": "User",
+    "Description": "Full name input placeholder",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Enter your full name"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "أدخل اسمك الكامل"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "Email",
+    "ResourceGroup": "User",
+    "Description": "Email label",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Email"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "البريد الإلكتروني"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "EmailPlaceholder",
+    "ResourceGroup": "User",
+    "Description": "Email input placeholder",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Enter your email address"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "أدخل عنوان بريدك الإلكتروني"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "PhoneNumberPlaceholder",
+    "ResourceGroup": "User",
+    "Description": "Phone number input placeholder",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Enter your phone number"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "أدخل رقم هاتفك"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "Cancel",
+    "ResourceGroup": "Common",
+    "Description": "Cancel button text",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Cancel"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "إلغاء"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "UpdatePhone",
+    "ResourceGroup": "User",
+    "Description": "Update phone button tooltip",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Update Phone"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "تحديث الهاتف"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "SecuritySectionDescription",
+    "ResourceGroup": "User",
+    "Description": "Security section description",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Keep your account secure by updating your password regularly"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "حافظ على أمان حسابك من خلال تحديث كلمة المرور بانتظام"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "Processing",
+    "ResourceGroup": "Common",
+    "Description": "Processing text for loading states",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Processing..."
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "جاري المعالجة..."
+      }
+    ]
+  },
+  {
+    "ResourceKey": "ImageSizeError",
+    "ResourceGroup": "User",
+    "Description": "Error message for image size limit",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Image size should be less than 5MB"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "يجب أن يكون حجم الصورة أقل من 5 ميجابايت"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "InvalidImageType",
+    "ResourceGroup": "User",
+    "Description": "Error message for invalid image type",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Please select a valid image file"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "يرجى اختيار ملف صورة صالح"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "SelectImageFirst",
+    "ResourceGroup": "User",
+    "Description": "Warning message to select image first",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Please select an image first"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "يرجى اختيار صورة أولاً"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "ImageUpdatedSuccess",
+    "ResourceGroup": "User",
+    "Description": "Success message for image update",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Profile image updated successfully"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "تم تحديث صورة الملف الشخصي بنجاح"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "ImageUpdateFailed",
+    "ResourceGroup": "User",
+    "Description": "Error message for failed image update",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Failed to update profile image"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "فشل في تحديث صورة الملف الشخصي"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "ImageUpdateError",
+    "ResourceGroup": "User",
+    "Description": "Generic error message for image update",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "An error occurred while updating the image"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "حدث خطأ أثناء تحديث الصورة"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "EnterPhoneNumber",
+    "ResourceGroup": "User",
+    "Description": "Warning message to enter phone number",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Please enter a phone number"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "يرجى إدخال رقم الهاتف"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "PhoneUpdatedSuccess",
+    "ResourceGroup": "User",
+    "Description": "Success message for phone update",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Phone number updated successfully"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "تم تحديث رقم الهاتف بنجاح"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "PhoneUpdateFailed",
+    "ResourceGroup": "User",
+    "Description": "Error message for failed phone update",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Failed to update phone number"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "فشل في تحديث رقم الهاتف"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "PhoneUpdateError",
+    "ResourceGroup": "User",
+    "Description": "Generic error message for phone update",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "An error occurred while updating the phone number"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "حدث خطأ أثناء تحديث رقم الهاتف"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "FillRequiredFields",
+    "ResourceGroup": "Common",
+    "Description": "Validation message for required fields",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Please fill in all required fields correctly"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "يرجى ملء جميع الحقول المطلوبة بشكل صحيح"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "UpdatePasswordFor",
+    "ResourceGroup": "User",
+    "Description": "Update password description text",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Update password for"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "تحديث كلمة المرور لـ"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "Success",
+    "ResourceGroup": "Common",
+    "Description": "Success alert title",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Success!"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "نجح!"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "PleaseCorrectErrors",
+    "ResourceGroup": "Common",
+    "Description": "Error alert title",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Please correct the following errors:"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "يرجى تصحيح الأخطاء التالية:"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "CurrentPassword",
+    "ResourceGroup": "User",
+    "Description": "Current password label",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Current Password"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "كلمة المرور الحالية"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "CurrentPasswordPlaceholder",
+    "ResourceGroup": "User",
+    "Description": "Current password input placeholder",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Enter your current password"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "أدخل كلمة المرور الحالية"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "NewPassword",
+    "ResourceGroup": "User",
+    "Description": "New password label",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "New Password"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "كلمة المرور الجديدة"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "NewPasswordPlaceholder",
+    "ResourceGroup": "User",
+    "Description": "New password input placeholder",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Enter your new password"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "أدخل كلمة المرور الجديدة"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "PasswordStrength",
+    "ResourceGroup": "User",
+    "Description": "Password strength indicator label",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Password Strength"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "قوة كلمة المرور"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "PasswordRequirements",
+    "ResourceGroup": "User",
+    "Description": "Password requirements title",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Password Requirements:"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "متطلبات كلمة المرور:"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "PasswordRequirement1",
+    "ResourceGroup": "User",
+    "Description": "Password requirement - minimum length",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "At least 6 characters long"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "6 أحرف على الأقل"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "PasswordRequirement2",
+    "ResourceGroup": "User",
+    "Description": "Password requirement - uppercase and lowercase",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Contains uppercase and lowercase letters"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "يحتوي على أحرف كبيرة وصغيرة"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "PasswordRequirement3",
+    "ResourceGroup": "User",
+    "Description": "Password requirement - contains number",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Contains at least one number"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "يحتوي على رقم واحد على الأقل"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "PasswordRequirement4",
+    "ResourceGroup": "User",
+    "Description": "Password requirement - special character",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Contains at least one special character"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "يحتوي على رمز خاص واحد على الأقل"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "ConfirmPassword",
+    "ResourceGroup": "User",
+    "Description": "Confirm password label",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Confirm Password"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "تأكيد كلمة المرور"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "ConfirmPasswordPlaceholder",
+    "ResourceGroup": "User",
+    "Description": "Confirm password input placeholder",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Confirm your new password"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "أكد كلمة المرور الجديدة"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "SecurityNotice",
+    "ResourceGroup": "User",
+    "Description": "Security notice title",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Security Notice"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "إشعار أمني"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "SecurityNoticeText",
+    "ResourceGroup": "User",
+    "Description": "Security notice description",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Choose a strong password that you haven't used elsewhere. Avoid using personal information that could be easily guessed."
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "اختر كلمة مرور قوية لم تستخدمها في مكان آخر. تجنب استخدام المعلومات الشخصية التي يمكن تخمينها بسهولة."
+      }
+    ]
+  },
+  {
+    "ResourceKey": "ShowPassword",
+    "ResourceGroup": "User",
+    "Description": "Show password tooltip",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Show password"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "إظهار كلمة المرور"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "HidePassword",
+    "ResourceGroup": "User",
+    "Description": "Hide password tooltip",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Hide password"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "إخفاء كلمة المرور"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "UpdatingPassword",
+    "ResourceGroup": "User",
+    "Description": "Updating password loading text",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Updating Password..."
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "جاري تحديث كلمة المرور..."
+      }
+    ]
+  },
+  {
+    "ResourceKey": "VeryWeak",
+    "ResourceGroup": "User",
+    "Description": "Password strength - very weak",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Very Weak"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "ضعيفة جداً"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "Weak",
+    "ResourceGroup": "User",
+    "Description": "Password strength - weak",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Weak"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "ضعيفة"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "Fair",
+    "ResourceGroup": "User",
+    "Description": "Password strength - fair",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Fair"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "مقبولة"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "Good",
+    "ResourceGroup": "User",
+    "Description": "Password strength - good",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Good"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "جيدة"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "Strong",
+    "ResourceGroup": "User",
+    "Description": "Password strength - strong",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Strong"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "قوية"
+      }
+    ]
+  }
+]

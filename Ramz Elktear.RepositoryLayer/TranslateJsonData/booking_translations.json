@@ -1,0 +1,272 @@
+[
+  {
+    "ResourceKey": "BookingDetails",
+    "ResourceGroup": "Booking",
+    "Description": "Booking details page title and header",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Booking Details"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "تفاصيل الحجز"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "Status",
+    "ResourceGroup": "Booking",
+    "Description": "Booking status label",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Status"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "الحالة"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "BuyerInformation",
+    "ResourceGroup": "Booking",
+    "Description": "Buyer information section header",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Buyer Information"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "معلومات المشتري"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "SellerInformation",
+    "ResourceGroup": "Booking",
+    "Description": "Seller information section header",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Seller Information"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "معلومات البائع"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "CarDetails",
+    "ResourceGroup": "Booking",
+    "Description": "Car details section header",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Car Details"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "تفاصيل السيارة"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "Name",
+    "ResourceGroup": "Booking",
+    "Description": "Name field label for buyer/seller",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Name"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "الاسم"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "Phone",
+    "ResourceGroup": "Booking",
+    "Description": "Phone number field label",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Phone"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "الهاتف"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "CarName",
+    "ResourceGroup": "Booking",
+    "Description": "Car name field label",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Name"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "الاسم"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "Price",
+    "ResourceGroup": "Booking",
+    "Description": "Price field label",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Price"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "السعر"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "Currency",
+    "ResourceGroup": "Booking",
+    "Description": "Currency symbol",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "$"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "ر.س"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "Kilometers",
+    "ResourceGroup": "Booking",
+    "Description": "Kilometers field label",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Kilometers"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "الكيلومترات"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "Transmission",
+    "ResourceGroup": "Booking",
+    "Description": "Transmission type field label",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Transmission"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "ناقل الحركة"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "FuelType",
+    "ResourceGroup": "Booking",
+    "Description": "Fuel type field label",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Fuel Type"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "نوع الوقود"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "Brand",
+    "ResourceGroup": "Booking",
+    "Description": "Car brand field label",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Brand"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "العلامة التجارية"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "CarImage",
+    "ResourceGroup": "Booking",
+    "Description": "Car image section header",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Car Image"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "صورة السيارة"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "CarImageAlt",
+    "ResourceGroup": "Booking",
+    "Description": "Alt text for car image",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Car Image"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "صورة السيارة"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "BackToBookings",
+    "ResourceGroup": "Booking",
+    "Description": "Back to bookings button text",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Back to Bookings"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "العودة إلى الحجوزات"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "BookingNotAvailable",
+    "ResourceGroup": "Booking",
+    "Description": "Error message when booking details are not available",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Booking details not available."
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "تفاصيل الحجز غير متاحة."
+      }
+    ]
+  }
+]

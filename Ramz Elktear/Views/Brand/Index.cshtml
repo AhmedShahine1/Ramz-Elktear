@@ -117,40 +117,13 @@
                                             <i class="bx bx-edit-alt me-1"></i> @Localizer["Edit", "Brand"]
                                         </a>
                                         <button type="button"
-                                                class="dropdown-item text-danger"
+                                                class="dropdown-item text-danger delete-brand-btn"
+                                                data-brand-id="@brand.Id"
+                                                data-brand-name="@brand.NameEn (@brand.NameAr)"
                                                 data-bs-toggle="modal"
-                                                data-bs-target="#deleteModal-@brand.Id">
+                                                data-bs-target="#deleteModal">
                                             <i class="bx bx-trash me-1"></i> @Localizer["Delete", "Brand"]
                                         </button>
-                                    </div>
-                                </div>
-
-                                @* Delete Confirmation Modal *@
-                                <div class="modal fade" id="deleteModal-@brand.Id" tabindex="-1" aria-hidden="true">
-                                    <div class="modal-dialog modal-dialog-centered">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h5 class="modal-title text-danger">
-                                                    <i class="bx bx-warning"></i> @Localizer["ConfirmDelete", "Common"]
-                                                </h5>
-                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                            </div>
-                                            <div class="modal-body @(CultureInfo.CurrentCulture.TextInfo.IsRightToLeft ? "text-right" : "")">
-                                                <p>@Localizer["DeleteConfirmationMessage", "Common"]</p>
-                                                <strong>@brand.NameEn (@brand.NameAr)</strong>
-                                            </div>
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                                                    @Localizer["Cancel", "Common"]
-                                                </button>
-                                                <form action="@Url.Action("Delete", new { id = brand.Id })" method="post" class="d-inline">
-                                                    @Html.AntiForgeryToken()
-                                                    <button type="submit" class="btn btn-danger">
-                                                        <i class="bx bx-trash"></i> @Localizer["Delete", "Brand"]
-                                                    </button>
-                                                </form>
-                                            </div>
-                                        </div>
                                     </div>
                                 </div>
                             </td>
@@ -174,3 +147,109 @@
         </table>
     </div>
 </div>
+
+@* Shared Delete Confirmation Modal *@
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title text-danger">
+                    <i class="bx bx-warning"></i> @Localizer["ConfirmDelete", "Common"]
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body @(CultureInfo.CurrentCulture.TextInfo.IsRightToLeft ? "text-right" : "")">
+                <p>@Localizer["DeleteConfirmationMessage", "Common"]</p>
+                <strong id="brandNameToDelete"></strong>
+                <div class="alert alert-warning mt-3">
+                    <i class="bx bx-info-circle"></i>
+                    @Localizer["DeleteBrandWarning", "Brand"]
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    @Localizer["Cancel", "Common"]
+                </button>
+                <form id="deleteForm" method="post" class="d-inline">
+                    @Html.AntiForgeryToken()
+                    <button type="submit" class="btn btn-danger" id="confirmDeleteBtn">
+                        <i class="bx bx-trash"></i> @Localizer["Delete", "Brand"]
+                        <span class="spinner-border spinner-border-sm ms-2 d-none" id="deleteSpinner"></span>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Toastr CSS -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+
+<!-- Toastr JS (make sure jQuery is loaded first) -->
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            // Handle delete button click
+            $('.delete-brand-btn').on('click', function() {
+                const brandId = $(this).data('brand-id');
+                const brandName = $(this).data('brand-name');
+
+                $('#brandNameToDelete').text(brandName);
+                $('#deleteForm').attr('action', '@Url.Action("Delete")/' + brandId);
+            });
+
+            // Handle form submission with loading indicator
+            $('#deleteForm').on('submit', function() {
+                $('#confirmDeleteBtn').prop('disabled', true);
+                $('#deleteSpinner').removeClass('d-none');
+            });
+
+            // Display TempData messages using Toastr
+        @if (TempData["SuccessMessage"] != null)
+        {
+            <text>
+                    toastr.success('@Html.Raw(TempData["SuccessMessage"])');
+            </text>
+        }
+
+        @if (TempData["ErrorMessage"] != null)
+        {
+            <text>
+                    toastr.error('@Html.Raw(TempData["ErrorMessage"])');
+            </text>
+        }
+
+        @if (TempData["InfoMessage"] != null)
+        {
+            <text>
+                    toastr.info('@Html.Raw(TempData["InfoMessage"])');
+            </text>
+        }
+
+        @if (TempData["WarningMessage"] != null)
+        {
+            <text>
+                    toastr.warning('@Html.Raw(TempData["WarningMessage"])');
+            </text>
+        }
+
+            // Configure toastr options
+            toastr.options = {
+                "closeButton": true,
+                "debug": false,
+                "newestOnTop": true,
+                "progressBar": true,
+                "positionClass": "toast-top-right",
+                "preventDuplicates": false,
+                "onclick": null,
+                "showDuration": "300",
+                "hideDuration": "1000",
+                "timeOut": "5000",
+                "extendedTimeOut": "1000",
+                "showEasing": "swing",
+                "hideEasing": "linear",
+                "showMethod": "fadeIn",
+                "hideMethod": "fadeOut"
+            };
+        });
+    </script>
+}

@@ -1,8 +1,10 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Ramz_Elktear.core.DTO;
 using Ramz_Elktear.core.DTO.AuthModels;
 using Ramz_Elktear.core.DTO.RegisterModels;
 using Ramz_Elktear.core.DTO.RoleModels;
+using Ramz_Elktear.core.DTO.UpdateModels;
 using Ramz_Elktear.core.Entities.ApplicationData;
 using Ramz_Elktear.core.Entities.Files;
 
@@ -24,6 +26,10 @@ namespace Ramz_Elktear.BusinessLayer.Interfaces
         Task<IdentityResult> Register(RegisterUser model);
         Task<IdentityResult> UpdateSupportDeveloper(string SupportDeveloperId, RegisterSupportDeveloper model);
         Task<IdentityResult> RegisterCustomer(RegisterCustomer model);
+        Task<ServiceResult<string>> UpdateUserProfileImage(string userId, IFormFile profileImage);
+        Task<IdentityResult> UpdateUserPhoneNumber(string userId, string phoneNumber);
+        Task<IdentityResult> ChangeUserPassword(ChangePasswordModel model);
+        Task<IdentityResult> UpdateUserDetails(UpdateUserDetails model);
         Task<(bool IsSuccess, string Token, string ErrorMessage)> Login(LoginModel model);
         Task<(bool IsSuccess, string Token, string ErrorMessage)> LoginAdmin(LoginAdmin model);
         Task<bool> Logout(ApplicationUser user);

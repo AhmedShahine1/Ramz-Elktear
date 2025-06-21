@@ -1,0 +1,122 @@
+[
+  {
+    "ResourceKey": "BranchList",
+    "ResourceGroup": "Branch",
+    "Description": "Branch list page title",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Branch List"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "قائمة الفروع"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "AddNewBranch",
+    "ResourceGroup": "Branch",
+    "Description": "Add new branch button text",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Add New Branch"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "إضافة فرع جديد"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "Report",
+    "ResourceGroup": "Branch",
+    "Description": "Report button text",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Report"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "تقرير"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "BranchName",
+    "ResourceGroup": "Branch",
+    "Description": "Branch name column header",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Branch Name"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "اسم الفرع"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "Actions",
+    "ResourceGroup": "Branch",
+    "Description": "Actions column header",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Actions"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "الإجراءات"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "Edit",
+    "ResourceGroup": "Branch",
+    "Description": "Edit action text",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Edit"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "تعديل"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "Delete",
+    "ResourceGroup": "Branch",
+    "Description": "Delete action text",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Delete"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "حذف"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "NoBranchesFound",
+    "ResourceGroup": "Branch",
+    "Description": "No branches found message",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "No branches found."
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "لم يتم العثور على فروع."
+      }
+    ]
+  }
+]

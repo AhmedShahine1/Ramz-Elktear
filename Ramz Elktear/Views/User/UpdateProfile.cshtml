@@ -1,0 +1,422 @@
+﻿@model UpdateUserProfileViewModel
+@{
+    ViewData["Title"] = @Localizer["UpdateProfile", "User"];
+}
+
+<div class="container py-5" dir="@(CultureInfo.CurrentCulture.TextInfo.IsRightToLeft ? "rtl" : "ltr")">
+    <div class="row justify-content-center">
+        <div class="col-12 col-xl-10">
+            <!-- Page Header -->
+            <div class="mb-4">
+                <h2 class="fw-bold text-dark mb-2">
+                    <i class="bi bi-person-gear me-2 text-primary"></i>
+                    @Localizer["UpdateProfile", "User"]
+                </h2>
+                <p class="text-muted mb-0">
+                    <i class="bi bi-info-circle me-1"></i>
+                    @Localizer["RequiredFieldsNote", "Common"]
+                </p>
+            </div>
+
+            <!-- Success Message -->
+            @if (TempData["SuccessMessage"] != null)
+            {
+                <div class="alert alert-success alert-dismissible fade show mb-4" role="alert">
+                    <i class="bi bi-check-circle-fill me-2"></i>
+                    @TempData["SuccessMessage"]
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            }
+
+            <form asp-action="UpdateProfile" method="post" enctype="multipart/form-data" id="profileForm">
+                <input type="hidden" asp-for="UserId" />
+                @Html.AntiForgeryToken()
+
+                <div class="row g-4">
+                    <!-- Profile Image Section -->
+                    <div class="col-lg-4">
+                        <div class="card h-100 shadow-sm">
+                            <div class="card-header bg-white border-bottom">
+                                <h5 class="card-title mb-0 fw-semibold">
+                                    <i class="bi bi-camera me-2 text-primary"></i>
+                                    @Localizer["ProfileImage", "User"]
+                                </h5>
+                            </div>
+                            <div class="card-body text-center">
+                                <div class="position-relative d-inline-block mb-3">
+                                    <img id="profileImagePreview"
+                                         src="@(string.IsNullOrEmpty(Model.CurrentProfileImageUrl) ? "/images/default-avatar.png" : Model.CurrentProfileImageUrl)"
+                                         alt="@Localizer["ProfileImage", "User"]"
+                                         class="rounded-circle border border-3 border-light shadow-sm"
+                                         width="120" height="120"
+                                         style="object-fit: cover;" />
+                                    <div class="position-absolute bottom-0 end-0 bg-primary text-white rounded-circle d-flex align-items-center justify-content-center" style="width: 32px; height: 32px;">
+                                        <i class="bi bi-camera fs-6"></i>
+                                    </div>
+                                </div>
+
+                                <div class="mb-3">
+                                    <input type="file"
+                                           class="form-control"
+                                           id="profileImageInput"
+                                           accept="image/*"
+                                           onchange="handleProfileImageChange(this)" />
+                                    <div class="form-text mt-2">
+                                        <i class="bi bi-info-circle me-1"></i>
+                                        @Localizer["ProfileImageNote", "User"]
+                                    </div>
+                                </div>
+
+                                <button type="button"
+                                        class="btn btn-primary d-none"
+                                        onclick="updateProfileImage()"
+                                        id="updateImageBtn">
+                                    <i class="bi bi-upload me-2"></i>
+                                    @Localizer["UpdateImage", "User"]
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Personal Information Section -->
+                    <div class="col-lg-8">
+                        <div class="card h-100 shadow-sm">
+                            <div class="card-header bg-white border-bottom">
+                                <h5 class="card-title mb-0 fw-semibold">
+                                    <i class="bi bi-person-circle me-2 text-primary"></i>
+                                    @Localizer["PersonalInformation", "User"]
+                                </h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="row g-3">
+                                    <!-- Full Name -->
+                                    <div class="col-12">
+                                        <label class="form-label fw-medium">
+                                            <i class="bi bi-person me-2 text-muted"></i>
+                                            @Localizer["FullName", "User"]
+                                            <span class="text-danger">*</span>
+                                        </label>
+                                        <input type="text"
+                                               class="form-control"
+                                               asp-for="FullName"
+                                               placeholder="@Localizer["FullNamePlaceholder", "User"]"
+                                               required />
+                                        <span class="text-danger small" asp-validation-for="FullName"></span>
+                                    </div>
+
+                                    <!-- Email -->
+                                    <div class="col-12">
+                                        <label class="form-label fw-medium">
+                                            <i class="bi bi-envelope me-2 text-muted"></i>
+                                            @Localizer["Email", "User"]
+                                            <span class="text-danger">*</span>
+                                        </label>
+                                        <input type="email"
+                                               class="form-control"
+                                               asp-for="Email"
+                                               placeholder="@Localizer["EmailPlaceholder", "User"]"
+                                               required />
+                                        <span class="text-danger small" asp-validation-for="Email"></span>
+                                    </div>
+
+                                    <!-- Phone Number -->
+                                    <div class="col-12">
+                                        <label class="form-label fw-medium">
+                                            <i class="bi bi-telephone me-2 text-muted"></i>
+                                            @Localizer["PhoneNumber", "User"]
+                                            <span class="text-danger">*</span>
+                                        </label>
+                                        <div class="row g-2">
+                                            <div class="col">
+                                                <input type="tel"
+                                                       class="form-control"
+                                                       asp-for="PhoneNumber"
+                                                       placeholder="@Localizer["PhoneNumberPlaceholder", "User"]" />
+                                            </div>
+                                            <div class="col-auto">
+                                                <button type="button"
+                                                        class="btn btn-outline-primary"
+                                                        onclick="updatePhoneNumber()"
+                                                        data-bs-toggle="tooltip"
+                                                        title="@Localizer["UpdatePhone", "User"]">
+                                                    <i class="bi bi-check-lg"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <span class="text-danger small" asp-validation-for="PhoneNumber"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="row mt-4">
+                    <div class="col-12">
+                        <div class="d-flex flex-column flex-sm-row justify-content-end gap-2">
+                            <a href="@Url.Action("Index", "Home")" class="btn btn-outline-secondary">
+                                <i class="bi bi-arrow-left me-2"></i>
+                                @Localizer["Cancel", "Common"]
+                            </a>
+                            <button type="submit" class="btn btn-primary" id="submitBtn">
+                                <i class="bi bi-check-lg me-2"></i>
+                                @Localizer["UpdateProfile", "User"]
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+            <!-- Security Section -->
+            <div class="card mt-4 shadow-sm">
+                <div class="card-body">
+                    <div class="row align-items-center">
+                        <div class="col-md-8">
+                            <h6 class="fw-semibold mb-1">
+                                <i class="bi bi-shield-check me-2 text-success"></i>
+                                @Localizer["ChangePassword", "User"]
+                            </h6>
+                            <p class="text-muted small mb-0">
+                                @Localizer["SecuritySectionDescription", "User"]
+                            </p>
+                        </div>
+                        <div class="col-md-4 text-md-end mt-3 mt-md-0">
+                            <a href="@Url.Action("ChangePassword", new { userId = Model.UserId })"
+                               class="btn btn-outline-primary">
+                                <i class="bi bi-key me-2"></i>
+                                @Localizer["ChangePassword", "User"]
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Initialize tooltips
+        document.addEventListener('DOMContentLoaded', function() {
+            const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
+            const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
+        });
+
+        // Profile image handling
+        function handleProfileImageChange(input) {
+            const file = input.files[0];
+            const updateBtn = document.getElementById('updateImageBtn');
+
+            if (file) {
+                // Validate file size (5MB limit)
+                if (file.size > 5 * 1024 * 1024) {
+                    showToast('warning', '@Localizer["ImageSizeError", "User"]');
+                    input.value = '';
+                    return;
+                }
+
+                // Validate file type
+                if (!file.type.startsWith('image/')) {
+                    showToast('warning', '@Localizer["InvalidImageType", "User"]');
+                    input.value = '';
+                    return;
+                }
+
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('profileImagePreview').src = e.target.result;
+                    updateBtn.classList.remove('d-none');
+                };
+                reader.readAsDataURL(file);
+            } else {
+                updateBtn.classList.add('d-none');
+            }
+        }
+
+        async function updateProfileImage() {
+            const fileInput = document.getElementById('profileImageInput');
+            const file = fileInput.files[0];
+            const updateBtn = document.getElementById('updateImageBtn');
+
+            if (!file) {
+                showToast('warning', '@Localizer["SelectImageFirst", "User"]');
+                return;
+            }
+
+            // Show loading state
+            const originalContent = updateBtn.innerHTML;
+            updateBtn.disabled = true;
+            updateBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>@Localizer["Processing", "Common"]';
+
+            const formData = new FormData();
+            formData.append('userId', '@Model.UserId');
+            formData.append('profileImage', file);
+
+            // Add CSRF token
+            const token = document.querySelector('input[name="__RequestVerificationToken"]');
+            if (token) {
+                formData.append('__RequestVerificationToken', token.value);
+            }
+
+            try {
+                const response = await fetch('@Url.Action("UpdateProfileImage")', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    document.getElementById('profileImagePreview').src = data.imageUrl;
+                    updateBtn.classList.add('d-none');
+                    fileInput.value = '';
+                    showToast('success', data.message || '@Localizer["ImageUpdatedSuccess", "User"]');
+                } else {
+                    showToast('danger', data.message || '@Localizer["ImageUpdateFailed", "User"]');
+                }
+            } catch (error) {
+                console.error('Error updating profile image:', error);
+                showToast('danger', '@Localizer["ImageUpdateError", "User"]');
+            } finally {
+                // Restore button state
+                updateBtn.disabled = false;
+                updateBtn.innerHTML = originalContent;
+            }
+        }
+
+        async function updatePhoneNumber() {
+            const phoneInput = document.querySelector('input[name="PhoneNumber"]');
+            const phoneNumber = phoneInput.value.trim();
+
+            if (!phoneNumber) {
+                showToast('warning', '@Localizer["EnterPhoneNumber", "User"]');
+                phoneInput.focus();
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append('UserId', '@Model.UserId');
+            formData.append('PhoneNumber', phoneNumber);
+
+            // Add CSRF token
+            const token = document.querySelector('input[name="__RequestVerificationToken"]');
+            if (token) {
+                formData.append('__RequestVerificationToken', token.value);
+            }
+
+            try {
+                const response = await fetch('@Url.Action("UpdatePhoneNumber")', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    showToast('success', data.message || '@Localizer["PhoneUpdatedSuccess", "User"]');
+                } else {
+                    showToast('danger', data.message || '@Localizer["PhoneUpdateFailed", "User"]');
+                }
+            } catch (error) {
+                console.error('Error updating phone number:', error);
+                showToast('danger', '@Localizer["PhoneUpdateError", "User"]');
+            }
+        }
+
+        // Form submission handling
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('profileForm');
+            if (form) {
+                form.addEventListener('submit', function(e) {
+                    const submitBtn = document.getElementById('submitBtn');
+                    if (submitBtn && !submitBtn.disabled) {
+                        submitBtn.disabled = true;
+                        const originalContent = submitBtn.innerHTML;
+                        submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>@Localizer["Processing", "Common"]';
+
+                        // Re-enable button after 5 seconds as fallback
+                        setTimeout(() => {
+                            submitBtn.disabled = false;
+                            submitBtn.innerHTML = originalContent;
+                        }, 5000);
+                    }
+                });
+            }
+        });
+
+        // Enhanced toast notification system
+        function showToast(type, message) {
+            // Remove existing toasts of the same type
+            const existingToasts = document.querySelectorAll(`.toast.bg-${type === 'danger' ? 'danger' : type}`);
+            existingToasts.forEach(toast => toast.remove());
+
+            const toastContainer = document.getElementById('toastContainer') || createToastContainer();
+
+            const toastId = 'toast-' + Date.now();
+            const toast = document.createElement('div');
+            toast.id = toastId;
+            toast.className = 'toast align-items-center border-0 show';
+            toast.setAttribute('role', 'alert');
+            toast.setAttribute('aria-live', 'assertive');
+            toast.setAttribute('aria-atomic', 'true');
+
+            const typeConfig = {
+                success: { bgClass: 'bg-success', icon: 'bi-check-circle-fill', closeClass: 'btn-close-white' },
+                danger: { bgClass: 'bg-danger', icon: 'bi-exclamation-triangle-fill', closeClass: 'btn-close-white' },
+                warning: { bgClass: 'bg-warning', icon: 'bi-exclamation-triangle-fill', closeClass: '' },
+                info: { bgClass: 'bg-info', icon: 'bi-info-circle-fill', closeClass: 'btn-close-white' }
+            };
+
+            const config = typeConfig[type] || typeConfig.info;
+            toast.classList.add(config.bgClass, 'text-white');
+
+            toast.innerHTML = `
+                <div class="d-flex">
+                    <div class="toast-body">
+                        <i class="bi ${config.icon} me-2"></i>
+                        ${message}
+                    </div>
+                    <button type="button" class="btn-close ${config.closeClass} me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                </div>
+            `;
+
+            toastContainer.appendChild(toast);
+
+            // Auto-remove after 5 seconds
+            setTimeout(() => {
+                const toastElement = document.getElementById(toastId);
+                if (toastElement) {
+                    const bsToast = new bootstrap.Toast(toastElement);
+                    bsToast.hide();
+                    setTimeout(() => toastElement.remove(), 500);
+                }
+            }, 5000);
+        }
+
+        function createToastContainer() {
+            const container = document.createElement('div');
+            container.id = 'toastContainer';
+            container.className = 'toast-container position-fixed top-0 end-0 p-3';
+            container.style.zIndex = '1070';
+            document.body.appendChild(container);
+            return container;
+        }
+
+        // Form validation enhancement
+        (function() {
+            'use strict';
+            const forms = document.querySelectorAll('.needs-validation');
+            Array.from(forms).forEach(function(form) {
+                form.addEventListener('submit', function(event) {
+                    if (!form.checkValidity()) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                        showToast('warning', '@Localizer["FillRequiredFields", "Common"]');
+                    }
+                    form.classList.add('was-validated');
+                }, false);
+            });
+        })();
+    </script>
+}

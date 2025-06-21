@@ -416,6 +416,159 @@ namespace Ramz_Elktear.BusinessLayer.Services
 
             return result.Succeeded;
         }
+
+        public async Task<IdentityResult> UpdateUserDetails(UpdateUserDetails model)
+        {
+            var user = await _userManager.FindByIdAsync(model.UserId);
+            if (user == null)
+                throw new ArgumentException("User not found");
+
+            // Check if email is being changed and if it already exists
+            if (!string.IsNullOrEmpty(model.Email) && model.Email != user.Email)
+            {
+                if (await IsPhoneExistAsync(model.Email, model.UserId))
+                {
+                    throw new ArgumentException("Email already exists.");
+                }
+                user.Email = model.Email;
+            }
+
+            // Update full name if provided
+            if (!string.IsNullOrEmpty(model.FullName))
+            {
+                user.FullName = model.FullName;
+            }
+
+            // Update phone number if provided
+            if (!string.IsNullOrEmpty(model.PhoneNumber) && model.PhoneNumber != user.PhoneNumber)
+            {
+                if (await IsPhoneAsync(model.PhoneNumber))
+                {
+                    throw new ArgumentException("Phone number already exists.");
+                }
+                user.PhoneNumber = model.PhoneNumber;
+                user.UserName = model.PhoneNumber; // Update username as well since it's based on phone
+            }
+
+            // Update profile image if provided
+            if (model.ProfileImage != null)
+            {
+                await UpdateProfileImage(user, model.ProfileImage);
+            }
+
+            var result = await _userManager.UpdateAsync(user);
+            if (!result.Succeeded)
+            {
+                throw new InvalidOperationException($"Failed to update user: {string.Join(", ", result.Errors.Select(e => e.Description))}");
+            }
+
+            return result;
+        }
+
+        public async Task<IdentityResult> ChangeUserPassword(ChangePasswordModel model)
+        {
+            var user = await _userManager.FindByIdAsync(model.UserId);
+            if (user == null)
+                throw new ArgumentException("User not found");
+
+            // Verify current password
+            var isCurrentPasswordValid = await _userManager.CheckPasswordAsync(user, model.CurrentPassword);
+            if (!isCurrentPasswordValid)
+                throw new ArgumentException("Current password is incorrect");
+
+            // Change password
+            var result = await _userManager.ChangePasswordAsync(user, model.CurrentPassword, model.NewPassword);
+            if (!result.Succeeded)
+            {
+                throw new InvalidOperationException($"Failed to change password: {string.Join(", ", result.Errors.Select(e => e.Description))}");
+            }
+
+            return result;
+        }
+
+        public async Task<ServiceResult<string>> UpdateUserProfileImage(string userId, IFormFile profileImage)
+        {
+            try
+            {
+                var user = await _userManager.FindByIdAsync(userId);
+                if (user == null)
+                    return ServiceResult<string>.Failure("User not found");
+
+                if (profileImage == null || profileImage.Length == 0)
+                    return ServiceResult<string>.Failure("Invalid image file");
+
+                // Validate file type
+                var allowedExtensions = new[] { ".jpg", ".jpeg", ".png", ".gif" };
+                var fileExtension = Path.GetExtension(profileImage.FileName).ToLower();
+                if (!allowedExtensions.Contains(fileExtension))
+                    return ServiceResult<string>.Failure("Invalid file type. Only JPG, JPEG, PNG, and GIF files are allowed.");
+
+                // Validate file size (5MB limit)
+                if (profileImage.Length > 5 * 1024 * 1024)
+                    return ServiceResult<string>.Failure("File size must be less than 5MB");
+
+                await UpdateProfileImage(user, profileImage);
+                var updateResult = await _userManager.UpdateAsync(user);
+
+                if (!updateResult.Succeeded)
+                    return ServiceResult<string>.Failure($"Failed to update profile image: {string.Join(", ", updateResult.Errors.Select(e => e.Description))}");
+
+                return ServiceResult<string>.Success(user.ProfileId, "Profile image updated successfully");
+            }
+            catch (Exception ex)
+            {
+                return ServiceResult<string>.Failure($"An error occurred: {ex.Message}");
+            }
+        }
+
+        public async Task<IdentityResult> UpdateUserPhoneNumber(string userId, string phoneNumber)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null)
+                throw new ArgumentException("User not found");
+
+            if (string.IsNullOrEmpty(phoneNumber))
+                throw new ArgumentException("Phone number is required");
+
+            // Check if phone number already exists
+            if (await IsPhoneAsync(phoneNumber))
+                throw new ArgumentException("Phone number already exists.");
+
+            user.PhoneNumber = phoneNumber;
+            user.UserName = phoneNumber; // Update username as well since it's based on phone
+            user.PhoneNumberConfirmed = false; // Require re-verification
+
+            var result = await _userManager.UpdateAsync(user);
+            if (!result.Succeeded)
+            {
+                throw new InvalidOperationException($"Failed to update phone number: {string.Join(", ", result.Errors.Select(e => e.Description))}");
+            }
+
+            // Send OTP for verification
+            await SendOTP(phoneNumber);
+
+            return result;
+        }
+
+        public async Task<IdentityResult> UpdateUserName(string userId, string fullName)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null)
+                throw new ArgumentException("User not found");
+
+            if (string.IsNullOrEmpty(fullName))
+                throw new ArgumentException("Full name is required");
+
+            user.FullName = fullName;
+
+            var result = await _userManager.UpdateAsync(user);
+            if (!result.Succeeded)
+            {
+                throw new InvalidOperationException($"Failed to update name: {string.Join(", ", result.Errors.Select(e => e.Description))}");
+            }
+
+            return result;
+        }
         //------------------------------------------------------------------------------------------------------------
         public async Task<(bool IsSuccess, string Token, string ErrorMessage)> Login(LoginModel model)
         {

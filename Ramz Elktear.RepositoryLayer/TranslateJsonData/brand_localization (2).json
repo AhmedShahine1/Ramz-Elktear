@@ -1,0 +1,227 @@
+[
+  {
+    "ResourceKey": "AddBrand",
+    "ResourceGroup": "Brand",
+    "Description": "Add brand page title and header",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Add New Brand"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "إضافة علامة تجارية جديدة"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "NameArabic",
+    "ResourceGroup": "Brand",
+    "Description": "Arabic name field label",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Name (Arabic)"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "الاسم (عربي)"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "NameEnglish",
+    "ResourceGroup": "Brand",
+    "Description": "English name field label",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Name (English)"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "الاسم (إنجليزي)"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "DescriptionArabic",
+    "ResourceGroup": "Brand",
+    "Description": "Arabic description field label",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Description (Arabic)"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "الوصف (عربي)"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "DescriptionEnglish",
+    "ResourceGroup": "Brand",
+    "Description": "English description field label",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Description (English)"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "الوصف (إنجليزي)"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "Image",
+    "ResourceGroup": "Brand",
+    "Description": "Image upload field label",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Image"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "الصورة"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "SaveBrand",
+    "ResourceGroup": "Brand",
+    "Description": "Save brand button text",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Add Brand"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "إضافة العلامة التجارية"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "BrandNameArPlaceholder",
+    "ResourceGroup": "Brand",
+    "Description": "Placeholder for Arabic brand name",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Enter brand name in Arabic"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "أدخل اسم العلامة التجارية بالعربية"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "BrandNameEnPlaceholder",
+    "ResourceGroup": "Brand",
+    "Description": "Placeholder for English brand name",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Enter brand name in English"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "أدخل اسم العلامة التجارية بالإنجليزية"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "BrandDescriptionArPlaceholder",
+    "ResourceGroup": "Brand",
+    "Description": "Placeholder for Arabic brand description",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Enter brand description in Arabic"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "أدخل وصف العلامة التجارية بالعربية"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "BrandDescriptionEnPlaceholder",
+    "ResourceGroup": "Brand",
+    "Description": "Placeholder for English brand description",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Enter brand description in English"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "أدخل وصف العلامة التجارية بالإنجليزية"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "EditBrand",
+    "ResourceGroup": "Brand",
+    "Description": "Edit brand page title and header",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Edit Brand"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "تحرير العلامة التجارية"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "UpdateBrand",
+    "ResourceGroup": "Brand",
+    "Description": "Update brand button text",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Save Changes"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "حفظ التغييرات"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "CurrentImage",
+    "ResourceGroup": "Brand",
+    "Description": "Current image label",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Current Image"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "الصورة الحالية"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "ChangeImage",
+    "ResourceGroup": "Brand",
+    "Description": "Change image label",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Change Image (Optional)"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "تغيير الصورة (اختياري)"
+      }
+    ]
+  }
+]
