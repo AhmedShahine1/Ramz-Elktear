@@ -305,7 +305,9 @@ namespace Ramz_Elktear.BusinessLayer.Services
                     return false;
                 }
 
-                foreach (var resourceDto in importedResources)
+                foreach (var resourceDto in importedResources
+                    .Where(r => !string.IsNullOrEmpty(r.ResourceKey))
+                    .DistinctBy(r => r.ResourceKey))
                 {
                     // Skip if resource doesn't have a key
                     if (string.IsNullOrEmpty(resourceDto.ResourceKey))

@@ -1,33 +1,116 @@
 ﻿@model IEnumerable<JobDTO>
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
 
-<h2>Job List</h2>
-<a href="@Url.Action("Create")" class="btn btn-success mb-3">Add New Job</a>
+@{
+    ViewData["Title"] = @Localizer["JobList", "Job"];
+}
 
-<table class="table table-striped">
-    <thead>
-        <tr>
-            <th>Name</th>
-            <th>Description</th>
-            <th>IsConvertable</th>
-            <th>Percentage</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var job in Model)
-        {
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>@Localizer["JobList", "Job"]</h2>
+    <a href="@Url.Action("Create")" class="btn btn-success">
+        <i class="fas fa-plus me-2"></i>@Localizer["AddNewJobButton", "Job"]
+    </a>
+</div>
+
+<div class="table-responsive">
+    <table class="table table-striped table-hover">
+        <thead class="table-dark">
             <tr>
-                <td>@job.Name</td>
-                <td>@job.Description</td>
-                <td>@job.Percentage</td>
-                <td>@job.IsConvertable</td>
-                <td>
-                    <a href="@Url.Action("Edit", new { id = job.Id })" class="btn btn-primary">Edit</a>
-                    <form asp-action="Delete" asp-route-id="@job.Id" method="post" class="d-inline">
-                        <button type="submit" class="btn btn-danger">Delete</button>
-                    </form>
-                </td>
+                <th>@Localizer["Name", "Job"]</th>
+                <th>@Localizer["Description", "Job"]</th>
+                <th>@Localizer["Percentage", "Job"]</th>
+                <th>@Localizer["IsConvertable", "Job"]</th>
+                <th>@Localizer["Actions", "Job"]</th>
             </tr>
+        </thead>
+        <tbody>
+            @if (Model != null && Model.Any())
+            {
+                @foreach (var job in Model)
+                {
+                    <tr>
+                        <td>
+                            <strong>@job.Name</strong>
+                        </td>
+                        <td>
+                            <span class="text-muted">
+                                @(string.IsNullOrEmpty(job.Description) ? "-" : job.Description)
+                            </span>
+                        </td>
+                        <td>
+                            <span class="badge bg-info">@job.Percentage%</span>
+                        </td>
+                        <td>
+                            @if (job.IsConvertable)
+                            {
+                                <span class="badge bg-success">
+                                    <i class="fas fa-check me-1"></i>@Localizer["Yes", "Job"]
+                                </span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-secondary">
+                                    <i class="fas fa-times me-1"></i>@Localizer["No", "Job"]
+                                </span>
+                            }
+                        </td>
+                        <td>
+                            <div class="btn-group" role="group">
+                                <a href="@Url.Action("Edit", new { id = job.Id })"
+                                   class="btn btn-outline-primary btn-sm">
+                                    <i class="fas fa-edit me-1"></i>@Localizer["Edit", "Job"]
+                                </a>
+                                <button type="button"
+                                        class="btn btn-outline-danger btn-sm"
+                                        onclick="confirmDelete(@job.Id, '@Html.Raw(job.Name)')">
+                                    <i class="fas fa-trash me-1"></i>@Localizer["Delete", "Job"]
+                                </button>
+                            </div>
+
+                            <!-- Hidden delete form -->
+                            <form id="deleteForm_@job.Id"
+                                  asp-action="Delete"
+                                  asp-route-id="@job.Id"
+                                  method="post"
+                                  class="d-none">
+                            </form>
+                        </td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="5" class="text-center text-muted py-4">
+                        <i class="fas fa-inbox fa-3x mb-3 d-block"></i>
+                        <p class="mb-0">No jobs available</p>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        function confirmDelete(jobId, jobName) {
+            Swal.fire({
+                title: '@Localizer["ConfirmDelete", "Job"]',
+                text: `${jobName}`,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#6c757d',
+                confirmButtonText: '@Localizer["Delete", "Job"]',
+                cancelButtonText: '@Localizer["Cancel", "Job"]',
+                reverseButtons: true
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    document.getElementById('deleteForm_' + jobId).submit();
+                }
+            });
         }
-    </tbody>
-</table>
+    </script>
+}

@@ -1,17 +1,16 @@
 ﻿@model IEnumerable<DetailsInstallmentRequest>
-
 @{
-    ViewData["Title"] = "Installment Requests";
+    ViewData["Title"] = @Localizer["InstallmentRequests", "InstallmentRequest"];
 }
 
-<h2><span class="text-truncate">Installment Requests</span></h2>
+<h2><span class="text-truncate">@Localizer["InstallmentRequests", "InstallmentRequest"]</span></h2>
 
 <!-- Filters -->
 <div class="mb-3">
     <div class="row">
         <div class="col-md-3">
             <select id="filterUserName" class="form-control">
-                <option value=""><span class="text-truncate">All Users</span></option>
+                <option value=""><span class="text-truncate">@Localizer["AllUsers", "InstallmentRequest"]</span></option>
                 @foreach (var user in Model.Select(m => m.User.FullName).Distinct())
                 {
                     <option value="@user">@user</option>
@@ -21,7 +20,7 @@
 
         <div class="col-md-3">
             <select id="filterCarName" class="form-control">
-                <option value=""><span class="text-truncate">All Cars</span></option>
+                <option value=""><span class="text-truncate">@Localizer["AllCars", "InstallmentRequest"]</span></option>
                 @foreach (var car in Model.Select(m => m.Car.NameEn).Distinct())
                 {
                     <option value="@car">@car</option>
@@ -31,7 +30,7 @@
 
         <div class="col-md-3">
             <select id="filterCarModel" class="form-control">
-                <option value=""><span class="text-truncate">All Model Years</span></option>
+                <option value=""><span class="text-truncate">@Localizer["AllModelYears", "InstallmentRequest"]</span></option>
                 @foreach (var modelyear in Model.Select(m => m.Car.ModelYear.Name).Distinct())
                 {
                     <option value="@modelyear">@modelyear</option>
@@ -41,7 +40,7 @@
 
         <div class="col-md-3">
             <select id="filterStatus" class="form-control">
-                <option value=""><span class="text-truncate">All Status</span></option>
+                <option value=""><span class="text-truncate">@Localizer["AllStatus", "InstallmentRequest"]</span></option>
                 @foreach (var status in Enum.GetValues(typeof(InstallmentStatus)))
                 {
                     <option value="@status"><span class="text-truncate">@status</span></option>
@@ -55,12 +54,12 @@
 <table class="table table-bordered" id="installmentTable">
     <thead>
         <tr>
-            <th><span class="text-truncate">User</span></th>
-            <th><span class="text-truncate">Car</span></th>
-            <th><span class="text-truncate">Model Year</span></th>
-            <th><span class="text-truncate">Bank</span></th>
-            <th><span class="text-truncate">Job</span></th>
-            <th><span class="text-truncate">Status</span></th>
+            <th><span class="text-truncate">@Localizer["User", "InstallmentRequest"]</span></th>
+            <th><span class="text-truncate">@Localizer["Car", "InstallmentRequest"]</span></th>
+            <th><span class="text-truncate">@Localizer["ModelYear", "InstallmentRequest"]</span></th>
+            <th><span class="text-truncate">@Localizer["Bank", "InstallmentRequest"]</span></th>
+            <th><span class="text-truncate">@Localizer["Job", "InstallmentRequest"]</span></th>
+            <th><span class="text-truncate">@Localizer["Status", "InstallmentRequest"]</span></th>
         </tr>
     </thead>
     <tbody>
@@ -99,6 +98,10 @@
                 timeOut: "3000"
             };
 
+            // Localized messages
+            var successMessage = '@Localizer["StatusUpdatedSuccessfully", "InstallmentRequest"]';
+            var errorMessage = '@Localizer["ErrorUpdatingStatus", "InstallmentRequest"]';
+
             $(".status-dropdown").change(function () {
                 var requestId = $(this).data("id");
                 var newStatus = $(this).val();
@@ -108,10 +111,10 @@
                     type: "POST",
                     data: { id: requestId, newStatus: newStatus },
                     success: function () {
-                        toastr.success("Status updated successfully!");
+                        toastr.success(successMessage);
                     },
                     error: function () {
-                        toastr.error("Error updating status. Please try again.");
+                        toastr.error(errorMessage);
                     }
                 });
             });
