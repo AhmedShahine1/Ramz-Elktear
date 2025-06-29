@@ -9243,6 +9243,291 @@
     ]
   },
   {
+    "ResourceKey": "BookingsList",
+    "ResourceGroup": "Booking",
+    "Description": "Booking list page title",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Bookings List"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "قائمة الحجوزات"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "CreateBooking",
+    "ResourceGroup": "Booking",
+    "Description": "Create new booking button",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Create Booking"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "إنشاء حجز"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "FilterBySales",
+    "ResourceGroup": "Booking",
+    "Description": "Filter by sales person label",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Filter by Sales"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "تصفية حسب المبيعات"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "AllSales",
+    "ResourceGroup": "Booking",
+    "Description": "All sales option in filter",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "All Sales"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "جميع المبيعات"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "Filter",
+    "ResourceGroup": "Booking",
+    "Description": "Filter button text",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Filter"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "تصفية"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "BookingId",
+    "ResourceGroup": "Booking",
+    "Description": "Booking ID label",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Booking ID"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "رقم الحجز"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "Buyer",
+    "ResourceGroup": "Booking",
+    "Description": "Buyer section title",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Buyer"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "المشتري"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "Seller",
+    "ResourceGroup": "Booking",
+    "Description": "Seller section title",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Seller"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "البائع"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "Car",
+    "ResourceGroup": "Booking",
+    "Description": "Car section title",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Car"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "السيارة"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "ViewDetails",
+    "ResourceGroup": "Booking",
+    "Description": "View details button text",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "View Details"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "عرض التفاصيل"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "TotalBookings",
+    "ResourceGroup": "Booking",
+    "Description": "Total bookings count label",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Total Bookings"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "إجمالي الحجوزات"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "NoBookings",
+    "ResourceGroup": "Booking",
+    "Description": "No bookings found message title",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "No Bookings Found"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "لا توجد حجوزات"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "NoBookingsMessage",
+    "ResourceGroup": "Booking",
+    "Description": "No bookings found message description",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "You haven't created any bookings yet."
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "لم تقم بإنشاء أي حجوزات بعد."
+      }
+    ]
+  },
+  {
+    "ResourceKey": "CreateFirstBooking",
+    "ResourceGroup": "Booking",
+    "Description": "Create first booking button text",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Create First Booking"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "إنشاء أول حجز"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "ConfirmDelete",
+    "ResourceGroup": "Booking",
+    "Description": "Confirm delete booking message",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Are you sure you want to delete this booking?"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "هل أنت متأكد من حذف هذا الحجز؟"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "Error",
+    "ResourceGroup": "Booking",
+    "Description": "Error label",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Error"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "خطأ"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "SellerNotAvailable",
+    "ResourceGroup": "Booking",
+    "Description": "Seller information not available message",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Seller information is not available"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "معلومات البائع غير متوفرة"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "BookingNotFound",
+    "ResourceGroup": "Booking",
+    "Description": "Booking not found error title",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Booking Not Found"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "الحجز غير موجود"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "PrintBooking",
+    "ResourceGroup": "Booking",
+    "Description": "Print booking button text",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Print Booking"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "طباعة الحجز"
+      }
+    ]
+  },
+  {
     "ResourceKey": "PendingBookings",
     "ResourceGroup": "Dashboard",
     "Description": "Pending bookings status",

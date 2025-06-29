@@ -1,44 +1,232 @@
-﻿@model Ramz_Elktear.core.DTO.BookingModels.BookingDto
+﻿@model List<BookingDto>
 @{
-    ViewData["Title"] = Localizer["BookingDetails", "Booking"];
+    ViewData["Title"] = Localizer["BookingsList", "Booking"];
+    var isRtl = CultureInfo.CurrentCulture.TextInfo.IsRightToLeft;
+    var textDirection = isRtl ? "rtl" : "ltr";
+    var textAlign = isRtl ? "text-end" : "text-start";
 }
-<h2 class="text-center text-truncate" dir="@(CultureInfo.CurrentCulture.TextInfo.IsRightToLeft ? "rtl" : "ltr")">@Localizer["BookingDetails", "Booking"]</h2>
-@if (Model != null)
-{
-    <div class="card">
-        <div class="card-body" dir="@(CultureInfo.CurrentCulture.TextInfo.IsRightToLeft ? "rtl" : "ltr")">
-            <h4 class="card-title"><span class="text-truncate">@Localizer["Status", "Booking"]:</span> @Model.BookingStatusDisplay</h4>
 
-            <h5 class="text-truncate">@Localizer["BuyerInformation", "Booking"]</h5>
-            <ul class="@(CultureInfo.CurrentCulture.TextInfo.IsRightToLeft ? "text-right" : "")">
-                <li><strong class="text-truncate">@Localizer["Name", "Booking"]:</strong> @Model.Buyer.FullName</li>
-                <li><strong class="text-truncate">@Localizer["Phone", "Booking"]:</strong> @Model.Buyer.PhoneNumber</li>
-            </ul>
-
-            <h5 class="text-truncate">@Localizer["SellerInformation", "Booking"]</h5>
-            <ul class="@(CultureInfo.CurrentCulture.TextInfo.IsRightToLeft ? "text-right" : "")">
-                <li><strong class="text-truncate">@Localizer["Name", "Booking"]:</strong> @Model.Seller.FullName</li>
-                <li><strong class="text-truncate">@Localizer["Phone", "Booking"]:</strong> @Model.Seller.PhoneNumber</li>
-            </ul>
-
-            <h5 class="text-truncate">@Localizer["CarDetails", "Booking"]</h5>
-            <ul class="@(CultureInfo.CurrentCulture.TextInfo.IsRightToLeft ? "text-right" : "")">
-                <li><strong class="text-truncate">@Localizer["Name", "Booking"]:</strong> @(CultureInfo.CurrentCulture.TextInfo.IsRightToLeft ? Model.Car.NameAr : Model.Car.NameEn)</li>
-                <li><strong class="text-truncate">@Localizer["Price", "Booking"]:</strong> @Model.Car.SellingPrice @Localizer["Currency", "Booking"]</li>
-                <li><strong class="text-truncate">@Localizer["Kilometers", "Booking"]:</strong> @Model.Car.Kilometers</li>
-                <li><strong class="text-truncate">@Localizer["Transmission", "Booking"]:</strong> @Model.Car.TransmissionType.NameAr</li>
-                <li><strong class="text-truncate">@Localizer["FuelType", "Booking"]:</strong> @Model.Car.FuelType.NameAr</li>
-                <li><strong class="text-truncate">@Localizer["Brand", "Booking"]:</strong> @Model.Car.Brand.NameAr</li>
-            </ul>
-
-            <h5 class="text-truncate">@Localizer["CarImage", "Booking"]</h5>
-            <img src="@Model.Car.ImageUrl" alt="@Localizer["CarImageAlt", "Booking"]" class="img-fluid" width="300" />
-            <br /><br />
-            <a href="@Url.Action("Index", "Booking")" class="btn btn-secondary text-truncate">@Localizer["BackToBookings", "Booking"]</a>
+<div class="container-fluid py-4">
+    <!-- Header -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center">
+                <h1 class="h3 mb-0 text-primary" dir="@textDirection">
+                    <i class="fas fa-calendar-alt me-2"></i>
+                    @Localizer["BookingsList", "Booking"]
+                </h1>
+                <div class="d-flex gap-2">
+                    <a href="@Url.Action("Create", "Booking")" class="btn btn-success">
+                        <i class="fas fa-plus me-1"></i>
+                        @Localizer["CreateBooking", "Booking"]
+                    </a>
+                </div>
+            </div>
         </div>
     </div>
-}
-else
-{
-    <p class="text-danger text-truncate" dir="@(CultureInfo.CurrentCulture.TextInfo.IsRightToLeft ? "rtl" : "ltr")">@Localizer["BookingNotAvailable", "Booking"]</p>
-}
+
+    <!-- Sales Users Filter -->
+    @if (ViewBag.SalesList != null)
+    {
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="card shadow-sm border-0">
+                    <div class="card-body">
+                        <div class="row align-items-center">
+                            <div class="col-md-3">
+                                <label class="form-label fw-bold">@Localizer["FilterBySales", "Booking"]:</label>
+                            </div>
+                            <div class="col-md-6">
+                                <select class="form-select" id="salesFilter">
+                                    <option value="">@Localizer["AllSales", "Booking"]</option>
+                                    @foreach (var sales in ViewBag.SalesList)
+                                    {
+                                        <option value="@sales.Id">@sales.FullName</option>
+                                    }
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <button type="button" class="btn btn-outline-primary w-100" onclick="filterBookings()">
+                                    <i class="fas fa-filter me-1"></i>
+                                    @Localizer["Filter", "Booking"]
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+
+    @if (Model != null && Model.Any())
+    {
+        <!-- Bookings Cards -->
+        <div class="row g-4">
+            @foreach (var booking in Model)
+            {
+                <div class="col-lg-6 col-xl-4">
+                    <div class="card shadow-sm border-0 h-100 booking-card" data-sales-id="@booking.Seller?.Id">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <div>
+                                <h6 class="mb-0 text-primary">
+                                    <i class="fas fa-hashtag me-1"></i>
+                                    @Localizer["BookingId", "Booking"]: @booking.Id
+                                </h6>
+                            </div>
+                            <span class="badge bg-primary">@booking.BookingStatusDisplay</span>
+                        </div>
+                        <div class="card-body">
+                            <!-- Buyer Info -->
+                            <div class="mb-3">
+                                <h6 class="text-muted mb-2">
+                                    <i class="fas fa-user me-1"></i>
+                                    @Localizer["Buyer", "Booking"]
+                                </h6>
+                                <div class="small">
+                                    <div><strong>@booking.Buyer.FullName</strong></div>
+                                    <div class="text-muted">@booking.Buyer.PhoneNumber</div>
+                                </div>
+                            </div>
+
+                            <!-- Seller Info -->
+                            <div class="mb-3">
+                                <h6 class="text-muted mb-2">
+                                    <i class="fas fa-user-tie me-1"></i>
+                                    @Localizer["Seller", "Booking"]
+                                </h6>
+                                @if (booking.Seller != null && !string.IsNullOrEmpty(booking.Seller.FullName))
+                                {
+                                    <div class="small">
+                                        <div><strong>@booking.Seller.FullName</strong></div>
+                                        <div class="text-muted">@booking.Seller.PhoneNumber</div>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="small text-danger">
+                                        <i class="fas fa-exclamation-triangle me-1"></i>
+                                        @Localizer["SellerNotAvailable", "Booking"]
+                                    </div>
+                                }
+                            </div>
+
+                            <!-- Car Info -->
+                            <div class="mb-3">
+                                <h6 class="text-muted mb-2">
+                                    <i class="fas fa-car me-1"></i>
+                                    @Localizer["Car", "Booking"]
+                                </h6>
+                                <div class="small">
+                                    <div><strong>@(isRtl ? booking.Car.NameAr : booking.Car.NameEn)</strong></div>
+                                    <div class="text-success fw-bold">@booking.Car.SellingPrice @Localizer["Currency", "Booking"]</div>
+                                </div>
+                            </div>
+
+                            <!-- Car Image -->
+                            @if (!string.IsNullOrEmpty(booking.Car.ImageUrl))
+                            {
+                                <div class="mb-3">
+                                    <img src="@booking.Car.ImageUrl" 
+                                         alt="@Localizer["CarImageAlt", "Booking"]" 
+                                         class="img-fluid rounded"
+                                         style="height: 120px; width: 100%; object-fit: cover;" />
+                                </div>
+                            }
+                        </div>
+                        <div class="card-footer bg-transparent">
+                            <div class="d-flex justify-content-between">
+                                <a href="@Url.Action("Details", "Booking", new { id = booking.Id })" 
+                                   class="btn btn-outline-primary btn-sm">
+                                    <i class="fas fa-eye me-1"></i>
+                                    @Localizer["ViewDetails", "Booking"]
+                                </a>
+                                <div class="btn-group">
+                                    <a href="@Url.Action("Edit", "Booking", new { id = booking.Id })" 
+                                       class="btn btn-outline-secondary btn-sm">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                    <button type="button" class="btn btn-outline-danger btn-sm" 
+                                            onclick="deleteBooking(@booking.Id)">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+
+        <!-- Pagination (if needed) -->
+        <div class="row mt-4">
+            <div class="col-12">
+                <nav aria-label="Bookings pagination">
+                    <div class="d-flex justify-content-center">
+                        <small class="text-muted">
+                            @Localizer["TotalBookings", "Booking"]: @Model.Count
+                        </small>
+                    </div>
+                </nav>
+            </div>
+        </div>
+    }
+    else
+    {
+        <!-- Empty State -->
+        <div class="row">
+            <div class="col-12">
+                <div class="card shadow-sm border-0">
+                    <div class="card-body text-center py-5">
+                        <i class="fas fa-calendar-times text-muted mb-3" style="font-size: 4rem;"></i>
+                        <h4 class="text-muted mb-3" dir="@textDirection">@Localizer["NoBookings", "Booking"]</h4>
+                        <p class="text-muted mb-4" dir="@textDirection">@Localizer["NoBookingsMessage", "Booking"]</p>
+                        <a href="@Url.Action("Create", "Booking")" class="btn btn-primary">
+                            <i class="fas fa-plus me-2"></i>
+                            @Localizer["CreateFirstBooking", "Booking"]
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+<!-- JavaScript for filtering and actions -->
+<script>
+    function filterBookings() {
+        const salesId = document.getElementById('salesFilter').value;
+        const bookingCards = document.querySelectorAll('.booking-card');
+        
+        bookingCards.forEach(card => {
+            if (salesId === '' || card.dataset.salesId === salesId) {
+                card.parentElement.style.display = 'block';
+            } else {
+                card.parentElement.style.display = 'none';
+            }
+        });
+    }
+
+    function deleteBooking(bookingId) {
+        if (confirm('@Localizer["ConfirmDelete", "Booking"]')) {
+            // Add your delete logic here
+            window.location.href = '@Url.Action("Delete", "Booking")' + '/' + bookingId;
+        }
+    }
+</script>
+
+<!-- Custom CSS -->
+<style>
+    .booking-card {
+        transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+    }
+    
+    .booking-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15) !important;
+    }
+    
+    .card-header {
+        background-color: #f8f9fa;
+        border-bottom: 1px solid #e9ecef;
+    }
+</style>

@@ -1,369 +1,703 @@
-﻿@model CarDTO
+﻿@using System.Globalization
+@model CarDTO
 
 @{
     var isRightToLeft = CultureInfo.CurrentCulture.TextInfo.IsRightToLeft;
     var direction = isRightToLeft ? "rtl" : "ltr";
     var textAlign = isRightToLeft ? "text-end" : "text-start";
-    var justifyContent = isRightToLeft ? "justify-content-start" : "justify-content-end";
+    var flexDirection = isRightToLeft ? "flex-row-reverse" : "flex-row";
+    var saudiCulture = new CultureInfo("ar-SA");
 }
 
-<div class="container py-5" dir="@direction">
-    <div class="row gx-5">
-        <!-- Product Images Gallery -->
-        <aside class="col-lg-6 mb-4">
-            <div class="border rounded-4 mb-3 d-flex justify-content-center">
-                <img id="mainImage"
-                     class="rounded-4 img-fluid"
-                     style="max-height: 400px; object-fit: contain;"
-                     src="@Model.ImageUrl"
-                     alt="@(isRightToLeft ? Model.NameAr : Model.NameEn)" />
-            </div>
-            <div class="d-flex flex-wrap justify-content-center mb-3 gallery-thumbnails">
-                @if (Model.ImagesUrl != null && Model.ImagesUrl.Any())
-                {
-                    @foreach (var imageUrl in Model.ImagesUrl)
-                    {
-                        <a class="border mx-1 rounded-2 thumbnail-container" onclick="swapImage(this)">
-                            <img width="60" height="60" class="rounded-2" src="@imageUrl" alt="@Localizer["CarThumbnail", "Car"]" />
-                        </a>
-                    }
-                }
-            </div>
-        </aside>
-
-        <!-- Product Information -->
-        <main class="col-lg-6">
-            <div class="@textAlign">
-                <h4 class="title text-dark mb-4">@(isRightToLeft ? Model.NameAr : Model.NameEn)</h4>
-
-                <div class="info-grid mb-4">
-                    <div class="info-item">
-                        <span class="info-label">@Localizer["CarCode", "Car"]:</span>
-                        <span class="info-value">@Model.CarCode</span>
-                    </div>
-                    <div class="info-item">
-                        <span class="info-label">@Localizer["CarSKU", "Car"]:</span>
-                        <span class="info-value">@Model.CarSKU</span>
-                    </div>
-                    <div class="info-item">
-                        <span class="info-label">@Localizer["SubCategory", "Car"]:</span>
-                        <span class="info-value">@(isRightToLeft ? Model.SubCategory?.NameAr : Model.SubCategory?.NameEn)</span>
-                    </div>
-                    <div class="info-item">
-                        <span class="info-label">@Localizer["Kilometers", "Car"]:</span>
-                        <span class="info-value">@Model.Kilometers?.ToString("N0")</span>
-                    </div>
-                    <div class="info-item">
-                        <span class="info-label">@Localizer["InstallmentPrice", "Car"]:</span>
-                        <span class="info-value fw-bold text-primary">@Model.InstallmentPrice.ToString("C")</span>
-                    </div>
-                    <div class="info-item">
-                        <span class="info-label">@Localizer["SellingPrice", "Car"]:</span>
-                        <span class="info-value fw-bold text-success">@Model.SellingPrice.ToString("C")</span>
-                    </div>
-                    <div class="info-item">
-                        <span class="info-label">@Localizer["Status", "Car"]:</span>
-                        <span class="info-value">
-                            @if (Model.IsActive)
-                            {
-                                <span class="badge bg-success">@Localizer["Active", "Common"]</span>
-                            }
-                            else
-                            {
-                                <span class="badge bg-secondary">@Localizer["Inactive", "Common"]</span>
-                            }
-                        </span>
-                    </div>
-                    <div class="info-item">
-                        <span class="info-label">@Localizer["Special", "Car"]:</span>
-                        <span class="info-value">
-                            @if (Model.IsSpecial)
-                            {
-                                <span class="badge bg-warning text-dark">@Localizer["Yes", "Common"]</span>
-                            }
-                            else
-                            {
-                                <span>@Localizer["No", "Common"]</span>
-                            }
-                        </span>
-                    </div>
-                    @if (Model.Color != null && Model.Color.Any())
-                    {
-                        <div class="info-item">
-                            <span class="info-label">@Localizer["Color", "Car"]:</span>
-                            <span class="d-inline-flex gap-1 align-items-center">
-                                @foreach (var color in Model.Color)
-                                {
-                                    <span class="color-swatch"
-                                          style="background-color:@color.Value;"
-                                          title="@color.Value"
-                                          data-bs-toggle="tooltip"
-                                          data-bs-placement="top"></span>
-                                }
-                            </span>
+<div class="car-details-container" dir="@direction">
+    <!-- Header Section -->
+    <div class="hero-section bg-gradient-primary text-white py-4 mb-5">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-8">
+                    <h1 class="display-6 fw-bold mb-2">@(isRightToLeft? Model.NameAr: Model.NameEn)</h1>
+                    <p class="lead mb-0">@Localizer["CarCode", "Car"]: @Model.CarCode</p>
+                </div>
+                <div class="col-md-4 @textAlign">
+                    <div class="price-display">
+                        <div class="installment-price mb-2">
+                            <small class="text-white-50">@Localizer["InstallmentPrice", "Car"]</small>
+                            <div class="h4 mb-0">@Model.InstallmentPrice.ToString("C", saudiCulture)</div>
                         </div>
-                    }
-                </div>
-
-                <!-- Action Buttons -->
-                <div class="d-flex gap-2 flex-wrap">
-                    <button class="btn btn-primary">
-                        <i class="bx bx-phone"></i>
-                        @Localizer["ContactUs", "Common"]
-                    </button>
-                    <button class="btn btn-outline-primary">
-                        <i class="bx bx-heart"></i>
-                        @Localizer["AddToWishlist", "Common"]
-                    </button>
-                    <button class="btn btn-outline-secondary">
-                        <i class="bx bx-share"></i>
-                        @Localizer["Share", "Common"]
-                    </button>
-                </div>
-            </div>
-        </main>
-    </div>
-
-    <!-- Tabs Section -->
-    <section class="mt-5">
-        <ul class="nav nav-tabs" id="carDetailsTabs" role="tablist">
-            <li class="nav-item" role="presentation">
-                <button class="nav-link active"
-                        id="details-tab"
-                        data-bs-toggle="tab"
-                        data-bs-target="#details"
-                        type="button"
-                        role="tab"
-                        aria-controls="details"
-                        aria-selected="true">
-                    <i class="bx bx-info-circle me-1"></i>
-                    @Localizer["Details", "Car"]
-                </button>
-            </li>
-            <li class="nav-item" role="presentation">
-                <button class="nav-link"
-                        id="specifications-tab"
-                        data-bs-toggle="tab"
-                        data-bs-target="#specifications"
-                        type="button"
-                        role="tab"
-                        aria-controls="specifications"
-                        aria-selected="false">
-                    <i class="bx bx-cog me-1"></i>
-                    @Localizer["Specifications", "Car"]
-                </button>
-            </li>
-            <li class="nav-item" role="presentation">
-                <button class="nav-link"
-                        id="offers-tab"
-                        data-bs-toggle="tab"
-                        data-bs-target="#offers"
-                        type="button"
-                        role="tab"
-                        aria-controls="offers"
-                        aria-selected="false">
-                    <i class="bx bx-gift me-1"></i>
-                    @Localizer["Offers", "Car"]
-                </button>
-            </li>
-        </ul>
-
-        <div class="tab-content pt-4 pb-5" id="carDetailsTabsContent">
-            <!-- Details Tab -->
-            <div class="tab-pane fade show active @textAlign" id="details" role="tabpanel" aria-labelledby="details-tab">
-                <div class="card shadow-sm">
-                    <div class="card-body">
-                        <dl class="row">
-                            <dt class="col-sm-4 col-lg-3">@Localizer["Description", "Car"]:</dt>
-                            <dd class="col-sm-8 col-lg-9">@(isRightToLeft ? Model.DescrptionAr : Model.DescrptionEn)</dd>
-
-                            @if (Model.ModelYear != null)
-                            {
-                                <dt class="col-sm-4 col-lg-3">@Localizer["ModelYear", "Car"]:</dt>
-                                <dd class="col-sm-8 col-lg-9">@Model.ModelYear.Name</dd>
-                            }
-
-                            @if (Model.EnginePosition != null)
-                            {
-                                <dt class="col-sm-4 col-lg-3">@Localizer["EnginePosition", "Car"]:</dt>
-                                <dd class="col-sm-8 col-lg-9">@(isRightToLeft ? Model.EnginePosition.NameAr : Model.EnginePosition.NameEn)</dd>
-                            }
-
-                            @if (Model.TransmissionType != null)
-                            {
-                                <dt class="col-sm-4 col-lg-3">@Localizer["TransmissionType", "Car"]:</dt>
-                                <dd class="col-sm-8 col-lg-9">@(isRightToLeft ? Model.TransmissionType.NameAr : Model.TransmissionType.NameEn)</dd>
-                            }
-
-                            @if (Model.EngineSize != null)
-                            {
-                                <dt class="col-sm-4 col-lg-3">@Localizer["EngineSize", "Car"]:</dt>
-                                <dd class="col-sm-8 col-lg-9">@(isRightToLeft ? Model.EngineSize.NameAr : Model.EngineSize.NameEn)</dd>
-                            }
-
-                            @if (Model.Option != null)
-                            {
-                                <dt class="col-sm-4 col-lg-3">@Localizer["Option", "Car"]:</dt>
-                                <dd class="col-sm-8 col-lg-9">@(isRightToLeft ? Model.Option.NameAr : Model.Option.NameEn)</dd>
-                            }
-
-                            @if (Model.Origin != null)
-                            {
-                                <dt class="col-sm-4 col-lg-3">@Localizer["Origin", "Car"]:</dt>
-                                <dd class="col-sm-8 col-lg-9">@(isRightToLeft ? Model.Origin.NameAr : Model.Origin.NameEn)</dd>
-                            }
-                        </dl>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Specifications Tab -->
-            <div class="tab-pane fade @textAlign" id="specifications" role="tabpanel" aria-labelledby="specifications-tab">
-                <div class="card shadow-sm">
-                    <div class="card-body">
-                        @if (Model.Specifications != null && Model.Specifications.Any())
-                        {
-                            <div class="row">
-                                @foreach (var specification in Model.Specifications)
-                                {
-                                    <div class="col-md-6 mb-3">
-                                        <div class="d-flex align-items-center">
-                                            <i class="bx bx-check-circle text-success me-2"></i>
-                                            <span>@(isRightToLeft ? specification.NameAr : specification.NameEn)</span>
-                                        </div>
-                                    </div>
-                                }
-                            </div>
-                        }
-                        else
-                        {
-                            <div class="text-center py-4">
-                                <i class="bx bx-info-circle text-muted" style="font-size: 3rem;"></i>
-                                <p class="text-muted mt-2">@Localizer["NoSpecificationsAvailable", "Car"]</p>
-                            </div>
-                        }
-                    </div>
-                </div>
-            </div>
-
-            <!-- Offers Tab -->
-            <div class="tab-pane fade @textAlign" id="offers" role="tabpanel" aria-labelledby="offers-tab">
-                <div class="card shadow-sm">
-                    <div class="card-body">
-                        @if (Model.Offer != null && Model.Offer.Any())
-                        {
-                            <div class="row">
-                                @foreach (var offer in Model.Offer)
-                                {
-                                    <div class="col-md-6 mb-3">
-                                        <div class="card border-primary">
-                                            <div class="card-body p-3">
-                                                <div class="d-flex align-items-center">
-                                                    <i class="bx bx-gift text-primary me-2"></i>
-                                                    <span class="fw-medium">@(isRightToLeft ? offer.NameAr : offer.NameEn)</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                }
-                            </div>
-                        }
-                        else
-                        {
-                            <div class="text-center py-4">
-                                <i class="bx bx-gift text-muted" style="font-size: 3rem;"></i>
-                                <p class="text-muted mt-2">@Localizer["NoOffersAvailable", "Car"]</p>
-                            </div>
-                        }
+                        <div class="selling-price">
+                            <small class="text-white-50">@Localizer["SellingPrice", "Car"]</small>
+                            <div class="h3 mb-0 fw-bold">@Model.SellingPrice.ToString("C", saudiCulture)</div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </section>
+    </div>
 
-    <!-- Back to List Button -->
-    <div class="text-center py-4">
-        <a href="@Url.Action("Index")" class="btn btn-outline-primary">
-            <i class="bx bx-arrow-back"></i>
-            @Localizer["BackToList", "Common"]
-        </a>
+    <div class="container">
+        <!-- Main Content -->
+        <div class="row g-5">
+            <!-- Image Gallery Section -->
+            <div class="col-lg-7">
+                <div class="image-gallery-wrapper">
+                    <!-- Main Image -->
+                    <div class="main-image-container mb-4">
+                        <div class="image-frame">
+                            <img id="mainImage"
+                                 class="main-image"
+                                 src="@Model.ImageUrl"
+                                 alt="@(isRightToLeft? Model.NameAr: Model.NameEn)" />
+
+                            <!-- Status Badges -->
+                            <div class="image-badges">
+                                @if (Model.IsSpecial)
+                                {
+                                    <span class="badge bg-warning text-dark">
+                                        <i class="bi bi-star-fill me-1"></i>
+                                        @Localizer["Special", "Car"]
+                                    </span>
+                                }
+                                @if (Model.IsActive)
+                                {
+                                    <span class="badge bg-success">
+                                        <i class="bi bi-check-circle-fill me-1"></i>
+                                        @Localizer["Active", "Common"]
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-secondary">
+                                        <i class="bi bi-pause-circle-fill me-1"></i>
+                                        @Localizer["Inactive", "Common"]
+                                    </span>
+                                }
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Thumbnail Gallery -->
+                    @if (Model.ImagesUrl != null && Model.ImagesUrl.Any())
+                    {
+                        <div class="thumbnail-gallery">
+                            <div class="d-flex gap-2 flex-wrap justify-content-center">
+                                @foreach (var imageUrl in Model.ImagesUrl.Take(6))
+                                {
+                                    <div class="thumbnail-item" onclick="swapImage(this)">
+                                        <img src="@imageUrl" alt="@Localizer["CarThumbnail", "Car"]" />
+                                    </div>
+                                }
+                                @if (Model.ImagesUrl.Count() > 6)
+                                {
+                                    <div class="thumbnail-item more-images">
+                                        <div class="more-count">+@(Model.ImagesUrl.Count() - 6)</div>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+
+            <!-- Car Information -->
+            <div class="col-lg-5">
+                <div class="car-info-section">
+                    <!-- Quick Info Cards -->
+                    <div class="quick-info-grid mb-4">
+                        <div class="info-card">
+                            <div class="info-icon">
+                                <i class="bi bi-speedometer2"></i>
+                            </div>
+                            <div class="info-content">
+                                <small class="text-muted">@Localizer["Kilometers", "Car"]</small>
+                                <div class="fw-semibold">@Model.Kilometers?.ToString("N0")</div>
+                            </div>
+                        </div>
+
+                        <div class="info-card">
+                            <div class="info-icon">
+                                <i class="bi bi-tag"></i>
+                            </div>
+                            <div class="info-content">
+                                <small class="text-muted">@Localizer["CarSKU", "Car"]</small>
+                                <div class="fw-semibold">@Model.CarSKU</div>
+                            </div>
+                        </div>
+
+                        <div class="info-card">
+                            <div class="info-icon">
+                                <i class="bi bi-grid"></i>
+                            </div>
+                            <div class="info-content">
+                                <small class="text-muted">@Localizer["SubCategory", "Car"]</small>
+                                <div class="fw-semibold">@(isRightToLeft? Model.SubCategory?.NameAr : Model.SubCategory?.NameEn)</div>
+                            </div>
+                        </div>
+
+                        @if (Model.Color != null && Model.Color.Any())
+                        {
+                            <div class="info-card">
+                                <div class="info-icon">
+                                    <i class="bi bi-palette"></i>
+                                </div>
+                                <div class="info-content">
+                                    <small class="text-muted">@Localizer["Color", "Car"]</small>
+                                    <div class="color-swatches">
+                                        @foreach (var color in Model.Color.Take(4))
+                                        {
+                                            <span class="color-swatch"
+                                                  style="background-color:@color.Value;"
+                                                  title="@color.Value"
+                                                  data-bs-toggle="tooltip"></span>
+                                        }
+                                        @if (Model.Color.Count() > 4)
+                                        {
+                                            <span class="color-more">+@(Model.Color.Count() - 4)</span>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="action-buttons-container mb-5">
+                        <div class="row g-3">
+                            <div class="col-12">
+                                <button class="btn btn-primary btn-lg w-100 action-btn">
+                                    <i class="bi bi-telephone-fill me-2"></i>
+                                    @Localizer["ContactUs", "Common"]
+                                </button>
+                            </div>
+                            <div class="col-6">
+                                <button class="btn btn-outline-danger w-100 action-btn">
+                                    <i class="bi bi-heart me-2"></i>
+                                    @Localizer["AddToWishlist", "Common"]
+                                </button>
+                            </div>
+                            <div class="col-6">
+                                <button class="btn btn-outline-secondary w-100 action-btn">
+                                    <i class="bi bi-share me-2"></i>
+                                    @Localizer["Share", "Common"]
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Detailed Information Tabs -->
+        <div class="details-section mt-5">
+            <nav class="nav nav-pills nav-justified modern-tabs mb-4" id="carTabs" role="tablist">
+                <button class="nav-link active"
+                        id="details-tab"
+                        data-bs-toggle="pill"
+                        data-bs-target="#details"
+                        type="button"
+                        role="tab">
+                    <i class="bi bi-info-circle me-2"></i>
+                    @Localizer["Details", "Car"]
+                </button>
+                <button class="nav-link"
+                        id="specifications-tab"
+                        data-bs-toggle="pill"
+                        data-bs-target="#specifications"
+                        type="button"
+                        role="tab">
+                    <i class="bi bi-gear me-2"></i>
+                    @Localizer["Specifications", "Car"]
+                </button>
+                <button class="nav-link"
+                        id="offers-tab"
+                        data-bs-toggle="pill"
+                        data-bs-target="#offers"
+                        type="button"
+                        role="tab">
+                    <i class="bi bi-gift me-2"></i>
+                    @Localizer["Offers", "Car"]
+                </button>
+            </nav>
+
+            <div class="tab-content" id="carTabsContent">
+                <!-- Details Tab -->
+                <div class="tab-pane fade show active" id="details" role="tabpanel">
+                    <div class="details-card">
+                        <div class="card-body p-4">
+                            <!-- Description -->
+                            @if (!string.IsNullOrEmpty(isRightToLeft ? Model.DescrptionAr : Model.DescrptionEn))
+                            {
+                                <div class="description-section mb-4">
+                                    <h5 class="section-title">@Localizer["Description", "Car"]</h5>
+                                    <p class="description-text">@(isRightToLeft? Model.DescrptionAr: Model.DescrptionEn)</p>
+                                </div>
+                            }
+
+                            <!-- Technical Details -->
+                            <div class="technical-details">
+                                <h5 class="section-title mb-3">@Localizer["TechnicalDetails", "Car"]</h5>
+                                <div class="row g-3">
+                                    @if (Model.ModelYear != null)
+                                    {
+                                        <div class="col-md-6">
+                                            <div class="detail-item">
+                                                <div class="detail-label">@Localizer["ModelYear", "Car"]</div>
+                                                <div class="detail-value">@Model.ModelYear.Name</div>
+                                            </div>
+                                        </div>
+                                    }
+
+                                    @if (Model.EnginePosition != null)
+                                    {
+                                        <div class="col-md-6">
+                                            <div class="detail-item">
+                                                <div class="detail-label">@Localizer["EnginePosition", "Car"]</div>
+                                                <div class="detail-value">@(isRightToLeft? Model.EnginePosition.NameAr : Model.EnginePosition.NameEn)</div>
+                                            </div>
+                                        </div>
+                                    }
+
+                                    @if (Model.TransmissionType != null)
+                                    {
+                                        <div class="col-md-6">
+                                            <div class="detail-item">
+                                                <div class="detail-label">@Localizer["TransmissionType", "Car"]</div>
+                                                <div class="detail-value">@(isRightToLeft? Model.TransmissionType.NameAr : Model.TransmissionType.NameEn)</div>
+                                            </div>
+                                        </div>
+                                    }
+
+                                    @if (Model.EngineSize != null)
+                                    {
+                                        <div class="col-md-6">
+                                            <div class="detail-item">
+                                                <div class="detail-label">@Localizer["EngineSize", "Car"]</div>
+                                                <div class="detail-value">@(isRightToLeft? Model.EngineSize.NameAr : Model.EngineSize.NameEn)</div>
+                                            </div>
+                                        </div>
+                                    }
+
+                                    @if (Model.Option != null)
+                                    {
+                                        <div class="col-md-6">
+                                            <div class="detail-item">
+                                                <div class="detail-label">@Localizer["Option", "Car"]</div>
+                                                <div class="detail-value">@(isRightToLeft? Model.Option.NameAr : Model.Option.NameEn)</div>
+                                            </div>
+                                        </div>
+                                    }
+
+                                    @if (Model.Origin != null)
+                                    {
+                                        <div class="col-md-6">
+                                            <div class="detail-item">
+                                                <div class="detail-label">@Localizer["Origin", "Car"]</div>
+                                                <div class="detail-value">@(isRightToLeft? Model.Origin.NameAr : Model.Origin.NameEn)</div>
+                                            </div>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Specifications Tab -->
+                <div class="tab-pane fade" id="specifications" role="tabpanel">
+                    <div class="specifications-card">
+                        <div class="card-body p-4">
+                            @if (Model.Specifications != null && Model.Specifications.Any())
+                            {
+                                <div class="specifications-grid">
+                                    @foreach (var specification in Model.Specifications)
+                                    {
+                                        <div class="specification-item">
+                                            <i class="bi bi-check-circle-fill text-success me-3"></i>
+                                            <span>@(isRightToLeft? specification.NameAr: specification.NameEn)</span>
+                                        </div>
+                                    }
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="empty-state">
+                                    <div class="empty-icon">
+                                        <i class="bi bi-info-circle"></i>
+                                    </div>
+                                    <h6 class="empty-title">@Localizer["NoSpecificationsAvailable", "Car"]</h6>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Offers Tab -->
+                <div class="tab-pane fade" id="offers" role="tabpanel">
+                    <div class="offers-card">
+                        <div class="card-body p-4">
+                            @if (Model.Offer != null && Model.Offer.Any())
+                            {
+                                <div class="offers-grid">
+                                    @foreach (var offer in Model.Offer)
+                                    {
+                                        <div class="offer-item">
+                                            <div class="offer-icon">
+                                                <i class="bi bi-gift-fill"></i>
+                                            </div>
+                                            <div class="offer-content">
+                                                <h6 class="offer-title">@(isRightToLeft? offer.NameAr: offer.NameEn)</h6>
+                                            </div>
+                                        </div>
+                                    }
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="empty-state">
+                                    <div class="empty-icon">
+                                        <i class="bi bi-gift"></i>
+                                    </div>
+                                    <h6 class="empty-title">@Localizer["NoOffersAvailable", "Car"]</h6>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Back Button -->
+        <div class="text-center py-5">
+            <a href="@Url.Action("Index")" class="btn btn-outline-primary btn-lg px-5">
+                <i class="bi bi-arrow-left me-2"></i>
+                @Localizer["BackToList", "Common"]
+            </a>
+        </div>
     </div>
 </div>
 
-<!-- Custom Styles -->
 <style>
+    /* Hero Section */
+    .hero-section {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border-radius: 0 0 50px 50px;
+        margin: -20px -15px 0 -15px;
+    }
+
+    .price-display {
+        text-align: center;
+        background: rgba(255, 255, 255, 0.1);
+        padding: 20px;
+        border-radius: 15px;
+        backdrop-filter: blur(10px);
+    }
+
+    /* Image Gallery */
+    .image-gallery-wrapper {
+        position: sticky;
+        top: 20px;
+    }
+
+    .main-image-container {
+        position: relative;
+    }
+
+    .image-frame {
+        position: relative;
+        background: #f8f9fa;
+        border-radius: 20px;
+        padding: 20px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    }
+
+    .main-image {
+        width: 100%;
+        height: 400px;
+        object-fit: cover;
+        border-radius: 15px;
+    }
+
+    .image-badges {
+        position: absolute;
+        top: 30px;
+        right: 30px;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+        .image-badges .badge {
+            font-size: 0.875rem;
+            padding: 8px 12px;
+            border-radius: 25px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+        }
+
+    /* Thumbnail Gallery */
+    .thumbnail-gallery {
+        padding: 15px;
+        background: #f8f9fa;
+        border-radius: 15px;
+    }
+
+    .thumbnail-item {
+        width: 80px;
+        height: 80px;
+        border-radius: 12px;
+        overflow: hidden;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        border: 3px solid transparent;
+    }
+
+        .thumbnail-item:hover {
+            transform: scale(1.05);
+            border-color: #007bff;
+        }
+
+        .thumbnail-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .thumbnail-item.more-images {
+            background: #6c757d;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+
+    /* Quick Info Cards */
+    .quick-info-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 20px;
+    }
+
+    .info-card {
+        background: white;
+        padding: 20px;
+        border-radius: 15px;
+        border: 1px solid #e9ecef;
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        transition: all 0.3s ease;
+    }
+
+        .info-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+
+    .info-icon {
+        width: 50px;
+        height: 50px;
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 1.25rem;
+    }
+
+    .info-content {
+        flex: 1;
+    }
+
+    /* Color Swatches */
+    .color-swatches {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
     .color-swatch {
         width: 25px;
         height: 25px;
-        display: inline-block;
         border-radius: 50%;
-        border: 2px solid #ddd;
+        border: 3px solid #fff;
+        box-shadow: 0 0 0 1px #ddd;
         cursor: pointer;
         transition: transform 0.2s;
     }
 
         .color-swatch:hover {
-            transform: scale(1.1);
-            border-color: #007bff;
+            transform: scale(1.2);
         }
 
-    .thumbnail-container {
-        cursor: pointer;
-        transition: all 0.2s;
-        display: block;
-        text-decoration: none;
-    }
-
-        .thumbnail-container:hover {
-            transform: scale(1.05);
-            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
-        }
-
-    .info-item {
-        margin-bottom: 12px;
-        padding-bottom: 8px;
-        border-bottom: 1px solid #f0f0f0;
-    }
-
-        .info-item:last-child {
-            border-bottom: none;
-        }
-
-    .info-label {
-        font-weight: 600;
-        color: #495057;
-        margin-right: 8px;
-    }
-
-    .info-value {
-        color: #212529;
-    }
-
-    .nav-tabs .nav-link {
-        border: none;
+    .color-more {
+        font-size: 0.75rem;
         color: #6c757d;
         font-weight: 500;
     }
 
-        .nav-tabs .nav-link.active {
-            background-color: #fff;
-            border-bottom: 2px solid #007bff;
-            color: #007bff;
+    /* Action Buttons */
+    .action-btn {
+        border-radius: 12px;
+        padding: 12px 24px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+
+        .action-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
         }
 
-    .tab-content .card {
+    /* Modern Tabs */
+    .modern-tabs {
+        background: #f8f9fa;
+        border-radius: 15px;
+        padding: 5px;
+    }
+
+        .modern-tabs .nav-link {
+            border: none;
+            border-radius: 10px;
+            color: #6c757d;
+            font-weight: 600;
+            padding: 15px 25px;
+            transition: all 0.3s ease;
+        }
+
+            .modern-tabs .nav-link.active {
+                background: white;
+                color: #007bff;
+                box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            }
+
+    /* Tab Content Cards */
+    .details-card,
+    .specifications-card,
+    .offers-card {
+        background: white;
+        border-radius: 20px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
         border: none;
-        background-color: #f8f9fa;
     }
 
-    .gallery-thumbnails {
-        max-height: 80px;
-        overflow-x: auto;
+    .section-title {
+        color: #495057;
+        font-weight: 700;
+        margin-bottom: 20px;
+        padding-bottom: 10px;
+        border-bottom: 2px solid #e9ecef;
     }
 
+    .description-text {
+        font-size: 1.1rem;
+        line-height: 1.6;
+        color: #6c757d;
+    }
+
+    /* Technical Details */
+    .detail-item {
+        background: #f8f9fa;
+        padding: 15px;
+        border-radius: 10px;
+        border-left: 4px solid #007bff;
+    }
+
+    .detail-label {
+        font-size: 0.875rem;
+        color: #6c757d;
+        font-weight: 600;
+        margin-bottom: 5px;
+    }
+
+    .detail-value {
+        font-size: 1rem;
+        color: #495057;
+        font-weight: 500;
+    }
+
+    /* Specifications */
+    .specifications-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 15px;
+    }
+
+    .specification-item {
+        display: flex;
+        align-items: center;
+        padding: 15px;
+        background: #f8f9fa;
+        border-radius: 10px;
+        font-weight: 500;
+    }
+
+    /* Offers */
+    .offers-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 20px;
+    }
+
+    .offer-item {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        padding: 20px;
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        color: white;
+        border-radius: 15px;
+    }
+
+    .offer-icon {
+        width: 50px;
+        height: 50px;
+        background: rgba(255, 255, 255, 0.2);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.25rem;
+    }
+
+    .offer-title {
+        margin: 0;
+        font-weight: 600;
+    }
+
+    /* Empty States */
+    .empty-state {
+        text-align: center;
+        padding: 60px 20px;
+        color: #6c757d;
+    }
+
+    .empty-icon {
+        font-size: 4rem;
+        margin-bottom: 20px;
+        opacity: 0.5;
+    }
+
+    .empty-title {
+        font-weight: 600;
+        margin: 0;
+    }
+
+    /* RTL Support */
+    [dir="rtl"] .thumbnail-gallery {
+        direction: ltr;
+    }
+
+    [dir="rtl"] .image-badges {
+        right: auto;
+        left: 30px;
+    }
+
+    [dir="rtl"] .detail-item {
+        border-left: none;
+        border-right: 4px solid #007bff;
+    }
 </style>
 
-<!-- Scripts -->
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         // Initialize tooltips
@@ -371,11 +705,39 @@
         var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
             return new bootstrap.Tooltip(tooltipTriggerEl);
         });
+
+        // Add smooth scrolling
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
     });
+
+    // Image gallery functionality
+    function swapImage(element) {
+        const mainImage = document.getElementById("mainImage");
+        const thumbnailImg = element.querySelector('img');
+
+        if (mainImage && thumbnailImg) {
+            // Add transition effect
+            mainImage.style.opacity = '0.5';
+
+            setTimeout(() => {
+                const tempSrc = mainImage.src;
+                mainImage.src = thumbnailImg.src;
+                thumbnailImg.src = tempSrc;
+                mainImage.alt = thumbnailImg.alt;
+                mainImage.style.opacity = '1';
+            }, 150);
+        }
+    }
 
     // Language switching function
     function switchLanguage(languageCode) {
-        // Create a form to change culture
         const form = document.createElement('form');
         form.method = 'POST';
         form.action = '/Home/SetLanguage';
@@ -396,36 +758,45 @@
         form.submit();
     }
 
-    // Image gallery functionality
-    function swapImage(element) {
-        const mainImage = document.getElementById("mainImage");
-        const thumbnailImg = element.querySelector('img');
-
-        if (mainImage && thumbnailImg) {
-            const tempSrc = mainImage.src;
-            mainImage.src = thumbnailImg.src;
-            thumbnailImg.src = tempSrc;
-
-            // Update alt text
-            mainImage.alt = thumbnailImg.alt;
-        }
-    }
-
-    // Add loading states for action buttons
-    document.querySelectorAll('.btn').forEach(button => {
+    // Enhanced button interactions
+    document.querySelectorAll('.action-btn').forEach(button => {
         button.addEventListener('click', function(e) {
             if (this.getAttribute('data-bs-toggle') || this.href || this.type === 'submit') {
-                return; // Don't add loading state for navigation or form buttons
+                return;
             }
 
+            // Add loading state
+            const originalContent = this.innerHTML;
             this.disabled = true;
-            const originalText = this.innerHTML;
-            this.innerHTML = '<span class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>' + this.textContent;
+            this.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status"></span>' + this.textContent.trim();
 
             setTimeout(() => {
                 this.disabled = false;
-                this.innerHTML = originalText;
+                this.innerHTML = originalContent;
             }, 2000);
         });
+    });
+
+    // Add entrance animations
+    const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.style.opacity = '1';
+                entry.target.style.transform = 'translateY(0)';
+            }
+        });
+    }, observerOptions);
+
+    // Observe elements for animation
+    document.querySelectorAll('.info-card, .detail-item, .specification-item, .offer-item').forEach(el => {
+        el.style.opacity = '0';
+        el.style.transform = 'translateY(20px)';
+        el.style.transition = 'all 0.6s ease';
+        observer.observe(el);
     });
 </script>
