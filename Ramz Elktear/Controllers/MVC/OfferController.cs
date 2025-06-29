@@ -1,16 +1,22 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Ramz_Elktear.BusinessLayer.Interfaces;
 using Ramz_Elktear.core.DTO.OfferModels;
+using Ramz_Elktear.core.DTO.CarOfferModels;
+using Ramz_Elktear.core.DTO;
 
 namespace Ramz_Elktear.Web.Controllers
 {
     public class OfferController : Controller
     {
         private readonly IOfferService _offerService;
+        private readonly ICarService _carService;
+        private readonly ICarOfferService _carOfferService;
 
-        public OfferController(IOfferService offerService)
+        public OfferController(IOfferService offerService, ICarService carService, ICarOfferService carOfferService)
         {
             _offerService = offerService;
+            _carService = carService;
+            _carOfferService = carOfferService;
         }
 
         // GET: Offer
@@ -135,6 +141,105 @@ namespace Ramz_Elktear.Web.Controllers
             {
                 ModelState.AddModelError(string.Empty, ex.Message);
                 return RedirectToAction(nameof(Index));
+            }
+        }
+
+        // GET: Get cars for offer assignment (AJAX)
+        [HttpGet]
+        public async Task<IActionResult> GetCarsForOffer()
+        {
+            try
+            {
+                var cars = await _carService.GetAllCarsAsync();
+                return Json(new { success = true, data = cars });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = ex.Message });
+            }
+        }
+
+        // POST: Assign offer to car (single car - keeping for backward compatibility)
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddOfferToCar([FromBody] AddCarOffer carOffer)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return Json(new { success = false, message = "Invalid data provided." });
+                }
+
+                var result = await _carOfferService.AddCarOfferAsync(carOffer);
+                if (result != null)
+                {
+                    return Json(new { success = true, message = "Offer assigned to car successfully!" });
+                }
+                else
+                {
+                    return Json(new { success = false, message = "Failed to assign offer to car." });
+                }
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = ex.Message });
+            }
+        }
+
+        // POST: Assign offer to multiple cars
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddOfferToMultipleCars([FromBody] MultipleCarOfferRequest request)
+        {
+            try
+            {
+                if (request?.CarOffers == null || !request.CarOffers.Any())
+                {
+                    return Json(new { success = false, message = "No cars selected." });
+                }
+
+                var results = new List<string>();
+                var successCount = 0;
+                var failureCount = 0;
+
+                foreach (var carOffer in request.CarOffers)
+                {
+                    try
+                    {
+                        var result = await _carOfferService.AddCarOfferAsync(carOffer);
+                        if (result != null)
+                        {
+                            successCount++;
+                            results.Add($"Car ID {carOffer.CarId}: Success");
+                        }
+                        else
+                        {
+                            failureCount++;
+                            results.Add($"Car ID {carOffer.CarId}: Failed to assign offer");
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        failureCount++;
+                        results.Add($"Car ID {carOffer.CarId}: Error - {ex.Message}");
+                    }
+                }
+
+                var message = $"Operation completed. {successCount} successful, {failureCount} failed.";
+
+                return Json(new
+                {
+                    success = successCount > 0,
+                    message = message,
+                    details = results,
+                    successCount = successCount,
+                    failureCount = failureCount
+                });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = $"An error occurred: {ex.Message}" });
             }
         }
     }

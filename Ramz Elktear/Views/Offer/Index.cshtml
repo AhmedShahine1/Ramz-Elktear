@@ -1,76 +1,766 @@
 ﻿@model IEnumerable<OfferDTO>
-<div class="headerIndex">
-    <h3><span class="text-truncate">@Localizer["OfferList", "Offer"]</span></h3>
-    <a href="@Url.Action("Create")" class="btn btn-success mb-3">
-        <i class="bx bx-plus"></i> <span class="text-truncate">@Localizer["AddNewOffer", "Offer"]</span>
-    </a>
-    <a href="@Url.Action("AllOffers","Report")" class="btn btn-info mb-3">
-        <i class="bx bx-file"></i> <span class="text-truncate">@Localizer["Report", "Offer"]</span>
-    </a>
+
+@{
+    ViewData["Title"] = "Offers Management";
+    var saudiCulture = new CultureInfo("ar-SA");
+}
+
+<div class="container-fluid">
+    <!-- Header Section -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center flex-wrap">
+                        <div class="d-flex align-items-center">
+                            <i class="bx bx-gift fs-3 text-primary me-2"></i>
+                            <h3 class="mb-0 text-primary">@Localizer["OfferList", "Offer"]</h3>
+                        </div>
+                        <div class="d-flex gap-2 flex-wrap">
+                            <a href="@Url.Action("Create")" class="btn btn-success">
+                                <i class="bx bx-plus me-1"></i>
+                                @Localizer["AddNewOffer", "Offer"]
+                            </a>
+                            <a href="@Url.Action("AllOffers", "Report")" class="btn btn-info">
+                                <i class="bx bx-file me-1"></i>
+                                @Localizer["Report", "Offer"]
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Offers Table -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    @if (Model != null && Model.Any())
+                    {
+                        <div class="table-responsive">
+                            <table class="table table-hover align-middle">
+                                <thead class="table-dark">
+                                    <tr>
+                                        <th scope="col" class="text-center">#</th>
+                                        <th scope="col">
+                                            <i class="bx bx-text me-1"></i>
+                                            @Localizer["NameArabic", "Offer"]
+                                        </th>
+                                        <th scope="col">
+                                            <i class="bx bx-text me-1"></i>
+                                            @Localizer["NameEnglish", "Offer"]
+                                        </th>
+                                        <th scope="col">
+                                            <i class="bx bx-calendar me-1"></i>
+                                            @Localizer["StartDate", "Offer"]
+                                        </th>
+                                        <th scope="col">
+                                            <i class="bx bx-calendar me-1"></i>
+                                            @Localizer["EndDate", "Offer"]
+                                        </th>
+                                        <th scope="col">
+                                            <i class="bx bx-price-tag me-1"></i>
+                                            @Localizer["NewPrice", "Offer"]
+                                        </th>
+                                        <th scope="col" class="text-center">
+                                            <i class="bx bx-image me-1"></i>
+                                            @Localizer["Image", "Offer"]
+                                        </th>
+                                        <th scope="col" class="text-center">
+                                            <i class="bx bx-cog me-1"></i>
+                                            @Localizer["Actions", "Offer"]
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @{
+                                        int index = 1;
+                                    }
+                                    @foreach (var offer in Model)
+                                    {
+                                        <tr>
+                                            <td class="text-center">
+                                                <span class="badge bg-primary">@index</span>
+                                            </td>
+                                            <td>
+                                                <strong>@offer.NameAr</strong>
+                                            </td>
+                                            <td>
+                                                <strong>@offer.NameEn</strong>
+                                            </td>
+                                            <td>
+                                                @if (offer.StartDate.HasValue)
+                                                {
+                                                    <span class="badge bg-success">
+                                                        <i class="bx bx-calendar-check me-1"></i>
+                                                        @offer.StartDate.Value.ToString("MMM dd, yyyy")
+                                                    </span>
+                                                }
+                                                else
+                                                {
+                                                    <span class="text-muted">N/A</span>
+                                                }
+                                            </td>
+                                            <td>
+                                                @if (offer.EndDate.HasValue)
+                                                {
+                                                    var isExpired = offer.EndDate.Value < DateTime.Now;
+                                                    <span class="badge @(isExpired ? "bg-danger" : "bg-warning")">
+                                                        <i class="bx @(isExpired ? "bx-calendar-x" : "bx-calendar-event") me-1"></i>
+                                                        @offer.EndDate.Value.ToString("MMM dd, yyyy")
+                                                    </span>
+                                                }
+                                                else
+                                                {
+                                                    <span class="text-muted">N/A</span>
+                                                }
+                                            </td>
+                                            <td>
+                                                <span class="fw-bold text-success fs-6">
+                                                    @offer.NewPrice.ToString("C", saudiCulture)
+                                                </span>
+                                            </td>
+                                            <td class="text-center">
+                                                @if (!string.IsNullOrEmpty(offer.ImageUrl))
+                                                {
+                                                    <img src="@offer.ImageUrl"
+                                                         alt="Offer Image"
+                                                         class="rounded shadow-sm"
+                                                         style="width: 60px; height: 60px; object-fit: cover;"
+                                                         data-bs-toggle="tooltip"
+                                                         title="@offer.NameEn" />
+                                                }
+                                                else
+                                                {
+                                                    <div class="text-muted">
+                                                        <i class="bx bx-image-alt fs-2"></i>
+                                                        <br>
+                                                        <small>@Localizer["NoImage", "Offer"]</small>
+                                                    </div>
+                                                }
+                                            </td>
+                                            <td class="text-center">
+                                                <div class="btn-group" role="group">
+                                                    <button type="button"
+                                                            class="btn btn-outline-primary btn-sm"
+                                                            onclick="openAssignModal('@offer.Id', '@offer.NameEn')"
+                                                            data-bs-toggle="tooltip"
+                                                            title="Assign to Cars">
+                                                        <i class="bx bx-car"></i>
+                                                    </button>
+                                                    <a href="@Url.Action("Edit", new { offerId = offer.Id })"
+                                                       class="btn btn-outline-warning btn-sm"
+                                                       data-bs-toggle="tooltip"
+                                                       title="@Localizer["Edit", "Offer"]">
+                                                        <i class="bx bx-edit-alt"></i>
+                                                    </a>
+                                                    <button type="button"
+                                                            class="btn btn-outline-danger btn-sm"
+                                                            onclick="confirmDelete('@offer.Id', '@offer.NameEn')"
+                                                            data-bs-toggle="tooltip"
+                                                            title="@Localizer["Delete", "Offer"]">
+                                                        <i class="bx bx-trash"></i>
+                                                    </button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        index++;
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="text-center py-5">
+                            <i class="bx bx-gift fs-1 text-muted"></i>
+                            <h5 class="text-muted mt-2">@Localizer["NoOffersAvailable", "Offer"]</h5>
+                            <p class="text-muted">Start by creating your first offer!</p>
+                            <a href="@Url.Action("Create")" class="btn btn-primary">
+                                <i class="bx bx-plus me-1"></i>
+                                @Localizer["AddNewOffer", "Offer"]
+                            </a>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
-<table class="table table-bordered">
-    <thead>
-        <tr>
-            <th>@Localizer["SerialNumber", "Offer"]</th>
-            <th><i class="bx bx-text"></i> <span class="text-truncate">@Localizer["NameArabic", "Offer"]</span></th>
-            <th><i class="bx bx-text"></i> <span class="text-truncate">@Localizer["NameEnglish", "Offer"]</span></th>
-            <th><i class="bx bx-calendar"></i> <span class="text-truncate">@Localizer["StartDate", "Offer"]</span></th>
-            <th><i class="bx bx-calendar"></i> <span class="text-truncate">@Localizer["EndDate", "Offer"]</span></th>
-            <th><i class="bx bx-price-tag"></i> <span class="text-truncate">@Localizer["NewPrice", "Offer"]</span></th>
-            <th><i class="bx bx-image"></i> <span class="text-truncate">@Localizer["Image", "Offer"]</span></th>
-            <th><i class="bx bx-cog"></i> <span class="text-truncate">@Localizer["Actions", "Offer"]</span></th>
-        </tr>
-    </thead>
-    <tbody>
-        @if (Model != null && Model.Any())
-        {
-            int index = 1;
-            foreach (var offer in Model)
-            {
-                <tr>
-                    <td>@index</td>
-                    <td>@offer.NameAr</td>
-                    <td>@offer.NameEn</td>
-                    <td>@offer.StartDate?.ToString("yyyy-MM-dd")</td>
-                    <td>@offer.EndDate?.ToString("yyyy-MM-dd")</td>
-                    <td>@offer.NewPrice.ToString("C")</td>
-                    <td>
-                        @if (!string.IsNullOrEmpty(offer.ImageUrl))
-                        {
-                            <img src="@offer.ImageUrl" alt="Offer Image" width="100" class="rounded shadow" />
-                        }
-                        else
-                        {
-                            <i class="bx bx-image-alt text-muted"></i> <p>@Localizer["NoImage", "Offer"]</p>
-                        }
-                    </td>
-                    <td>
-                        <div class="dropdown">
-                            <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
-                                <i class="bx bx-dots-vertical-rounded"></i>
-                            </button>
-                            <div class="dropdown-menu">
-                                <a class="dropdown-item" href="@Url.Action("Edit", new { offerId = offer.Id })">
-                                    <i class="bx bx-edit-alt me-1"></i> @Localizer["Edit", "Offer"]
-                                </a>
-                                <form action="@Url.Action("Delete", new { offerId = offer.Id })" method="post" class="dropdown-item" onsubmit="return confirm('@Localizer["ConfirmDelete", "Offer"]')">
-                                    @Html.AntiForgeryToken()
-                                    <button type="submit" class="btn p-0" style="border: none; background: transparent; color: inherit;">
-                                        <i class="bx bx-trash me-1"></i> @Localizer["Delete", "Offer"]
-                                    </button>
-                                </form>
+
+<!-- Assign Offer to Multiple Cars Modal -->
+<div class="modal fade" id="assignOfferModal" tabindex="-1" aria-labelledby="assignOfferModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title" id="assignOfferModalLabel">
+                    <i class="bx bx-car me-2"></i>
+                    Assign Offer to Multiple Cars
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="assignOfferForm">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" id="selectedOfferId" name="OfferId" />
+
+                    <div class="alert alert-info" role="alert">
+                        <i class="bx bx-info-circle me-2"></i>
+                        Assigning offer: <strong id="selectedOfferName"></strong>
+                    </div>
+
+                    <div class="mb-4">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <label class="form-label fw-bold">
+                                <i class="bx bx-car me-1"></i>
+                                Select Cars <span class="text-danger">*</span>
+                            </label>
+                            <div>
+                                <button type="button" class="btn btn-outline-primary btn-sm me-2" onclick="selectAllCars()">
+                                    <i class="bx bx-check-square me-1"></i>
+                                    Select All
+                                </button>
+                                <button type="button" class="btn btn-outline-secondary btn-sm" onclick="clearAllCars()">
+                                    <i class="bx bx-square me-1"></i>
+                                    Clear All
+                                </button>
                             </div>
                         </div>
-                    </td>
-                </tr>
-                index++;
+
+                        <!-- Search Box -->
+                        <div class="mb-3">
+                            <div class="input-group">
+                                <span class="input-group-text">
+                                    <i class="bx bx-search"></i>
+                                </span>
+                                <input type="text" class="form-control" id="carSearchInput" placeholder="Search cars by brand, model, or year...">
+                            </div>
+                        </div>
+
+                        <!-- Cars Selection Area -->
+                        <div class="border rounded p-3" style="max-height: 400px; overflow-y: auto;">
+                            <div id="carsContainer">
+                                <div class="text-center text-muted py-3">
+                                    <i class="bx bx-loader bx-spin"></i>
+                                    Loading cars...
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mt-2">
+                            <small class="text-muted">
+                                <span id="selectedCarsCount">0</span> car(s) selected
+                            </small>
+                        </div>
+                    </div>
+
+                    <div id="selectedCarsPreview" class="mt-3" style="display: none;">
+                        <div class="card bg-light">
+                            <div class="card-body">
+                                <h6 class="card-title">
+                                    <i class="bx bx-list-check me-1"></i>
+                                    Selected Cars
+                                </h6>
+                                <div id="selectedCarsList"></div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    <i class="bx bx-x me-1"></i>
+                    Cancel
+                </button>
+                <button type="button" class="btn btn-primary" id="assignOfferBtn">
+                    <i class="bx bx-check me-1"></i>
+                    Assign Offer to Selected Cars
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Delete Confirmation Modal -->
+<div class="modal fade" id="deleteConfirmModal" tabindex="-1" aria-labelledby="deleteConfirmModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title" id="deleteConfirmModalLabel">
+                    <i class="bx bx-trash me-2"></i>
+                    Confirm Delete
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="text-center">
+                    <i class="bx bx-error-circle text-danger" style="font-size: 4rem;"></i>
+                    <h5 class="mt-3">Are you sure?</h5>
+                    <p class="text-muted">
+                        You are about to delete the offer: <strong id="deleteOfferName"></strong>
+                        <br>This action cannot be undone.
+                    </p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    <i class="bx bx-x me-1"></i>
+                    Cancel
+                </button>
+                <form id="deleteForm" method="post" style="display: inline;">
+                    @Html.AntiForgeryToken()
+                    <button type="submit" class="btn btn-danger">
+                        <i class="bx bx-trash me-1"></i>
+                        Delete Offer
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <!-- Include Toastr CSS and JS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
+    <script>
+        // Configure Toastr options
+        toastr.options = {
+            "closeButton": true,
+            "debug": false,
+            "newestOnTop": true,
+            "progressBar": true,
+            "positionClass": "toast-top-right",
+            "preventDuplicates": false,
+            "onclick": null,
+            "showDuration": "300",
+            "hideDuration": "1000",
+            "timeOut": "5000",
+            "extendedTimeOut": "1000",
+            "showEasing": "swing",
+            "hideEasing": "linear",
+            "showMethod": "fadeIn",
+            "hideMethod": "fadeOut"
+        };
+
+        let carsData = [];
+        let selectedCarIds = [];
+
+        // Initialize tooltips and load data
+        $(document).ready(function() {
+            $('[data-bs-toggle="tooltip"]').tooltip();
+            loadCars();
+        });
+
+        // Load cars for selection
+        function loadCars() {
+            $.get('@Url.Action("GetCarsForOffer")', function(response) {
+                if (response.success) {
+                    carsData = response.data;
+                    populateCarsList();
+                } else {
+                    showToast('error', 'Failed to load cars: ' + response.message);
+                }
+            }).fail(function() {
+                showToast('error', 'Failed to load cars. Please try again.');
+            });
+        }
+
+        // Format currency in Saudi Riyal
+        function formatCurrency(amount) {
+            return new Intl.NumberFormat('ar-SA', {
+                style: 'currency',
+                currency: 'SAR',
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            }).format(amount);
+        }
+
+        // Populate cars list with checkboxes
+        function populateCarsList(filteredCars = null) {
+            const carsContainer = $('#carsContainer');
+            const cars = filteredCars || carsData;
+            const currentOfferId = $('#selectedOfferId').val();
+
+            if (cars.length === 0) {
+                carsContainer.html(`
+                    <div class="text-center text-muted py-3">
+                        <i class="bx bx-car"></i>
+                        <br>No cars available
+                    </div>
+                `);
+                return;
+            }
+
+            let carsHtml = '';
+            cars.forEach(car => {
+                const brandName = car.brand?.nameEn || car.brand?.nameAr || 'Unknown Brand';
+                const modelYear = car.modelYear?.name || 'Unknown Year';
+                const carNameEn = car.nameEn || 'Unknown Model';
+                const carNameAr = car.nameAr || '';
+
+                const carDisplayName = `${brandName} ${carNameEn} (${modelYear})`;
+
+                // Check if car already has this offer
+                const hasCurrentOffer = car.offer && car.offer.some(offer => offer.id === currentOfferId);
+                const isChecked = selectedCarIds.includes(car.id) ? 'checked' : '';
+                const isDisabled = hasCurrentOffer ? 'disabled' : '';
+                const disabledClass = hasCurrentOffer ? 'disabled-car-item' : '';
+                const disabledText = hasCurrentOffer ? '<span class="badge bg-warning ms-2">Already Assigned</span>' : '';
+
+                carsHtml += `
+                    <div class="form-check mb-2 p-3 border rounded car-item ${disabledClass}" data-car-id="${car.id}">
+                        <input class="form-check-input car-checkbox"
+                               type="checkbox"
+                               value="${car.id}"
+                               id="car_${car.id}"
+                               ${isChecked}
+                               ${isDisabled}
+                               onchange="toggleCarSelection('${car.id}')">
+                        <label class="form-check-label w-100 ${hasCurrentOffer ? 'text-muted' : ''}" for="car_${car.id}">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <strong>${carDisplayName}</strong>
+                                    ${disabledText}
+                                    ${carNameAr ? `<br><small class="text-muted">${carNameAr}</small>` : ''}
+                                    <br>
+                                    <small class="text-muted">
+                                        Code: ${car.carCode || 'N/A'} | SKU: ${car.carSKU || 'N/A'}
+                                    </small>
+                                </div>
+                                <div class="text-end">
+                                    <span class="badge bg-info">Stock: ${car.quantityInStock || 0}</span>
+                                    <br>
+                                    <span class="badge bg-success">Price: ${car.sellingPrice ? formatCurrency(car.sellingPrice) : 'N/A'}</span>
+                                </div>
+                            </div>
+                        </label>
+                    </div>
+                `;
+            });
+
+            carsContainer.html(carsHtml);
+        }
+
+        // Search functionality
+        $('#carSearchInput').on('input', function() {
+            const searchTerm = $(this).val().toLowerCase();
+            if (searchTerm === '') {
+                populateCarsList();
+                return;
+            }
+
+            const filteredCars = carsData.filter(car => {
+                const brandName = car.brand?.nameEn || car.brand?.nameAr || '';
+                const modelYear = car.modelYear?.name || '';
+                const carNameEn = car.nameEn || '';
+                const carNameAr = car.nameAr || '';
+                const carCode = car.carCode || '';
+                const carSKU = car.carSKU || '';
+
+                const searchableText = `${brandName} ${modelYear} ${carNameEn} ${carNameAr} ${carCode} ${carSKU}`.toLowerCase();
+                return searchableText.includes(searchTerm);
+            });
+
+            populateCarsList(filteredCars);
+        });
+
+        // Toggle car selection
+        function toggleCarSelection(carId) {
+            const checkbox = $(`#car_${carId}`);
+
+            // Don't allow selection if checkbox is disabled
+            if (checkbox.is(':disabled')) {
+                return;
+            }
+
+            if (checkbox.is(':checked')) {
+                if (!selectedCarIds.includes(carId)) {
+                    selectedCarIds.push(carId);
+                }
+            } else {
+                selectedCarIds = selectedCarIds.filter(id => id !== carId);
+            }
+
+            updateSelectedCarsDisplay();
+        }
+
+        // Select all cars
+        function selectAllCars() {
+            const currentOfferId = $('#selectedOfferId').val();
+
+            // Only select cars that are not disabled (don't have current offer)
+            $('.car-checkbox:not(:disabled)').prop('checked', true);
+
+            // Update selectedCarIds to include only enabled cars
+            selectedCarIds = carsData
+                .filter(car => !car.offer || !car.offer.some(offer => offer.id === currentOfferId))
+                .map(car => car.id);
+
+            updateSelectedCarsDisplay();
+        }
+
+        // Clear all selections
+        function clearAllCars() {
+            $('.car-checkbox:not(:disabled)').prop('checked', false);
+            selectedCarIds = [];
+            updateSelectedCarsDisplay();
+        }
+
+        // Update selected cars display
+        function updateSelectedCarsDisplay() {
+            const countElement = $('#selectedCarsCount');
+            const previewElement = $('#selectedCarsPreview');
+            const listElement = $('#selectedCarsList');
+
+            countElement.text(selectedCarIds.length);
+
+            if (selectedCarIds.length > 0) {
+                let selectedCarsHtml = '';
+                selectedCarIds.forEach(carId => {
+                    const car = carsData.find(c => c.id === carId);
+                    if (car) {
+                        const brandName = car.brand?.nameEn || car.brand?.nameAr || 'Unknown';
+                        const modelYear = car.modelYear?.name || 'N/A';
+                        const carName = car.nameEn || 'Unknown Model';
+
+                        const displayName = `${brandName} ${carName} (${modelYear})`;
+                        selectedCarsHtml += `
+                            <span class="badge bg-primary me-2 mb-1">${displayName}</span>
+                        `;
+                    }
+                });
+                listElement.html(selectedCarsHtml);
+                previewElement.show();
+            } else {
+                previewElement.hide();
             }
         }
-        else
-        {
-            <tr>
-                <td colspan="8" class="text-center">@Localizer["NoOffersAvailable", "Offer"]</td>
-            </tr>
+
+        // Open assign modal
+        function openAssignModal(offerId, offerName) {
+            $('#selectedOfferId').val(offerId);
+            $('#selectedOfferName').text(offerName);
+            $('#assignOfferForm')[0].reset();
+            $('#selectedOfferId').val(offerId); // Set again after reset
+            $('#carSearchInput').val('');
+            selectedCarIds = [];
+            $('#selectedCarsPreview').hide();
+
+            // Reload cars list to reflect the current offer ID for checking duplicates
+            loadCars(); // Reload fresh data from server
+            $('#assignOfferModal').modal('show');
         }
-    </tbody>
-</table>
+
+        // Assign offer to multiple cars
+        $('#assignOfferBtn').click(function() {
+            if (selectedCarIds.length === 0) {
+                showToast('error', 'Please select at least one car.');
+                return;
+            }
+
+            const offerId = $('#selectedOfferId').val();
+            const token = $('input[name="__RequestVerificationToken"]').val();
+
+            const carOffers = selectedCarIds.map(carId => ({
+                OfferId: offerId,
+                CarId: carId,
+                SellingPrice: 0
+            }));
+
+            // Show loading toast
+            showToast('info', 'Assigning offer to selected cars...');
+
+            // Disable the button to prevent multiple submissions
+            $('#assignOfferBtn').prop('disabled', true);
+
+            $.ajax({
+                url: '@Url.Action("AddOfferToMultipleCars")',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({ CarOffers: carOffers }),
+                headers: {
+                    'RequestVerificationToken': token
+                },
+                success: function(response) {
+                    if (response.success) {
+                        $('#assignOfferModal').modal('hide');
+                        showToast('success', `Offer assigned to ${selectedCarIds.length} car(s) successfully!`);
+
+                        // Reload cars data after successful assignment
+                        setTimeout(function() {
+                            loadCars();
+                        }, 1000);
+                    } else {
+                        showToast('error', response.message);
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error assigning offer:', error);
+                    showToast('error', 'An error occurred while assigning the offer.');
+                },
+                complete: function() {
+                    // Re-enable the button
+                    $('#assignOfferBtn').prop('disabled', false);
+                }
+            });
+        });
+
+        // Confirm delete
+        function confirmDelete(offerId, offerName) {
+            $('#deleteOfferName').text(offerName);
+            $('#deleteForm').attr('action', '@Url.Action("Delete")' + '?offerId=' + offerId);
+            $('#deleteConfirmModal').modal('show');
+        }
+
+        // Show toast messages using Toastr
+        function showToast(type, message, title = '') {
+            switch (type) {
+                case 'success':
+                    toastr.success(message, title);
+                    break;
+                case 'error':
+                    toastr.error(message, title);
+                    break;
+                case 'warning':
+                    toastr.warning(message, title);
+                    break;
+                case 'info':
+                    toastr.info(message, title);
+                    break;
+                default:
+                    toastr.info(message, title);
+            }
+        }
+
+        // Handle form submission success/error messages from server
+        @if (TempData["SuccessMessage"] != null)
+        {
+                        <text>
+                        showToast('success', '@TempData["SuccessMessage"]');
+                        </text>
+        }
+
+        @if (TempData["ErrorMessage"] != null)
+        {
+                        <text>
+                        showToast('error', '@TempData["ErrorMessage"]');
+                        </text>
+        }
+
+        @if (TempData["WarningMessage"] != null)
+        {
+                        <text>
+                        showToast('warning', '@TempData["WarningMessage"]');
+                        </text>
+        }
+
+        @if (TempData["InfoMessage"] != null)
+        {
+                        <text>
+                        showToast('info', '@TempData["InfoMessage"]');
+                        </text>
+        }
+    </script>
+
+    <style>
+        /* Disabled car item styles */
+        .disabled-car-item {
+            background-color: #f8f9fa !important;
+            border-color: #dee2e6 !important;
+            opacity: 0.7;
+            cursor: not-allowed !important;
+        }
+
+            .disabled-car-item:hover {
+                background-color: #f8f9fa !important;
+                border-color: #dee2e6 !important;
+            }
+
+            .disabled-car-item .form-check-input:disabled {
+                opacity: 0.5;
+                cursor: not-allowed;
+            }
+
+            .disabled-car-item .form-check-label {
+                cursor: not-allowed !important;
+            }
+
+        /* Badge for already assigned cars */
+        .badge.bg-warning {
+            color: #000 !important;
+            font-size: 0.75rem;
+        }
+
+        /* Ensure disabled state is clear */
+        .car-item.disabled-car-item {
+            transition: none !important;
+        }
+
+            .car-item.disabled-car-item .form-check-label {
+                color: #6c757d !important;
+            }
+
+        /* Override hover effects for disabled items */
+        .disabled-car-item:hover .form-check-label {
+            color: #6c757d !important;
+        }
+
+        .car-item {
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+
+            .car-item:hover {
+                background-color: #f8f9fa;
+                border-color: #007bff !important;
+            }
+
+            .car-item:has(.form-check-input:checked) {
+                background-color: #e3f2fd;
+                border-color: #007bff !important;
+            }
+
+        .form-check-input:checked {
+            background-color: #007bff;
+            border-color: #007bff;
+        }
+
+        /* Custom Toastr styles */
+        .toast-top-right {
+            top: 80px;
+            right: 12px;
+        }
+
+        .toast {
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .toast-success {
+            background-color: #28a745;
+        }
+
+        .toast-error {
+            background-color: #dc3545;
+        }
+
+        .toast-info {
+            background-color: #17a2b8;
+        }
+
+        .toast-warning {
+            background-color: #ffc107;
+            color: #212529;
+        }
+
+        /* Loading state for button */
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+    </style>
+}
