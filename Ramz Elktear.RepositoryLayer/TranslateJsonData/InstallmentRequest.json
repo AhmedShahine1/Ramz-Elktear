@@ -1,0 +1,392 @@
+[
+  {
+    "ResourceKey": "InstallmentRequestsTitle",
+    "ResourceGroup": "InstallmentRequest",
+    "Description": "Page title for installment requests",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Installment Requests"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "طلبات التقسيط"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "RequestIdPlaceholder",
+    "ResourceGroup": "InstallmentRequest",
+    "Description": "Placeholder for Request ID input field",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Request ID"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "رقم الطلب"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "UserIdPlaceholder",
+    "ResourceGroup": "InstallmentRequest",
+    "Description": "Placeholder for User ID input field",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "User ID"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "رقم المستخدم"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "AllStatuses",
+    "ResourceGroup": "InstallmentRequest",
+    "Description": "Option for all statuses in dropdown",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "All Statuses"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "جميع الحالات"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "FilterButton",
+    "ResourceGroup": "Common",
+    "Description": "Filter button text",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Filter"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "فلترة"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "NumberColumn",
+    "ResourceGroup": "Common",
+    "Description": "Number column header",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "#"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "#"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "UserIdColumn",
+    "ResourceGroup": "InstallmentRequest",
+    "Description": "User ID column header",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "User ID"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "المستخدم"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "CarIdColumn",
+    "ResourceGroup": "InstallmentRequest",
+    "Description": "Car ID column header",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Car ID"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "السيارة"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "BankIdColumn",
+    "ResourceGroup": "InstallmentRequest",
+    "Description": "Bank ID column header",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Bank ID"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "البنك"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "StatusColumn",
+    "ResourceGroup": "Common",
+    "Description": "Status column header",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Status"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "الحالة"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "ActionsColumn",
+    "ResourceGroup": "Common",
+    "Description": "Actions column header",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Actions"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "الإجراءات"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "DeleteButton",
+    "ResourceGroup": "Common",
+    "Description": "Delete button text",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Delete"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "حذف"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "NoInstallmentRequestsFound",
+    "ResourceGroup": "InstallmentRequest",
+    "Description": "Message when no installment requests are found",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "No installment requests found."
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "لم يتم العثور على طلبات تقسيط."
+      }
+    ]
+  },
+  {
+    "ResourceKey": "StatusUpdatedSuccessfully",
+    "ResourceGroup": "InstallmentRequest",
+    "Description": "Success message for status update",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Status updated successfully"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "تم تحديث الحالة بنجاح"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "FailedToUpdateStatus",
+    "ResourceGroup": "InstallmentRequest",
+    "Description": "Error message for failed status update",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Failed to update status"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "فشل في تحديث الحالة"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "ErrorOccurredWhileUpdatingStatus",
+    "ResourceGroup": "InstallmentRequest",
+    "Description": "Error message for exception during status update",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Error occurred while updating status"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "حدث خطأ أثناء تحديث الحالة"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "ConfirmDeleteRequest",
+    "ResourceGroup": "InstallmentRequest",
+    "Description": "Confirmation message for deleting request",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Are you sure you want to delete this request?"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "هل أنت متأكد من أنك تريد حذف هذا الطلب؟"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "RequestDeletedSuccessfully",
+    "ResourceGroup": "InstallmentRequest",
+    "Description": "Success message for request deletion",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Request deleted successfully"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "تم حذف الطلب بنجاح"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "FailedToDeleteRequest",
+    "ResourceGroup": "InstallmentRequest",
+    "Description": "Error message for failed request deletion",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Failed to delete request"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "فشل في حذف الطلب"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "ErrorOccurredWhileDeletingRequest",
+    "ResourceGroup": "InstallmentRequest",
+    "Description": "Error message for exception during request deletion",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Error occurred while deleting request"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "حدث خطأ أثناء حذف الطلب"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "Status_Pending",
+    "ResourceGroup": "InstallmentRequest",
+    "Description": "Pending status text",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Pending"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "قيد الانتظار"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "Status_Approved",
+    "ResourceGroup": "InstallmentRequest",
+    "Description": "Approved status text",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Approved"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "موافق عليه"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "Status_Rejected",
+    "ResourceGroup": "InstallmentRequest",
+    "Description": "Rejected status text",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Rejected"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "مرفوض"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "Status_InProgress",
+    "ResourceGroup": "InstallmentRequest",
+    "Description": "In Progress status text",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "In Progress"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "قيد التنفيذ"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "Status_Completed",
+    "ResourceGroup": "InstallmentRequest",
+    "Description": "Completed status text",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Completed"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "مكتمل"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "Status_Cancelled",
+    "ResourceGroup": "InstallmentRequest",
+    "Description": "Cancelled status text",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Cancelled"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "ملغي"
+      }
+    ]
+  }
+]

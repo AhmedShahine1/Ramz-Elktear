@@ -748,5 +748,665 @@
         "Value": "إلغاء"
       }
     ]
+  },
+  {
+    "ResourceKey": "UpdateCar",
+    "ResourceGroup": "Car",
+    "Description": "Update car page title and header",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Update Car"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "تحديث السيارة"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "NameArabic",
+    "ResourceGroup": "Car",
+    "Description": "Car name in Arabic field label",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Name (Arabic)"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "الاسم (بالعربية)"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "NameEnglish",
+    "ResourceGroup": "Car",
+    "Description": "Car name in English field label",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Name (English)"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "الاسم (بالإنجليزية)"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "DescriptionArabic",
+    "ResourceGroup": "Car",
+    "Description": "Car description in Arabic field label",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Description (Arabic)"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "الوصف (بالعربية)"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "DescriptionEnglish",
+    "ResourceGroup": "Car",
+    "Description": "Car description in English field label",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Description (English)"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "الوصف (بالإنجليزية)"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "CarImage",
+    "ResourceGroup": "Car",
+    "Description": "Car image field label",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Car Image"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "صورة السيارة"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "ImageWithoutBackground",
+    "ResourceGroup": "Car",
+    "Description": "Image without background field label",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Image Without Background"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "صورة بدون خلفية"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "AdditionalImagesOutside",
+    "ResourceGroup": "Car",
+    "Description": "Additional outside car images field label",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Additional Images (Outside Car)"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "صور إضافية (خارجية للسيارة)"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "InsideCarImages",
+    "ResourceGroup": "Car",
+    "Description": "Inside car images field label",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Inside Car Images"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "صور داخلية للسيارة"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "SellingPrice",
+    "ResourceGroup": "Car",
+    "Description": "Selling price field label",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Selling Price"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "سعر البيع"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "InstallmentPrice",
+    "ResourceGroup": "Car",
+    "Description": "Installment price field label",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Installment Price"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "سعر التقسيط"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "QuantityInStock",
+    "ResourceGroup": "Car",
+    "Description": "Quantity in stock field label",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Quantity in Stock"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "الكمية في المخزون"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "Kilometers",
+    "ResourceGroup": "Car",
+    "Description": "Kilometers field label",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Kilometers"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "الكيلومترات"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "Specifications",
+    "ResourceGroup": "Car",
+    "Description": "Specifications field label",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Specifications"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "المواصفات"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "Color",
+    "ResourceGroup": "Car",
+    "Description": "Color field label",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Color"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "اللون"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "Brand",
+    "ResourceGroup": "Car",
+    "Description": "Brand field label",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Brand"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "الماركة"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "CarCode",
+    "ResourceGroup": "Car",
+    "Description": "Car code field label",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Car Code"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "رمز السيارة"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "CarSKU",
+    "ResourceGroup": "Car",
+    "Description": "Car SKU field label",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Car SKU"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "رقم SKU للسيارة"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "TransmissionType",
+    "ResourceGroup": "Car",
+    "Description": "Transmission type field label",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Transmission Type"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "نوع ناقل الحركة"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "FuelType",
+    "ResourceGroup": "Car",
+    "Description": "Fuel type field label",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Fuel Type"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "نوع الوقود"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "EngineSize",
+    "ResourceGroup": "Car",
+    "Description": "Engine size field label",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Engine Size"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "حجم المحرك"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "ModelYear",
+    "ResourceGroup": "Car",
+    "Description": "Model year field label",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Model Year"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "سنة الطراز"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "IsActive",
+    "ResourceGroup": "Car",
+    "Description": "Is active checkbox label",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Is Active"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "نشط"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "EnginePosition",
+    "ResourceGroup": "Car",
+    "Description": "Engine position field label",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Engine Position"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "موضع المحرك"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "Origin",
+    "ResourceGroup": "Car",
+    "Description": "Origin field label",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Origin"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "المصدر"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "Subcategory",
+    "ResourceGroup": "Car",
+    "Description": "Subcategory field label",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Subcategory"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "الفئة الفرعية"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "Option",
+    "ResourceGroup": "Car",
+    "Description": "Option field label",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Option"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "الخيار"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "IsSpecial",
+    "ResourceGroup": "Car",
+    "Description": "Is special checkbox label",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Is Special"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "مميز"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "Edit",
+    "ResourceGroup": "Common",
+    "Description": "Edit button text",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Edit"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "تعديل"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "RequiredField",
+    "ResourceGroup": "Common",
+    "Description": "Required field indicator",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "*"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "*"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "AspectRatioError",
+    "ResourceGroup": "Car",
+    "Description": "Aspect ratio validation error message",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Please upload an image with a 16:9 aspect ratio."
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "يرجى تحميل صورة بنسبة عرض إلى ارتفاع 16:9."
+      }
+    ]
+  },
+  {
+    "ResourceKey": "CarList",
+    "ResourceGroup": "Car",
+    "Description": "Car list page title",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Car List"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "قائمة السيارات"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "AddNewCar",
+    "ResourceGroup": "Car",
+    "Description": "Add new car button text",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Add New Car"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "إضافة سيارة جديدة"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "NameArabic",
+    "ResourceGroup": "Car",
+    "Description": "Name in Arabic column header",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Name (Arabic)"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "الاسم (عربي)"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "NameEnglish",
+    "ResourceGroup": "Car",
+    "Description": "Name in English column header",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Name (English)"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "الاسم (إنجليزي)"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "DescriptionArabic",
+    "ResourceGroup": "Car",
+    "Description": "Description in Arabic column header",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Description (Arabic)"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "الوصف (عربي)"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "DescriptionEnglish",
+    "ResourceGroup": "Car",
+    "Description": "Description in English column header",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Description (English)"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "الوصف (إنجليزي)"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "SellingPrice",
+    "ResourceGroup": "Car",
+    "Description": "Selling price column header",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Selling Price"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "سعر البيع"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "AddToOffer",
+    "ResourceGroup": "Car",
+    "Description": "Add car to offer action text",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Add to Offer"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "إضافة إلى العرض"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "NoCarsAvailable",
+    "ResourceGroup": "Car",
+    "Description": "No cars available message",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "No cars available"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "لا توجد سيارات متاحة"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "AddYourFirstCar",
+    "ResourceGroup": "Car",
+    "Description": "Add your first car button text",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Add your first car"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "أضف سيارتك الأولى"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "AddCarToOffer",
+    "ResourceGroup": "Car",
+    "Description": "Add car to offer modal title",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Add Car to Offer"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "إضافة سيارة إلى العرض"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "SelectedCar",
+    "ResourceGroup": "Car",
+    "Description": "Selected car label",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Selected Car"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "السيارة المحددة"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "RegularPrice",
+    "ResourceGroup": "Car",
+    "Description": "Regular price label",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Regular Price"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "السعر العادي"
+      }
+    ]
   }
 ]

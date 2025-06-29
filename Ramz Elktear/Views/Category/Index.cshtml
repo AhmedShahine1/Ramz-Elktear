@@ -1,22 +1,22 @@
 ﻿@model IEnumerable<CategoryDTO>
 
 <div class="headerIndex">
-    <h3><span class="text-truncate">Category List</span></h3>
+    <h3><span class="text-truncate">@Localizer["CategoryList", "Category"]</span></h3>
     <a href="@Url.Action("Create")" class="btn btn-success mb-3">
-        <i class="bx bx-plus"></i> <span class="text-truncate">Add New Category</span>
+        <i class="bx bx-plus"></i> <span class="text-truncate">@Localizer["AddNewCategory", "Category"]</span>
     </a>
 </div>
 <table class="table table-bordered">
     <thead>
         <tr>
             <th>#</th>
-            <th><i class="bx bx-text"></i> <span class="text-truncate">Name (Arabic)</span></th>
-            <th><i class="bx bx-text"></i> <span class="text-truncate">Name (English)</span></th>
-            <th><i class="bx bx-info-circle"></i> <span class="text-truncate">Description (Arabic)</span></th>
-            <th><i class="bx bx-info-circle"></i> <span class="text-truncate">Description (English)</span></th>
-            <th><i class="bx bx-image"></i> <span class="text-truncate">Image</span></th>
-            <th><i class="bx bx-check-circle"></i> <span class="text-truncate">Active</span></th>
-            <th><i class="bx bx-cog"></i> <span class="text-truncate">Actions</span></th>
+            <th><i class="bx bx-text"></i> <span class="text-truncate">@Localizer["NameArabic", "Category"]</span></th>
+            <th><i class="bx bx-text"></i> <span class="text-truncate">@Localizer["NameEnglish", "Category"]</span></th>
+            <th><i class="bx bx-info-circle"></i> <span class="text-truncate">@Localizer["DescriptionArabic", "Category"]</span></th>
+            <th><i class="bx bx-info-circle"></i> <span class="text-truncate">@Localizer["DescriptionEnglish", "Category"]</span></th>
+            <th><i class="bx bx-image"></i> <span class="text-truncate">@Localizer["Image", "Category"]</span></th>
+            <th><i class="bx bx-check-circle"></i> <span class="text-truncate">@Localizer["Active", "Category"]</span></th>
+            <th><i class="bx bx-cog"></i> <span class="text-truncate">@Localizer["Actions", "Category"]</span></th>
 
         </tr>
     </thead>
@@ -35,24 +35,24 @@
                     <td>
                         @if (!string.IsNullOrEmpty(category.ImageUrl))
                         {
-                            <img src="@category.ImageUrl" alt="Category Image" width="100" class="rounded shadow" />
+                            <img src="@category.ImageUrl" alt="@Localizer["CategoryImageAlt", "Category"]" width="100" class="rounded shadow" />
                         }
                         else
                         {
-                            <i class="bx bx-image-alt text-muted"></i> <span>No Image</span>
+                            <i class="bx bx-image-alt text-muted"></i> <span>@Localizer["NoImage", "Category"]</span>
                         }
                     </td>
                     <td>
                         @if (category.IsActive)
                         {
                             <span class="badge bg-label-primary">
-                                <i class="bx bx-check"></i> Active
+                                <i class="bx bx-check"></i> @Localizer["ActiveStatus", "Category"]
                             </span>
                         }
                         else
                         {
                             <span class="badge bg-label-danger">
-                                <i class="bx bx-x"></i> Inactive
+                                <i class="bx bx-x"></i> @Localizer["InactiveStatus", "Category"]
                             </span>
                         }
                     </td>
@@ -63,12 +63,12 @@
                             </button>
                             <div class="dropdown-menu">
                                 <a class="dropdown-item" href="@Url.Action("Edit", new { id = category.Id })">
-                                    <i class="bx bx-edit-alt me-1"></i> Edit
+                                    <i class="bx bx-edit-alt me-1"></i> @Localizer["EditAction", "Category"]
                                 </a>
                                 <form action="@Url.Action("Delete", new { id = category.Id })" method="post" class="dropdown-item">
                                     @Html.AntiForgeryToken()
                                     <button type="submit" class="btn p-0" style="border: none; background: transparent; color: inherit;">
-                                        <i class="bx bx-trash me-1"></i> Delete
+                                        <i class="bx bx-trash me-1"></i> @Localizer["DeleteAction", "Category"]
                                     </button>
                                 </form>
                             </div>
@@ -81,7 +81,7 @@
         else
         {
             <tr>
-                <td colspan="8" class="text-center">No categories available.</td>
+                <td colspan="8" class="text-center">@Localizer["NoCategoriesAvailable", "Category"]</td>
             </tr>
         }
     </tbody>

@@ -1,19 +1,18 @@
 ﻿@model AddColor
-
-<h3>Add New Color</h3>
+<h3>@Localizer["AddNewColor", "Color"]</h3>
 <form asp-action="Create" method="post" enctype="multipart/form-data">
     <div class="form-group">
-        <label>Name</label>
+        <label>@Localizer["Name", "Common"]</label>
         <input asp-for="Name" class="form-control" required />
     </div>
     <div class="form-group">
-        <label>Value</label>
+        <label>@Localizer["Value", "Common"]</label>
         <input asp-for="Value" type="color" class="form-control" value="#ffffff" required />
     </div>
-
     <div class="form-group">
-        <label>Active</label>
+        <label>@Localizer["Active", "Common"]</label>
         <input type="checkbox" asp-for="IsActive" class="form-check-input" />
     </div>
-    <button type="submit" class="btn btn-primary mt-3">Add Color</button>
+    <button type="submit" class="btn btn-primary mt-3">@Localizer["AddColor", "Color"]</button>
 </form>
+<p class="text-muted small mt-3">@Localizer["RequiredFieldsNote", "Common"]</p>

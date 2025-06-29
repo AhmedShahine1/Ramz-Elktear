@@ -1,9 +1,9 @@
 ﻿@model UpdateCarDTO
 @{
-    ViewData["Title"] = "Update Car";
+    ViewData["Title"] = @Localizer["UpdateCar", "Car"];
 }
 
-<h3>Update Car</h3>
+<h3>@Localizer["UpdateCar", "Car"]</h3>
 
 <form asp-action="Edit" enctype="multipart/form-data">
     <input type="hidden" asp-for="Id" />
@@ -11,52 +11,52 @@
         <!-- Left Column -->
         <div class="col-md-6">
             <div class="mb-3">
-                <label class="form-label text-truncate d-block">Name (Arabic) *</label>
+                <label class="form-label text-truncate d-block">@Localizer["NameArabic", "Car"] @Localizer["RequiredField", "Common"]</label>
                 <input type="text" class="form-control" asp-for="NameAr" required />
                 <span class="text-danger" asp-validation-for="NameAr"></span>
             </div>
 
             <div class="mb-3">
-                <label class="form-label text-truncate d-block">Name (English) *</label>
+                <label class="form-label text-truncate d-block">@Localizer["NameEnglish", "Car"] @Localizer["RequiredField", "Common"]</label>
                 <input type="text" class="form-control" asp-for="NameEn" required />
                 <span class="text-danger" asp-validation-for="NameEn"></span>
             </div>
 
             <div class="mb-3">
-                <label class="form-label text-truncate d-block">Description (Arabic)</label>
+                <label class="form-label text-truncate d-block">@Localizer["DescriptionArabic", "Car"]</label>
                 <textarea class="form-control" asp-for="DescrptionAr"></textarea>
                 <span class="text-danger" asp-validation-for="DescrptionAr"></span>
             </div>
 
             <div class="mb-3">
-                <label class="form-label text-truncate d-block">Description (English)</label>
+                <label class="form-label text-truncate d-block">@Localizer["DescriptionEnglish", "Car"]</label>
                 <textarea class="form-control" asp-for="DescrptionEn"></textarea>
                 <span class="text-danger" asp-validation-for="DescrptionEn"></span>
             </div>
 
             <div class="mb-3">
-                <label class="form-label text-truncate d-block">Car Image *</label>
+                <label class="form-label text-truncate d-block">@Localizer["CarImage", "Car"] @Localizer["RequiredField", "Common"]</label>
                 <input type="file" class="form-control" asp-for="Image" />
                 <span class="text-danger" asp-validation-for="Image"></span>
                 <div id="imagePreviewContainer"></div>
             </div>
 
             <div class="mb-3">
-                <label class="form-label text-truncate d-block">Image Without Background *</label>
+                <label class="form-label text-truncate d-block">@Localizer["ImageWithoutBackground", "Car"] @Localizer["RequiredField", "Common"]</label>
                 <input type="file" class="form-control" asp-for="ImageWithoutBackground" />
                 <span class="text-danger" asp-validation-for="ImageWithoutBackground"></span>
                 <div id="bgImagePreviewContainer"></div>
             </div>
 
             <div class="mb-3">
-                <label class="form-label text-truncate d-block">Additional Images (Outside Car) *</label>
+                <label class="form-label text-truncate d-block">@Localizer["AdditionalImagesOutside", "Car"] @Localizer["RequiredField", "Common"]</label>
                 <input type="file" class="form-control" asp-for="Images" multiple />
                 <span class="text-danger" asp-validation-for="Images"></span>
                 <div id="outsideImagePreviewContainer"></div>
             </div>
 
             <div class="mb-3">
-                <label class="form-label text-truncate d-block">Inside Car Images *</label>
+                <label class="form-label text-truncate d-block">@Localizer["InsideCarImages", "Car"] @Localizer["RequiredField", "Common"]</label>
                 <input type="file" class="form-control" asp-for="InsideCarImages" multiple />
                 <span class="text-danger" asp-validation-for="InsideCarImages"></span>
                 <div id="insideImagePreviewContainer"></div>
@@ -66,55 +66,55 @@
         <!-- Right Column -->
         <div class="col-md-6">
             <div class="mb-3">
-                <label class="form-label text-truncate d-block">Selling Price *</label>
+                <label class="form-label text-truncate d-block">@Localizer["SellingPrice", "Car"] @Localizer["RequiredField", "Common"]</label>
                 <input type="number" class="form-control" asp-for="SellingPrice" required />
                 <span class="text-danger" asp-validation-for="SellingPrice"></span>
             </div>
 
             <div class="mb-3">
-                <label class="form-label text-truncate d-block">Installment Price *</label>
+                <label class="form-label text-truncate d-block">@Localizer["InstallmentPrice", "Car"] @Localizer["RequiredField", "Common"]</label>
                 <input type="number" class="form-control" asp-for="InstallmentPrice" required />
                 <span class="text-danger" asp-validation-for="InstallmentPrice"></span>
             </div>
 
             <div class="mb-3">
-                <label class="form-label text-truncate d-block">Quantity in Stock *</label>
+                <label class="form-label text-truncate d-block">@Localizer["QuantityInStock", "Car"] @Localizer["RequiredField", "Common"]</label>
                 <input type="number" class="form-control" asp-for="QuantityInStock" required />
                 <span class="text-danger" asp-validation-for="QuantityInStock"></span>
             </div>
 
             <div class="mb-3">
-                <label class="form-label text-truncate d-block">Kilometers *</label>
+                <label class="form-label text-truncate d-block">@Localizer["Kilometers", "Car"] @Localizer["RequiredField", "Common"]</label>
                 <input type="number" class="form-control" asp-for="Kilometers" required />
                 <span class="text-danger" asp-validation-for="Kilometers"></span>
             </div>
 
             <div class="mb-3">
-                <label class="form-label text-truncate d-block">Specifications *</label>
+                <label class="form-label text-truncate d-block">@Localizer["Specifications", "Car"] @Localizer["RequiredField", "Common"]</label>
                 <select class="form-control" asp-for="SpecificationsId" asp-items="ViewBag.Specifications" multiple></select>
                 <span class="text-danger" asp-validation-for="SpecificationsId"></span>
             </div>
 
             <div class="mb-3">
-                <label class="form-label text-truncate d-block">Color *</label>
+                <label class="form-label text-truncate d-block">@Localizer["Color", "Car"] @Localizer["RequiredField", "Common"]</label>
                 <select class="form-control" asp-for="ColorId" asp-items="ViewBag.Colors" multiple></select>
                 <span class="text-danger" asp-validation-for="ColorId"></span>
             </div>
 
             <div class="mb-3">
-                <label class="form-label text-truncate d-block">Brand *</label>
+                <label class="form-label text-truncate d-block">@Localizer["Brand", "Car"] @Localizer["RequiredField", "Common"]</label>
                 <select class="form-control" asp-for="BrandId" asp-items="ViewBag.Brands" required></select>
                 <span class="text-danger" asp-validation-for="BrandId"></span>
             </div>
 
             <div class="mb-3">
-                <label class="form-label text-truncate d-block">Car Code</label>
+                <label class="form-label text-truncate d-block">@Localizer["CarCode", "Car"]</label>
                 <input type="text" class="form-control" asp-for="CarCode" />
                 <span class="text-danger" asp-validation-for="CarCode"></span>
             </div>
 
             <div class="mb-3">
-                <label class="form-label text-truncate d-block">Car SKU</label>
+                <label class="form-label text-truncate d-block">@Localizer["CarSKU", "Car"]</label>
                 <input type="text" class="form-control" asp-for="CarSKU" />
                 <span class="text-danger" asp-validation-for="CarSKU"></span>
             </div>
@@ -125,71 +125,71 @@
         <!-- Additional Details -->
         <div class="col-md-6">
             <div class="mb-3">
-                <label class="form-label text-truncate d-block">Transmission Type *</label>
+                <label class="form-label text-truncate d-block">@Localizer["TransmissionType", "Car"] @Localizer["RequiredField", "Common"]</label>
                 <select class="form-control" asp-for="TransmissionTypeId" asp-items="ViewBag.TransmissionTypes" required></select>
                 <span class="text-danger" asp-validation-for="TransmissionTypeId"></span>
             </div>
 
             <div class="mb-3">
-                <label class="form-label text-truncate d-block">Fuel Type *</label>
+                <label class="form-label text-truncate d-block">@Localizer["FuelType", "Car"] @Localizer["RequiredField", "Common"]</label>
                 <select class="form-control" asp-for="FuelTypeId" asp-items="ViewBag.FuelTypes" required></select>
                 <span class="text-danger" asp-validation-for="FuelTypeId"></span>
             </div>
 
             <div class="mb-3">
-                <label class="form-label text-truncate d-block">Engine Size *</label>
+                <label class="form-label text-truncate d-block">@Localizer["EngineSize", "Car"] @Localizer["RequiredField", "Common"]</label>
                 <select class="form-control" asp-for="EngineSizeId" asp-items="ViewBag.EngineSizes" required></select>
                 <span class="text-danger" asp-validation-for="EngineSizeId"></span>
             </div>
 
             <div class="mb-3">
-                <label class="form-label text-truncate d-block">Model Year *</label>
+                <label class="form-label text-truncate d-block">@Localizer["ModelYear", "Car"] @Localizer["RequiredField", "Common"]</label>
                 <select class="form-control" asp-for="ModelYearId" asp-items="ViewBag.ModelYears" required></select>
                 <span class="text-danger" asp-validation-for="ModelYearId"></span>
             </div>
             <div class="mb-3">
                 <div class="form-check">
                     <input type="checkbox" class="form-check-input" asp-for="IsActive" />
-                    <label class="form-check-label text-truncate d-block">Is Active</label>
+                    <label class="form-check-label text-truncate d-block">@Localizer["IsActive", "Car"]</label>
                 </div>
             </div>
         </div>
 
         <div class="col-md-6">
             <div class="mb-3">
-                <label class="form-label text-truncate d-block">Engine Position *</label>
+                <label class="form-label text-truncate d-block">@Localizer["EnginePosition", "Car"] @Localizer["RequiredField", "Common"]</label>
                 <select class="form-control" asp-for="EnginePositionId" asp-items="ViewBag.EnginePositions" required></select>
                 <span class="text-danger" asp-validation-for="EnginePositionId"></span>
             </div>
 
             <div class="mb-3">
-                <label class="form-label text-truncate d-block">Origin *</label>
+                <label class="form-label text-truncate d-block">@Localizer["Origin", "Car"] @Localizer["RequiredField", "Common"]</label>
                 <select class="form-control" asp-for="OriginId" asp-items="ViewBag.Origins" required></select>
                 <span class="text-danger" asp-validation-for="OriginId"></span>
             </div>
 
             <div class="mb-3">
-                <label class="form-label text-truncate d-block">Subcategory *</label>
+                <label class="form-label text-truncate d-block">@Localizer["Subcategory", "Car"] @Localizer["RequiredField", "Common"]</label>
                 <select class="form-control" asp-for="SubCategoryId" asp-items="ViewBag.SubCategories" required></select>
                 <span class="text-danger" asp-validation-for="SubCategoryId"></span>
             </div>
 
             <div class="mb-3">
-                <label class="form-label text-truncate d-block">Option *</label>
+                <label class="form-label text-truncate d-block">@Localizer["Option", "Car"] @Localizer["RequiredField", "Common"]</label>
                 <select class="form-control" asp-for="OptionId" asp-items="ViewBag.Options" required></select>
                 <span class="text-danger" asp-validation-for="OptionId"></span>
             </div>
             <div class="mb-3">
                 <div class="form-check">
                     <input type="checkbox" class="form-check-input" asp-for="IsSpecial" />
-                    <label class="form-check-label text-truncate d-block">Is Special</label>
+                    <label class="form-check-label text-truncate d-block">@Localizer["IsSpecial", "Car"]</label>
                 </div>
             </div>
         </div>
     </div>
 
     <!-- Submit Button -->
-    <button type="submit" class="btn btn-primary mt-3">Edit</button>
+    <button type="submit" class="btn btn-primary mt-3">@Localizer["Edit", "Common"]</button>
 </form>
 @section Scripts {
     <script>
@@ -207,7 +207,7 @@
                         let aspectRatio = width / height;
 
                         if (Math.abs(aspectRatio - (16 / 9)) > 0.01) {
-                            alert("Please upload an image with a 16:9 aspect ratio.");
+                            alert("@Localizer["AspectRatioError", "Car"]");
                             input.value = ""; // Clear the file input
                         } else {
                             let reader = new FileReader();

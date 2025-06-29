@@ -2,13 +2,13 @@
 
 <div class="card">
     <div class="card-header d-flex justify-content-between align-items-center">
-        <h5 class="mb-0"><i class="bx bx-car me-2"></i><span class="text-truncate">Car List</span></h5>
+        <h5 class="mb-0"><i class="bx bx-car me-2"></i><span class="text-truncate">@Localizer["CarList", "Car"]</span></h5>
         <div>
             <a href="@Url.Action("Create")" class="btn btn-success btn-sm me-2">
-                <i class="bx bx-plus me-1"></i><span class="text-truncate">Add New Car</span>
+                <i class="bx bx-plus me-1"></i><span class="text-truncate">@Localizer["AddNewCar", "Car"]</span>
             </a>
-            <a href="@Url.Action("AllCars","Report")" class="btn btn-info btn-sm">
-                <i class="bx bx-file me-1"></i><span class="text-truncate">Report</span>
+            <a href="@Url.Action("AllCars", "Report")" class="btn btn-info btn-sm">
+                <i class="bx bx-file me-1"></i><span class="text-truncate">@Localizer["Report", "Common"]</span>
             </a>
         </div>
     </div>
@@ -20,31 +20,31 @@
                         <th>#</th>
                         <th>
                             <i class="bx bx-text me-1"></i>
-                            <span class="text-truncate d-inline-block w-100">Name (Arabic)</span>
+                            <span class="text-truncate d-inline-block w-100">@Localizer["NameArabic", "Car"]</span>
                         </th>
                         <th>
                             <i class="bx bx-text me-1"></i>
-                            <span class="text-truncate d-inline-block w-100">Name (English)</span>
+                            <span class="text-truncate d-inline-block w-100">@Localizer["NameEnglish", "Car"]</span>
                         </th>
                         <th>
                             <i class="bx bx-info-circle me-1"></i>
-                            <span class="text-truncate d-inline-block w-100">Description (Arabic)</span>
+                            <span class="text-truncate d-inline-block w-100">@Localizer["DescriptionArabic", "Car"]</span>
                         </th>
                         <th>
                             <i class="bx bx-info-circle me-1"></i>
-                            <span class="text-truncate d-inline-block w-100">Description (English)</span>
+                            <span class="text-truncate d-inline-block w-100">@Localizer["DescriptionEnglish", "Car"]</span>
                         </th>
                         <th>
                             <i class="bx bx-money me-1"></i>
-                            <span class="text-truncate d-inline-block w-100">Selling Price</span>
+                            <span class="text-truncate d-inline-block w-100">@Localizer["SellingPrice", "Car"]</span>
                         </th>
                         <th>
                             <i class="bx bx-image me-1"></i>
-                            <span class="text-truncate d-inline-block w-100">Image</span>
+                            <span class="text-truncate d-inline-block w-100">@Localizer["Image", "Common"]</span>
                         </th>
                         <th>
                             <i class="bx bx-cog me-1"></i>
-                            <span class="text-truncate d-inline-block w-100">Actions</span>
+                            <span class="text-truncate d-inline-block w-100">@Localizer["Actions", "Common"]</span>
                         </th>
                     </tr>
                 </thead>
@@ -70,7 +70,7 @@
                                     {
                                         <div class="text-center text-muted">
                                             <i class="bx bx-image-alt d-block fs-4"></i>
-                                            <small>No Image</small>
+                                            <small>@Localizer["NoImage", "Common"]</small>
                                         </div>
                                     }
                                 </td>
@@ -81,18 +81,18 @@
                                         <ul class="dropdown-menu dropdown-menu-end shadow-sm">
                                             <li>
                                                 <a class="dropdown-item d-flex align-items-center" href="@Url.Action("Edit", new { id = car.Id })">
-                                                    <i class="bx bx-edit-alt me-2 text-primary"></i><span class="text-truncate">Edit</span>
+                                                    <i class="bx bx-edit-alt me-2 text-primary"></i><span class="text-truncate">@Localizer["Edit", "Common"]</span>
                                                 </a>
                                             </li>
                                             <li>
                                                 <a class="dropdown-item d-flex align-items-center" href="@Url.Action("Details", new { id = car.Id })">
-                                                    <i class="bx bx-info-circle me-2 text-info"></i><span class="text-truncate">View Details</span>
+                                                    <i class="bx bx-info-circle me-2 text-info"></i><span class="text-truncate">@Localizer["ViewDetails", "Common"]</span>
                                                 </a>
                                             </li>
                                             <li>
                                                 <a class="dropdown-item d-flex align-items-center add-to-offer-btn" href="#"
                                                    data-car-id="@car.Id" data-car-name="@car.NameEn" data-car-price="@car.SellingPrice">
-                                                    <i class="bx bx-tag me-2 text-warning"></i><span class="text-truncate">Add to Offer</span>
+                                                    <i class="bx bx-tag me-2 text-warning"></i><span class="text-truncate">@Localizer["AddToOffer", "Car"]</span>
                                                 </a>
                                             </li>
                                             <li><hr class="dropdown-divider"></li>
@@ -101,7 +101,7 @@
                                                     @Html.AntiForgeryToken()
                                                     <button type="button" class="dropdown-item d-flex align-items-center delete-car-btn"
                                                             data-car-id="@car.Id" data-car-name="@car.NameEn">
-                                                        <i class="bx bx-trash me-2 text-danger"></i><span class="text-truncate">Delete</span>
+                                                        <i class="bx bx-trash me-2 text-danger"></i><span class="text-truncate">@Localizer["Delete", "Common"]</span>
                                                     </button>
                                                 </form>
                                             </li>
@@ -118,9 +118,9 @@
                             <td colspan="8" class="text-center py-4">
                                 <div class="text-muted">
                                     <i class="bx bx-car-crash fs-1"></i>
-                                    <p class="mt-2">No cars available</p>
+                                    <p class="mt-2">@Localizer["NoCarsAvailable", "Car"]</p>
                                     <a href="@Url.Action("Create")" class="btn btn-sm btn-outline-primary mt-2">
-                                        <i class="bx bx-plus me-1"></i>Add your first car
+                                        <i class="bx bx-plus me-1"></i>@Localizer["AddYourFirstCar", "Car"]
                                     </a>
                                 </div>
                             </td>
@@ -138,20 +138,20 @@
         <div class="modal-content">
             <div class="modal-header bg-danger text-white">
                 <h5 class="modal-title">
-                    <i class="bx bx-error-circle me-2"></i>Confirm Deletion
+                    <i class="bx bx-error-circle me-2"></i>@Localizer["ConfirmDeletion", "Common"]
                 </h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="@Localizer["Close", "Common"]"></button>
             </div>
             <div class="modal-body py-4">
-                <p>Are you sure you want to delete <strong id="carNameToDelete"></strong>?</p>
-                <p class="text-danger mb-0"><small>This action cannot be undone.</small></p>
+                <p>@Localizer["AreYouSureDelete", "Common"] <strong id="carNameToDelete"></strong>?</p>
+                <p class="text-danger mb-0"><small>@Localizer["ActionCannotBeUndone", "Common"]</small></p>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
-                    <i class="bx bx-x me-1"></i>Cancel
+                    <i class="bx bx-x me-1"></i>@Localizer["Cancel", "Common"]
                 </button>
                 <button type="button" class="btn btn-danger" id="confirmDeleteBtn">
-                    <i class="bx bx-trash me-1"></i>Delete
+                    <i class="bx bx-trash me-1"></i>@Localizer["Delete", "Common"]
                 </button>
             </div>
         </div>
@@ -164,9 +164,9 @@
         <div class="modal-content border-0 shadow">
             <div class="modal-header bg-primary text-white">
                 <h5 class="modal-title">
-                    <i class="bx bx-tag me-2"></i>Add Car to Offer
+                    <i class="bx bx-tag me-2"></i>@Localizer["AddCarToOffer", "Car"]
                 </h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="@Localizer["Close", "Common"]"></button>
             </div>
             <div class="modal-body p-4">
                 <input type="hidden" id="carIdForOffer" />
@@ -174,14 +174,14 @@
                 <!-- Selected Car Info -->
                 <div class="card bg-light mb-4">
                     <div class="card-body">
-                        <label class="text-muted small mb-1">Selected Car</label>
+                        <label class="text-muted small mb-1">@Localizer["SelectedCar", "Car"]</label>
                         <div class="d-flex align-items-center">
                             <div class="me-3">
                                 <i class="bx bx-car fs-2 text-primary"></i>
                             </div>
                             <div>
                                 <h6 class="mb-0" id="carNameDisplay"></h6>
-                                <div class="small text-muted">Regular Price: <span id="carPriceDisplay"></span></div>
+                                <div class="small text-muted">@Localizer["RegularPrice", "Car"]: <span id="carPriceDisplay"></span></div>
                             </div>
                         </div>
                     </div>
@@ -190,28 +190,28 @@
                 <!-- Offer Selection -->
                 <div class="mb-4">
                     <label for="offerSelect" class="form-label">
-                        <i class="bx bx-purchase-tag me-1"></i>Select Offer
+                        <i class="bx bx-purchase-tag me-1"></i>@Localizer["SelectOffer", "Car"]
                     </label>
                     <select class="form-select form-select-lg" id="offerSelect">
-                        <option value="">-- Select an offer --</option>
+                        <option value="">-- @Localizer["SelectAnOffer", "Car"] --</option>
                     </select>
-                    <div class="invalid-feedback">Please select an offer</div>
+                    <div class="invalid-feedback">@Localizer["PleaseSelectOffer", "Car"]</div>
                 </div>
 
                 <!-- Price Input -->
                 <div class="mb-3">
                     <label for="offerPrice" class="form-label">
-                        <i class="bx bx-money me-1"></i>Special Offer Price
+                        <i class="bx bx-money me-1"></i>@Localizer["SpecialOfferPrice", "Car"]
                     </label>
                     <div class="input-group">
                         <span class="input-group-text bg-light">$</span>
                         <input type="number" class="form-control form-control-lg" id="offerPrice" step="0.01" min="0"
-                               placeholder="Enter special price for this offer" />
+                               placeholder="@Localizer["EnterSpecialPrice", "Car"]" />
                     </div>
-                    <div class="invalid-feedback">Please enter a valid price</div>
+                    <div class="invalid-feedback">@Localizer["PleaseEnterValidPrice", "Car"]</div>
                     <div class="form-text mt-2 d-flex align-items-center">
                         <i class="bx bx-info-circle me-1"></i>
-                        <span id="discountMessage">Enter the special price for this car in this offer</span>
+                        <span id="discountMessage">@Localizer["EnterSpecialPriceMessage", "Car"]</span>
                     </div>
                 </div>
 
@@ -223,10 +223,10 @@
             </div>
             <div class="modal-footer bg-light">
                 <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
-                    <i class="bx bx-x me-1"></i>Cancel
+                    <i class="bx bx-x me-1"></i>@Localizer["Cancel", "Common"]
                 </button>
                 <button type="button" class="btn btn-primary" id="saveOfferBtn">
-                    <i class="bx bx-check me-1"></i>Save
+                    <i class="bx bx-check me-1"></i>@Localizer["Save", "Common"]
                 </button>
             </div>
         </div>
@@ -238,6 +238,25 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
     <script>
         $(document).ready(function() {
+            // Localized messages for JavaScript
+            const localizedMessages = {
+                loadingOffers: '@Html.Raw(Localizer["LoadingOffers", "Car"])',
+                selectAnOffer: '@Html.Raw(Localizer["SelectAnOffer", "Car"])',
+                noOffersAvailable: '@Html.Raw(Localizer["NoOffersAvailable", "Car"])',
+                noOffersAvailableMessage: '@Html.Raw(Localizer["NoOffersAvailableMessage", "Car"])',
+                failedToLoadOffers: '@Html.Raw(Localizer["FailedToLoadOffers", "Car"])',
+                failedToLoadOffersMessage: '@Html.Raw(Localizer["FailedToLoadOffersMessage", "Car"])',
+                saving: '@Html.Raw(Localizer["Saving", "Common"])',
+                carAddedToOfferSuccess: '@Html.Raw(Localizer["CarAddedToOfferSuccess", "Car"])',
+                failedToAddCarToOffer: '@Html.Raw(Localizer["FailedToAddCarToOffer", "Car"])',
+                errorOccurred: '@Html.Raw(Localizer["ErrorOccurred", "Common"])',
+                enterSpecialPriceMessage: '@Html.Raw(Localizer["EnterSpecialPriceMessage", "Car"])',
+                youreOfferingDiscount: '@Html.Raw(Localizer["YoureOfferingDiscount", "Car"])',
+                save: '@Html.Raw(Localizer["Save", "Car"])',
+                priceHigherThanRegular: '@Html.Raw(Localizer["PriceHigherThanRegular", "Car"])',
+                noDiscountApplied: '@Html.Raw(Localizer["NoDiscountApplied", "Car"])'
+            };
+
             // Configure toastr notification
             toastr.options = {
                 closeButton: true,
@@ -291,14 +310,14 @@
                     const discountAmount = (regularPrice - offerPrice).toFixed(2);
 
                     if (discountPercent > 0) {
-                        $('#discountMessage').html(`You're offering a <strong class="text-success">${discountPercent}% discount</strong> (Save $${discountAmount})`);
+                        $('#discountMessage').html(localizedMessages.youreOfferingDiscount.replace('{0}', discountPercent).replace('{1}', discountAmount));
                     } else if (discountPercent < 0) {
-                        $('#discountMessage').html(`<span class="text-warning">Price is higher than regular price by ${Math.abs(discountPercent)}%</span>`);
+                        $('#discountMessage').html(localizedMessages.priceHigherThanRegular.replace('{0}', Math.abs(discountPercent)));
                     } else {
-                        $('#discountMessage').html(`No discount applied (same as regular price)`);
+                        $('#discountMessage').html(localizedMessages.noDiscountApplied);
                     }
                 } else {
-                    $('#discountMessage').html(`Enter the special price for this car in this offer`);
+                    $('#discountMessage').html(localizedMessages.enterSpecialPriceMessage);
                 }
             }
 
@@ -308,11 +327,11 @@
                     url: '@Url.Action("GetAllOffers", "Car")',
                     type: 'GET',
                     beforeSend: function() {
-                        $('#offerSelect').html('<option value="">Loading offers...</option>');
+                        $('#offerSelect').html('<option value="">' + localizedMessages.loadingOffers + '</option>');
                     },
                     success: function(response) {
                         $('#offerSelect').empty();
-                        $('#offerSelect').append('<option value="">-- Select an offer --</option>');
+                        $('#offerSelect').append('<option value="">-- ' + localizedMessages.selectAnOffer + ' --</option>');
 
                         if (response.status) {
                             const offers = response.data;
@@ -324,16 +343,16 @@
                                 // Show the modal after offers are loaded
                                 $('#addOfferModal').modal('show');
                             } else {
-                                $('#offerSelect').append('<option value="" disabled>No offers available</option>');
+                                $('#offerSelect').append('<option value="" disabled>' + localizedMessages.noOffersAvailable + '</option>');
                                 $('#addOfferModal').modal('show');
-                                toastr.warning("No offers available. Please create an offer first.");
+                                toastr.warning(localizedMessages.noOffersAvailableMessage);
                             }
                         } else {
-                            toastr.error(response.ErrorMessage || "Failed to load offers");
+                            toastr.error(response.ErrorMessage || localizedMessages.failedToLoadOffers);
                         }
                     },
                     error: function(xhr) {
-                        let errorMessage = "Failed to load offers. Please try again.";
+                        let errorMessage = localizedMessages.failedToLoadOffersMessage;
 
                         if (xhr && xhr.responseJSON) {
                             errorMessage = xhr.responseJSON.ErrorMessage || errorMessage;
@@ -373,7 +392,7 @@
                 // Show loading state
                 const saveBtn = $('#saveOfferBtn');
                 const originalHtml = saveBtn.html();
-                saveBtn.html('<i class="bx bx-loader bx-spin me-1"></i> Saving...');
+                saveBtn.html('<i class="bx bx-loader bx-spin me-1"></i> ' + localizedMessages.saving + '...');
                 saveBtn.prop('disabled', true);
                 $('#offerSaveProgress').removeClass('d-none');
 
@@ -401,14 +420,14 @@
 
                         // Handle BaseResponse format
                         if (response && response.status) {
-                            toastr.success(response.ErrorMessage || "Car added to offer successfully!");
+                            toastr.success(response.ErrorMessage || localizedMessages.carAddedToOfferSuccess);
                             $('#addOfferModal').modal('hide');
 
                             // Reset form fields
                             $('#offerSelect').val('');
                             $('#offerPrice').val('');
                         } else {
-                            toastr.error(response.ErrorMessage || "Failed to add car to offer.");
+                            toastr.error(response.ErrorMessage || localizedMessages.failedToAddCarToOffer);
                         }
                     },
                     error: function(xhr, status, error) {
@@ -417,7 +436,7 @@
                         saveBtn.prop('disabled', false);
                         $('#offerSaveProgress').addClass('d-none');
 
-                        let errorMessage = "An error occurred. Please try again.";
+                        let errorMessage = localizedMessages.errorOccurred;
 
                         // Try to extract error message from response
                         if (xhr && xhr.responseJSON) {
@@ -451,7 +470,7 @@
                 $('#offerPrice').val('');
                 $('#offerSelect').removeClass('is-invalid');
                 $('#offerPrice').removeClass('is-invalid');
-                $('#discountMessage').html('Enter the special price for this car in this offer');
+                $('#discountMessage').html(localizedMessages.enterSpecialPriceMessage);
             });
         });
     </script>

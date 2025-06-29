@@ -1,26 +1,33 @@
 ﻿@model IEnumerable<ContactFormDetails>
-
-<h3 class="text-truncate">Contact Forms</h3>
-
+<h3 class="text-truncate">@Localizer["ContactForms", "ContactForm"]</h3>
 <table class="table table-bordered table-striped">
     <thead>
         <tr>
-            <th class="text-truncate">Name</th>
-            <th class="text-truncate">Email</th>
-            <th class="text-truncate">Phone</th>
-            <th class="text-truncate">Message</th>
-            <th class="text-truncate">Date</th>
+            <th class="text-truncate">@Localizer["Name", "Common"]</th>
+            <th class="text-truncate">@Localizer["Email", "Common"]</th>
+            <th class="text-truncate">@Localizer["Phone", "Common"]</th>
+            <th class="text-truncate">@Localizer["Message", "Common"]</th>
+            <th class="text-truncate">@Localizer["Date", "Common"]</th>
         </tr>
     </thead>
     <tbody>
-        @foreach (var item in Model)
+        @if (Model != null && Model.Any())
+        {
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.Name</td>
+                    <td>@item.Email</td>
+                    <td>@item.Phone</td>
+                    <td>@item.Message</td>
+                    <td>@item.CreatedOn.ToString("yyyy-MM-dd HH:mm")</td>
+                </tr>
+            }
+        }
+        else
         {
             <tr>
-                <td>@item.Name</td>
-                <td>@item.Email</td>
-                <td>@item.Phone</td>
-                <td>@item.Message</td>
-                <td>@item.CreatedOn.ToString("yyyy-MM-dd HH:mm")</td>
+                <td colspan="5" class="text-center">@Localizer["NoContactFormsAvailable", "ContactForm"]</td>
             </tr>
         }
     </tbody>

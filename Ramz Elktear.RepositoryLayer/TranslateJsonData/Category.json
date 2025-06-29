@@ -1,0 +1,287 @@
+[
+  {
+    "ResourceKey": "AddNewCategory",
+    "ResourceGroup": "Category",
+    "Description": "Add new category page title",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Add New Category"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "إضافة فئة جديدة"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "NameArabic",
+    "ResourceGroup": "Category",
+    "Description": "Arabic name field label",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Name (Arabic)"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "الاسم (بالعربية)"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "NameEnglish",
+    "ResourceGroup": "Category",
+    "Description": "English name field label",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Name (English)"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "الاسم (بالإنجليزية)"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "DescriptionArabic",
+    "ResourceGroup": "Category",
+    "Description": "Arabic description field label",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Description (Arabic)"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "الوصف (بالعربية)"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "DescriptionEnglish",
+    "ResourceGroup": "Category",
+    "Description": "English description field label",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Description (English)"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "الوصف (بالإنجليزية)"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "Image",
+    "ResourceGroup": "Category",
+    "Description": "Image field label",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Image"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "الصورة"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "Active",
+    "ResourceGroup": "Category",
+    "Description": "Active status field label",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Active"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "نشط"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "AddCategoryButton",
+    "ResourceGroup": "Category",
+    "Description": "Add category submit button text",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Add Category"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "إضافة الفئة"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "EditCategory",
+    "ResourceGroup": "Category",
+    "Description": "Edit category page title",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Edit Category"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "تعديل الفئة"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "SaveChangesButton",
+    "ResourceGroup": "Category",
+    "Description": "Save changes submit button text",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Save Changes"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "حفظ التغييرات"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "CategoryList",
+    "ResourceGroup": "Category",
+    "Description": "Category list page title",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Category List"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "قائمة الفئات"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "Actions",
+    "ResourceGroup": "Category",
+    "Description": "Actions column header",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Actions"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "الإجراءات"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "CategoryImageAlt",
+    "ResourceGroup": "Category",
+    "Description": "Alt text for category image",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Category Image"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "صورة الفئة"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "NoImage",
+    "ResourceGroup": "Category",
+    "Description": "Text displayed when no image is available",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "No Image"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "لا توجد صورة"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "ActiveStatus",
+    "ResourceGroup": "Category",
+    "Description": "Active status badge text",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Active"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "نشط"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "InactiveStatus",
+    "ResourceGroup": "Category",
+    "Description": "Inactive status badge text",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Inactive"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "غير نشط"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "EditAction",
+    "ResourceGroup": "Category",
+    "Description": "Edit action text in dropdown",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Edit"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "تعديل"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "DeleteAction",
+    "ResourceGroup": "Category",
+    "Description": "Delete action text in dropdown",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Delete"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "حذف"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "NoCategoriesAvailable",
+    "ResourceGroup": "Category",
+    "Description": "Message when no categories are available",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "No categories available."
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "لا توجد فئات متاحة."
+      }
+    ]
+  }
+]

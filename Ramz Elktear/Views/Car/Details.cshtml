@@ -8,20 +8,6 @@
 }
 
 <div class="container py-5" dir="@direction">
-    <!-- Language Switcher -->
-    <div class="@(isRightToLeft ? "text-start" : "text-end") mb-3">
-        <div class="dropdown">
-            <button class="btn btn-outline-secondary btn-sm dropdown-toggle" type="button" id="languageDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                <i class="bx bx-globe"></i>
-                @Localizer["Language", "Common"]
-            </button>
-            <ul class="dropdown-menu" aria-labelledby="languageDropdown">
-                <li><a class="dropdown-item" href="#" onclick="switchLanguage('ar')">العربية</a></li>
-                <li><a class="dropdown-item" href="#" onclick="switchLanguage('en')">English</a></li>
-            </ul>
-        </div>
-    </div>
-
     <div class="row gx-5">
         <!-- Product Images Gallery -->
         <aside class="col-lg-6 mb-4">

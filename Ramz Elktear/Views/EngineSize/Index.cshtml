@@ -1,23 +1,22 @@
 ﻿@model IEnumerable<EngineSizeDTO>
 
 <div class="headerIndex">
-    <h3><span class="text-truncate">Engine Size List</span></h3>
+    <h3><span class="text-truncate">@Localizer["EngineSizeList", "EngineSize"]</span></h3>
     <a href="@Url.Action("Create")" class="btn btn-success mb-3">
-        <i class="bx bx-plus"></i> <span class="text-truncate">Add New Engine Size</span>
+        <i class="bx bx-plus"></i> <span class="text-truncate">@Localizer["AddNewEngineSize", "EngineSize"]</span>
     </a>
 </div>
 <table class="table table-bordered">
     <thead>
         <tr>
             <th>#</th>
-            <th><i class="bx bx-text"></i> <span class="text-truncate">Name (Arabic)</span></th>
-            <th><i class="bx bx-text"></i> <span class="text-truncate">Name (English)</span></th>
-            <th><i class="bx bx-info-circle"></i> <span class="text-truncate">Description (Arabic)</span></th>
-            <th><i class="bx bx-info-circle"></i> <span class="text-truncate">Description (English)</span></th>
-            <th><i class="bx bx-image"></i> <span class="text-truncate">Image</span></th>
-            <th><i class="bx bx-check-circle"></i> <span class="text-truncate">Active</span></th>
-            <th><i class="bx bx-cog"></i> <span class="text-truncate">Actions</span></th>
-
+            <th><i class="bx bx-text"></i> <span class="text-truncate">@Localizer["NameArabic", "EngineSize"]</span></th>
+            <th><i class="bx bx-text"></i> <span class="text-truncate">@Localizer["NameEnglish", "EngineSize"]</span></th>
+            <th><i class="bx bx-info-circle"></i> <span class="text-truncate">@Localizer["DescriptionArabic", "EngineSize"]</span></th>
+            <th><i class="bx bx-info-circle"></i> <span class="text-truncate">@Localizer["DescriptionEnglish", "EngineSize"]</span></th>
+            <th><i class="bx bx-image"></i> <span class="text-truncate">@Localizer["Image", "EngineSize"]</span></th>
+            <th><i class="bx bx-check-circle"></i> <span class="text-truncate">@Localizer["Active", "EngineSize"]</span></th>
+            <th><i class="bx bx-cog"></i> <span class="text-truncate">@Localizer["Actions", "EngineSize"]</span></th>
         </tr>
     </thead>
     <tbody>
@@ -35,24 +34,24 @@
                     <td>
                         @if (!string.IsNullOrEmpty(engineSize.ImageUrl))
                         {
-                            <img src="@engineSize.ImageUrl" alt="Engine Size Image" width="60" class="rounded shadow" />
+                            <img src="@engineSize.ImageUrl" alt="@Localizer["EngineSizeImage", "EngineSize"]" width="60" class="rounded shadow" />
                         }
                         else
                         {
-                            <i class="bx bx-image-alt text-muted"></i> <p>No Image</p>
+                            <i class="bx bx-image-alt text-muted"></i> <p>@Localizer["NoImage", "EngineSize"]</p>
                         }
                     </td>
                     <td>
                         @if (engineSize.IsActive)
                         {
                             <span class="badge bg-label-primary">
-                                <i class="bx bx-check"></i> Active
+                                <i class="bx bx-check"></i> @Localizer["Active", "EngineSize"]
                             </span>
                         }
                         else
                         {
                             <span class="badge bg-label-danger">
-                                <i class="bx bx-x"></i> Inactive
+                                <i class="bx bx-x"></i> @Localizer["Inactive", "EngineSize"]
                             </span>
                         }
                     </td>
@@ -63,12 +62,12 @@
                             </button>
                             <div class="dropdown-menu">
                                 <a class="dropdown-item" href="@Url.Action("Edit", new { id = engineSize.Id })">
-                                    <i class="bx bx-edit-alt me-1"></i> Edit
+                                    <i class="bx bx-edit-alt me-1"></i> @Localizer["Edit", "EngineSize"]
                                 </a>
                                 <form action="@Url.Action("Delete", new { id = engineSize.Id })" method="post" class="dropdown-item">
                                     @Html.AntiForgeryToken()
                                     <button type="submit" class="btn p-0" style="border: none; background: transparent; color: inherit;">
-                                        <i class="bx bx-trash me-1"></i> Delete
+                                        <i class="bx bx-trash me-1"></i> @Localizer["Delete", "EngineSize"]
                                     </button>
                                 </form>
                             </div>
@@ -81,7 +80,7 @@
         else
         {
             <tr>
-                <td colspan="8" class="text-center">No engine sizes available.</td>
+                <td colspan="8" class="text-center">@Localizer["NoEngineSizesAvailable", "EngineSize"]</td>
             </tr>
         }
     </tbody>

@@ -1,0 +1,302 @@
+[
+  {
+    "ResourceKey": "FuelTypeList",
+    "ResourceGroup": "FuelType",
+    "Description": "Fuel type list page title",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Fuel Type List"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "قائمة أنواع الوقود"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "AddNewFuelType",
+    "ResourceGroup": "FuelType",
+    "Description": "Add new fuel type button and page title",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Add New Fuel Type"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "إضافة نوع وقود جديد"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "NameArabic",
+    "ResourceGroup": "FuelType",
+    "Description": "Name in Arabic field label",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Name (Arabic)"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "الاسم (عربي)"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "NameEnglish",
+    "ResourceGroup": "FuelType",
+    "Description": "Name in English field label",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Name (English)"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "الاسم (إنجليزي)"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "DescriptionArabic",
+    "ResourceGroup": "FuelType",
+    "Description": "Description in Arabic field label",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Description (Arabic)"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "الوصف (عربي)"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "DescriptionEnglish",
+    "ResourceGroup": "FuelType",
+    "Description": "Description in English field label",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Description (English)"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "الوصف (إنجليزي)"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "Image",
+    "ResourceGroup": "FuelType",
+    "Description": "Image field label",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Image"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "الصورة"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "Active",
+    "ResourceGroup": "FuelType",
+    "Description": "Active status field label",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Active"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "نشط"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "Inactive",
+    "ResourceGroup": "FuelType",
+    "Description": "Inactive status label",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Inactive"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "غير نشط"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "Actions",
+    "ResourceGroup": "FuelType",
+    "Description": "Actions column header",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Actions"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "الإجراءات"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "Edit",
+    "ResourceGroup": "FuelType",
+    "Description": "Edit action button",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Edit"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "تعديل"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "Delete",
+    "ResourceGroup": "FuelType",
+    "Description": "Delete action button",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Delete"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "حذف"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "FuelTypeImage",
+    "ResourceGroup": "FuelType",
+    "Description": "Fuel type image alt text",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Fuel Type Image"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "صورة نوع الوقود"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "NoImage",
+    "ResourceGroup": "FuelType",
+    "Description": "No image placeholder text",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "No Image"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "لا توجد صورة"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "NoFuelTypesAvailable",
+    "ResourceGroup": "FuelType",
+    "Description": "No fuel types available message",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "No fuel types available."
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "لا توجد أنواع وقود متاحة."
+      }
+    ]
+  },
+  {
+    "ResourceKey": "EditFuelType",
+    "ResourceGroup": "FuelType",
+    "Description": "Edit fuel type page title",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Edit Fuel Type"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "تعديل نوع الوقود"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "AddFuelType",
+    "ResourceGroup": "FuelType",
+    "Description": "Add fuel type button text",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Add Fuel Type"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "إضافة نوع الوقود"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "SaveChanges",
+    "ResourceGroup": "FuelType",
+    "Description": "Save changes button text",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Save Changes"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "حفظ التغييرات"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "Cancel",
+    "ResourceGroup": "FuelType",
+    "Description": "Cancel button text",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Cancel"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "إلغاء"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "ImageOptional",
+    "ResourceGroup": "FuelType",
+    "Description": "Image optional help text",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Leave empty to keep existing image"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "اتركه فارغاً للاحتفاظ بالصورة الحالية"
+      }
+    ]
+  }
+]

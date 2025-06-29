@@ -1,39 +1,40 @@
 ﻿@model UpdateFuelType
-
-<h3>Edit Fuel Type</h3>
-
+<h3>@Localizer["EditFuelType", "FuelType"]</h3>
 <form asp-action="Edit" method="post" enctype="multipart/form-data">
     <input type="hidden" asp-for="Id" />
-
     <div class="form-group">
-        <label>Name (Arabic)</label>
+        <label>@Localizer["NameArabic", "FuelType"]</label>
         <input asp-for="NameAr" class="form-control" required />
+        <span asp-validation-for="NameAr" class="text-danger"></span>
     </div>
-
     <div class="form-group">
-        <label>Name (English)</label>
+        <label>@Localizer["NameEnglish", "FuelType"]</label>
         <input asp-for="NameEn" class="form-control" required />
+        <span asp-validation-for="NameEn" class="text-danger"></span>
     </div>
-
     <div class="form-group">
-        <label>Description (Arabic)</label>
+        <label>@Localizer["DescriptionArabic", "FuelType"]</label>
         <textarea asp-for="DescriptionAr" class="form-control"></textarea>
+        <span asp-validation-for="DescriptionAr" class="text-danger"></span>
     </div>
-
     <div class="form-group">
-        <label>Description (English)</label>
+        <label>@Localizer["DescriptionEnglish", "FuelType"]</label>
         <textarea asp-for="DescriptionEn" class="form-control"></textarea>
+        <span asp-validation-for="DescriptionEn" class="text-danger"></span>
     </div>
-
     <div class="form-group">
-        <label>Image</label>
+        <label>@Localizer["Image", "FuelType"]</label>
         <input type="file" asp-for="Image" class="form-control" />
+        <span asp-validation-for="Image" class="text-danger"></span>
+        <small class="form-text text-muted">@Localizer["ImageOptional", "FuelType"]</small>
     </div>
-
     <div class="form-group">
-        <label>Active</label>
-        <input type="checkbox" asp-for="IsActive" class="form-check-input" />
+        <div class="form-check">
+            <input type="checkbox" asp-for="IsActive" class="form-check-input" />
+            <label class="form-check-label">@Localizer["Active", "FuelType"]</label>
+        </div>
+        <span asp-validation-for="IsActive" class="text-danger"></span>
     </div>
-
-    <button type="submit" class="btn btn-primary mt-3">Save Changes</button>
+    <button type="submit" class="btn btn-primary mt-3">@Localizer["SaveChanges", "FuelType"]</button>
+    <a href="@Url.Action("Index")" class="btn btn-secondary mt-3">@Localizer["Cancel", "FuelType"]</a>
 </form>

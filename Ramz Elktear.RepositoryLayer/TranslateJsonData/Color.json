@@ -1,0 +1,227 @@
+[
+  {
+    "ResourceKey": "AddNewColor",
+    "ResourceGroup": "Color",
+    "Description": "Add new color page title",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Add New Color"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "إضافة لون جديد"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "EditColor",
+    "ResourceGroup": "Color",
+    "Description": "Edit color page title",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Edit Color"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "تعديل اللون"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "Name",
+    "ResourceGroup": "Common",
+    "Description": "Name field label",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Name"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "الاسم"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "Value",
+    "ResourceGroup": "Common",
+    "Description": "Value field label",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Value"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "القيمة"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "Active",
+    "ResourceGroup": "Common",
+    "Description": "Active status label",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Active"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "نشط"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "AddColor",
+    "ResourceGroup": "Color",
+    "Description": "Add color button text",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Add Color"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "إضافة لون"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "UpdateColor",
+    "ResourceGroup": "Color",
+    "Description": "Update color button text",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Update Color"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "تحديث اللون"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "ColorList",
+    "ResourceGroup": "Color",
+    "Description": "Color list page title",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Color List"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "قائمة الألوان"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "Actions",
+    "ResourceGroup": "Common",
+    "Description": "Actions column header",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Actions"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "الإجراءات"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "Edit",
+    "ResourceGroup": "Common",
+    "Description": "Edit action text",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Edit"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "تعديل"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "Delete",
+    "ResourceGroup": "Common",
+    "Description": "Delete action text",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Delete"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "حذف"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "Inactive",
+    "ResourceGroup": "Common",
+    "Description": "Inactive status text",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Inactive"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "غير نشط"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "NoColor",
+    "ResourceGroup": "Color",
+    "Description": "No color available text",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "No color"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "لا يوجد لون"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "NoColorsAvailable",
+    "ResourceGroup": "Color",
+    "Description": "No colors available message",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "No colors available."
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "لا توجد ألوان متاحة."
+      }
+    ]
+  },
+  {
+    "ResourceKey": "RequiredFieldsNote",
+    "ResourceGroup": "Common",
+    "Description": "Required fields note message",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "* Required fields"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "* الحقول المطلوبة"
+      }
+    ]
+  }
+]

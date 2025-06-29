@@ -1,20 +1,18 @@
 ﻿@model IEnumerable<ColorDTO>
-
 <div class="headerIndex">
-    <h3><span class="text-truncate">Color List</span></h3>
+    <h3><span class="text-truncate">@Localizer["ColorList", "Color"]</span></h3>
     <a href="@Url.Action("Create")" class="btn btn-success mb-3">
-        <i class="bx bx-plus"></i> <span class="text-truncate">Add New Color</span>
+        <i class="bx bx-plus"></i> <span class="text-truncate">@Localizer["AddNewColor", "Color"]</span>
     </a>
 </div>
 <table class="table table-bordered">
     <thead>
         <tr>
             <th>#</th>
-            <th><i class="bx bx-text"></i> <span class="text-truncate">Name</span></th>
-            <th><i class="bx bx-palette"></i> <span class="text-truncate">Value</span></th>
-            <th><i class="bx bx-check-circle"></i> <span class="text-truncate">Active</span></th>
-            <th><i class="bx bx-cog"></i> <span class="text-truncate">Actions</span></th>
-
+            <th><i class="bx bx-text"></i> <span class="text-truncate">@Localizer["Name", "Common"]</span></th>
+            <th><i class="bx bx-palette"></i> <span class="text-truncate">@Localizer["Value", "Common"]</span></th>
+            <th><i class="bx bx-check-circle"></i> <span class="text-truncate">@Localizer["Active", "Common"]</span></th>
+            <th><i class="bx bx-cog"></i> <span class="text-truncate">@Localizer["Actions", "Common"]</span></th>
         </tr>
     </thead>
     <tbody>
@@ -34,20 +32,20 @@
                         }
                         else
                         {
-                            <span class="badge bg-secondary">No color</span>
+                            <span class="badge bg-secondary">@Localizer["NoColor", "Color"]</span>
                         }
                     </td>
                     <td>
                         @if (color.IsActive)
                         {
                             <span class="badge bg-label-primary">
-                                <i class="bx bx-check"></i> Active
+                                <i class="bx bx-check"></i> @Localizer["Active", "Common"]
                             </span>
                         }
                         else
                         {
                             <span class="badge bg-label-danger">
-                                <i class="bx bx-x"></i> Inactive
+                                <i class="bx bx-x"></i> @Localizer["Inactive", "Common"]
                             </span>
                         }
                     </td>
@@ -58,12 +56,12 @@
                             </button>
                             <div class="dropdown-menu">
                                 <a class="dropdown-item" href="@Url.Action("Edit", new { id = color.Id })">
-                                    <i class="bx bx-edit-alt me-1"></i> Edit
+                                    <i class="bx bx-edit-alt me-1"></i> @Localizer["Edit", "Common"]
                                 </a>
                                 <form action="@Url.Action("Delete", new { id = color.Id })" method="post" class="dropdown-item">
                                     @Html.AntiForgeryToken()
                                     <button type="submit" class="btn p-0" style="border: none; background: transparent; color: inherit;">
-                                        <i class="bx bx-trash me-1"></i> Delete
+                                        <i class="bx bx-trash me-1"></i> @Localizer["Delete", "Common"]
                                     </button>
                                 </form>
                             </div>
@@ -76,7 +74,7 @@
         else
         {
             <tr>
-                <td colspan="8" class="text-center">No colors available.</td>
+                <td colspan="8" class="text-center">@Localizer["NoColorsAvailable", "Color"]</td>
             </tr>
         }
     </tbody>

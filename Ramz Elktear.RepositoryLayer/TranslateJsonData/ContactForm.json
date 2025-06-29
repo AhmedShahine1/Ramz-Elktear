@@ -1,0 +1,107 @@
+[
+  {
+    "ResourceKey": "ContactForms",
+    "ResourceGroup": "ContactForm",
+    "Description": "Contact forms page title",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Contact Forms"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "نماذج الاتصال"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "Name",
+    "ResourceGroup": "Common",
+    "Description": "Name field label",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Name"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "الاسم"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "Email",
+    "ResourceGroup": "Common",
+    "Description": "Email field label",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Email"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "البريد الإلكتروني"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "Phone",
+    "ResourceGroup": "Common",
+    "Description": "Phone field label",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Phone"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "الهاتف"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "Message",
+    "ResourceGroup": "Common",
+    "Description": "Message field label",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Message"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "الرسالة"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "Date",
+    "ResourceGroup": "Common",
+    "Description": "Date field label",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Date"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "التاريخ"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "NoContactFormsAvailable",
+    "ResourceGroup": "ContactForm",
+    "Description": "No contact forms available message",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "No contact forms available."
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "لا توجد نماذج اتصال متاحة."
+      }
+    ]
+  }
+]
