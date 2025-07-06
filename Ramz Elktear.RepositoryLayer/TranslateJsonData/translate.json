@@ -9243,6 +9243,66 @@
     ]
   },
   {
+    "ResourceKey": "ExteriorImages",
+    "ResourceGroup": "Car",
+    "Description": "Exterior images section title",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Exterior Images"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "صور خارجية"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "InteriorImages",
+    "ResourceGroup": "Car",
+    "Description": "Interior images section title",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Interior Images"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "صور داخلية"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "TechnicalDetails",
+    "ResourceGroup": "Car",
+    "Description": "Technical details section title",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Technical Details"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "التفاصيل الفنية"
+      }
+    ]
+  },
+    {
+    "ResourceKey": "SubCategory",
+    "ResourceGroup": "Car",
+    "Description": "Sub-category section title",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Sub-category"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "الفئة الفرعية"
+      }
+    ]
+  },
+  {
     "ResourceKey": "BookingsList",
     "ResourceGroup": "Booking",
     "Description": "Booking list page title",

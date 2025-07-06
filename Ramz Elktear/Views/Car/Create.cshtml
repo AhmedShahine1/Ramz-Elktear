@@ -130,42 +130,6 @@
 
                     <div class="mb-3">
                         <label class="form-label @(CultureInfo.CurrentCulture.TextInfo.IsRightToLeft ? "text-right" : "")">
-                            @Localizer["InstallmentPrice", "Car"] *
-                        </label>
-                        <input type="number"
-                               class="form-control"
-                               asp-for="InstallmentPrice"
-                               placeholder="@Localizer["InstallmentPricePlaceholder", "Car"]"
-                               required />
-                        <span class="text-danger" asp-validation-for="InstallmentPrice"></span>
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="form-label @(CultureInfo.CurrentCulture.TextInfo.IsRightToLeft ? "text-right" : "")">
-                            @Localizer["QuantityInStock", "Car"] *
-                        </label>
-                        <input type="number"
-                               class="form-control"
-                               asp-for="QuantityInStock"
-                               placeholder="@Localizer["QuantityPlaceholder", "Car"]"
-                               required />
-                        <span class="text-danger" asp-validation-for="QuantityInStock"></span>
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="form-label @(CultureInfo.CurrentCulture.TextInfo.IsRightToLeft ? "text-right" : "")">
-                            @Localizer["Kilometers", "Car"] *
-                        </label>
-                        <input type="number"
-                               class="form-control"
-                               asp-for="Kilometers"
-                               placeholder="@Localizer["KilometersPlaceholder", "Car"]"
-                               required />
-                        <span class="text-danger" asp-validation-for="Kilometers"></span>
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="form-label @(CultureInfo.CurrentCulture.TextInfo.IsRightToLeft ? "text-right" : "")">
                             @Localizer["Specifications", "Car"] *
                         </label>
                         <select class="form-control"
@@ -199,27 +163,6 @@
                         <span class="text-danger" asp-validation-for="BrandId"></span>
                     </div>
 
-                    <div class="mb-3">
-                        <label class="form-label @(CultureInfo.CurrentCulture.TextInfo.IsRightToLeft ? "text-right" : "")">
-                            @Localizer["CarCode", "Car"]
-                        </label>
-                        <input type="text"
-                               class="form-control"
-                               asp-for="CarCode"
-                               placeholder="@Localizer["CarCodePlaceholder", "Car"]" />
-                        <span class="text-danger" asp-validation-for="CarCode"></span>
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="form-label @(CultureInfo.CurrentCulture.TextInfo.IsRightToLeft ? "text-right" : "")">
-                            @Localizer["CarSKU", "Car"]
-                        </label>
-                        <input type="text"
-                               class="form-control"
-                               asp-for="CarSKU"
-                               placeholder="@Localizer["CarSKUPlaceholder", "Car"]" />
-                        <span class="text-danger" asp-validation-for="CarSKU"></span>
-                    </div>
                 </div>
             </div>
 
