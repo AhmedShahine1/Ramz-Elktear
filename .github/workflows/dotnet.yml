@@ -25,7 +25,7 @@ jobs:
       run: dotnet build "Ramz Elktear/Ramz Elktear.csproj" --no-restore --configuration Release
 
     - name: ✅ Run Tests (optional)
-      run: echo "No test project configured"  # Replace if you have tests
+      run: echo "No test project configured"
 
     - name: 🚀 Publish App
       run: dotnet publish "Ramz Elktear/Ramz Elktear.csproj" --configuration Release --output ./publish
