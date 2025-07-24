@@ -35,11 +35,15 @@ jobs:
       with:
         website-name: "controlPanal"
         server-computer-name: ${{ secrets.DEPLOY_SERVER_NAME }}
-        server-username: ${{ secrets.DEPLOY_USERNAME }}
-        server-password: ${{ secrets.DEPLOY_PASSWORD }}
+        server-username: "${{ secrets.DEPLOY_USERNAME }}"
+        server-password: "${{ secrets.DEPLOY_PASSWORD }}"
         source-path: "./publish"
         target-path: "C:\\inetpub\\wwwroot\\RamezWebSite\\Api"
         target-delete: true
+        auth-type: "NTLM"
+        app-pool-name: "controlPanal"  # Match your app pool name
+        protocol: "https"  # Add if using SSL
+        port: "8172"  # Explicit port declaration
 
-    - name: ✅ Done
-      run: echo "✅ Deployed to IIS successfully"
+      - name: ✅ Done
+        run: echo "✅ Deployed to IIS successfully"
