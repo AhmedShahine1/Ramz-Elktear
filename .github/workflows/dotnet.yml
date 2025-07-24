@@ -1,14 +1,13 @@
-name: .NET
+name: Deploy .NET to IIS
 
 on:
   push:
     branches: [ "master" ]
-  pull_request:
-    branches: [ "master" ]
+  workflow_dispatch:
 
 jobs:
   build:
-    runs-on: windows-latest  # ✅ Must be a Windows runner for PowerShell deployment
+    runs-on: windows-latest
 
     steps:
     - uses: actions/checkout@v4
@@ -16,21 +15,21 @@ jobs:
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
       with:
-        dotnet-version: 9.0.x  # or your actual version
+        dotnet-version: 8.0.x
 
-    - name: Restore dependencies
+    - name: Restore
       run: dotnet restore
 
     - name: Build
       run: dotnet build --no-restore
 
     - name: Test
-      run: dotnet test --no-build --verbosity normal
+      run: dotnet test --no-build
 
     - name: Publish
       run: dotnet publish -c Release -o ./publish
 
-    - name: Simply Web Deploy in Windows
+    - name: Deploy to IIS via PowerShell
       uses: djad442/simply-web-deploy-powershell@v1.0.2
       with:
         website-name: "RamzElktear"
@@ -40,3 +39,6 @@ jobs:
         source-path: "./publish"
         target-path: "C:\\inetpub\\wwwroot\\RamezWebSite\\Api"
         target-delete: true
+
+    - name: ✅ Done
+      run: echo "✅ Deployment complete"
