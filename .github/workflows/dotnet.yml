@@ -1,36 +1,36 @@
-name: .NET
+name: Deploy Ramz Elktear to IIS
 
 on:
   push:
     branches: [ "master" ]
-  pull_request:
-    branches: [ "master" ]
+  workflow_dispatch:
 
 jobs:
-  build:
-    runs-on: windows-latest  # ✅ Must be a Windows runner for PowerShell deployment
+  build-and-deploy:
+    runs-on: windows-latest
 
     steps:
-    - uses: actions/checkout@v4
+    - name: 🧾 Checkout code
+      uses: actions/checkout@v4
 
-    - name: Setup .NET
+    - name: 🛠 Setup .NET SDK
       uses: actions/setup-dotnet@v4
       with:
-        dotnet-version: 9.0.x  # or your actual version
+        dotnet-version: 9.0.x  # Or your actual version
 
-    - name: Restore dependencies
-      run: dotnet restore
+    - name: 📦 Restore dependencies
+      run: dotnet restore "Ramz Elktear/Ramz Elktear.csproj"
 
-    - name: Build
-      run: dotnet build --no-restore
+    - name: 🔨 Build
+      run: dotnet build "Ramz Elktear/Ramz Elktear.csproj" --no-restore --configuration Release
 
-    - name: Test
-      run: dotnet test --no-build --verbosity normal
+    - name: ✅ Run Tests (optional)
+      run: echo "No test project configured"  # Replace if you have tests
 
-    - name: Publish
-      run: dotnet publish -c Release -o ./publish
+    - name: 🚀 Publish App
+      run: dotnet publish "Ramz Elktear/Ramz Elktear.csproj" --configuration Release --output ./publish
 
-    - name: Simply Web Deploy in Windows
+    - name: 🌐 Deploy to IIS
       uses: djad442/simply-web-deploy-powershell@v1.0.2
       with:
         website-name: "RamzElktear"
@@ -40,3 +40,6 @@ jobs:
         source-path: "./publish"
         target-path: "C:\\inetpub\\wwwroot\\RamezWebSite\\Api"
         target-delete: true
+
+    - name: ✅ Done
+      run: echo "✅ Deployed to IIS successfully"
