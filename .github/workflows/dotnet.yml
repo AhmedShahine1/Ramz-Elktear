@@ -33,7 +33,7 @@ jobs:
     - name: 🌐 Deploy to IIS
       uses: djad442/simply-web-deploy-powershell@v1.0.2
       with:
-        website-name: "RamzElktear"
+        website-name: "controlPanal"
         server-computer-name: ${{ secrets.DEPLOY_SERVER_NAME }}
         server-username: ${{ secrets.DEPLOY_USERNAME }}
         server-password: ${{ secrets.DEPLOY_PASSWORD }}
