@@ -1,49 +1,36 @@
-name: Deploy Ramz Elktear to IIS
+name: Deploy to IIS
 
 on:
   push:
-    branches: [ "master" ]
+    branches: [ "main" ]
   workflow_dispatch:
 
 jobs:
-  build-and-deploy:
+  deploy:
     runs-on: windows-latest
 
     steps:
-    - name: 🧾 Checkout code
+    - name: 🏷️ Checkout code
       uses: actions/checkout@v4
 
-    - name: 🛠 Setup .NET SDK
+    - name: 🛠️ Setup .NET
       uses: actions/setup-dotnet@v4
       with:
-        dotnet-version: 9.0.x  # Or your actual version
+        dotnet-version: '9.0.x'
 
-    - name: 📦 Restore dependencies
-      run: dotnet restore "Ramz Elktear/Ramz Elktear.csproj"
+    - name: 📦 Build & Publish
+      run: |
+        dotnet restore
+        dotnet publish -c Release -o ./publish
 
-    - name: 🔨 Build
-      run: dotnet build "Ramz Elktear/Ramz Elktear.csproj" --no-restore --configuration Release
-
-    - name: ✅ Run Tests (optional)
-      run: echo "No test project configured"
-
-    - name: 🚀 Publish App
-      run: dotnet publish "Ramz Elktear/Ramz Elktear.csproj" --configuration Release --output ./publish
-
-    - name: 🌐 Deploy to IIS
+    - name: 🚀 Deploy to IIS
       uses: djad442/simply-web-deploy-powershell@v1.0.2
       with:
-        website-name: "controlPanal"
+        website-name: "YourSiteName"  # Exact IIS site name
         server-computer-name: ${{ secrets.DEPLOY_SERVER_NAME }}
-        server-username: "${{ secrets.DEPLOY_USERNAME }}"
-        server-password: "${{ secrets.DEPLOY_PASSWORD }}"
+        server-username: ${{ secrets.DEPLOY_USERNAME }}
+        server-password: ${{ secrets.DEPLOY_PASSWORD }}
         source-path: "./publish"
-        target-path: "C:\\inetpub\\wwwroot\\RamezWebSite\\Api"
-        target-delete: true
+        target-path: "C:\inetpub\wwwroot\YourSiteName"
         auth-type: "NTLM"
-        app-pool-name: "controlPanal"
-        protocol: "https" 
         port: "8172"
-
-    - name: ✅ Done
-      run: echo "✅ Deployed to IIS successfully"
