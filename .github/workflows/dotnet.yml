@@ -16,7 +16,7 @@ jobs:
     - name: 🛠 Setup .NET SDK
       uses: actions/setup-dotnet@v4
       with:
-        dotnet-version: 9.0.x  # Or your actual version
+        dotnet-version: '9.0.x'  # Added quotes around version
 
     - name: 📦 Restore dependencies
       run: dotnet restore "Ramz Elktear/Ramz Elktear.csproj"
@@ -33,17 +33,18 @@ jobs:
     - name: 🌐 Deploy to IIS
       uses: djad442/simply-web-deploy-powershell@v1.0.2
       with:
-        website-name: "controlPanal"
+        website-name: "controlPanal"  # Must match exact IIS site name
         server-computer-name: ${{ secrets.DEPLOY_SERVER_NAME }}
         server-username: "${{ secrets.DEPLOY_USERNAME }}"
         server-password: "${{ secrets.DEPLOY_PASSWORD }}"
         source-path: "./publish"
-        target-path: "C:\\inetpub\\wwwroot\\RamezWebSite\\Api"
+        target-path: "C:\\inetpub\\wwwroot\\controlPanal"  # Fixed path to match site name
         target-delete: true
         auth-type: "NTLM"
         app-pool-name: "controlPanal"
         protocol: "https" 
         port: "8172"
+        skip-app-data: false  # Important for first deployment
 
     - name: ✅ Done
       run: echo "✅ Deployed to IIS successfully"
