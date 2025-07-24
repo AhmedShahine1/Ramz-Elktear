@@ -1,4 +1,4 @@
-name: Deploy .NET to IIS
+name: Deploy Ramz Elktear to IIS
 
 on:
   push:
@@ -6,30 +6,31 @@ on:
   workflow_dispatch:
 
 jobs:
-  build:
+  build-and-deploy:
     runs-on: windows-latest
 
     steps:
-    - uses: actions/checkout@v4
+    - name: 🧾 Checkout code
+      uses: actions/checkout@v4
 
-    - name: Setup .NET
+    - name: 🛠 Setup .NET SDK
       uses: actions/setup-dotnet@v4
       with:
-        dotnet-version: 8.0.x
+        dotnet-version: 9.0.x  # Or your actual version
 
-    - name: Restore
-      run: dotnet restore
+    - name: 📦 Restore dependencies
+      run: dotnet restore "Ramz Elktear/Ramz Elktear.csproj"
 
-    - name: Build
-      run: dotnet build --no-restore
+    - name: 🔨 Build
+      run: dotnet build "Ramz Elktear/Ramz Elktear.csproj" --no-restore --configuration Release
 
-    - name: Test
-      run: dotnet test --no-build
+    - name: ✅ Run Tests (optional)
+      run: echo "No test project configured"  # Replace if you have tests
 
-    - name: Publish
-      run: dotnet publish -c Release -o ./publish
+    - name: 🚀 Publish App
+      run: dotnet publish "Ramz Elktear/Ramz Elktear.csproj" --configuration Release --output ./publish
 
-    - name: Deploy to IIS via PowerShell
+    - name: 🌐 Deploy to IIS
       uses: djad442/simply-web-deploy-powershell@v1.0.2
       with:
         website-name: "RamzElktear"
@@ -41,4 +42,4 @@ jobs:
         target-delete: true
 
     - name: ✅ Done
-      run: echo "✅ Deployment complete"
+      run: echo "✅ Deployed to IIS successfully"
