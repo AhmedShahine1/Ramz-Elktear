@@ -8,6 +8,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="DevExpress.Reporting.Core" Version="24.2.3" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Ramz Elktear.core\Ramz_Elktear.core.csproj" />
   </ItemGroup>
 

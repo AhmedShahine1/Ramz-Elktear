@@ -56,6 +56,11 @@ namespace Ramz_Elktear.BusinessLayer.Services
             return imageUrls;
         }
 
+
+        
+
+
+
         public async Task<ImageCarDTO> GetCarImageByIdAsync(string imageCarId)
         {
             var imageCar = await _unitOfWork.ImageCarRepository.GetByIdAsync(imageCarId);
@@ -76,7 +81,8 @@ namespace Ramz_Elktear.BusinessLayer.Services
             var imageCar = new ImageCar()
             {
                 CarId = imageCarDto.CarId,
-                ImageId = imageId
+                ImageId = imageId,
+                ColorsId=imageCarDto.ColorId,
             };
 
             await _unitOfWork.ImageCarRepository.AddAsync(imageCar);
@@ -85,7 +91,9 @@ namespace Ramz_Elktear.BusinessLayer.Services
             return new ImageCarDTO()
             {
                 CarId = imageCar.CarId,
+                ColorId=imageCar.ColorsId,
                 ImageId = imageCar.ImageId,
+                
                 ImageUrl = await _fileHandling.GetFile(imageId)
             };
         }

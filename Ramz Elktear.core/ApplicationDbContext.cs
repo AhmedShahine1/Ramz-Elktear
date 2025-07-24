@@ -71,7 +71,7 @@ namespace Ramz_Elktear.core
             if (!optionsBuilder.IsConfigured)
             {
                 optionsBuilder.UseSqlServer(
-                   "Data Source=SQL9001.site4now.net;Initial Catalog=db_aa1665_ramzalkhtear;User Id=db_aa1665_ramzalkhtear_admin;Password=RamzForCar@1#2025;");
+                   "Data Source=SQL9001.site4now.net;Initial Catalog=RamezElktear;User Id=db_aa1665_ramzalkhtear_admin;Password=RamzForCar@1#2025;");
             }
         }
 

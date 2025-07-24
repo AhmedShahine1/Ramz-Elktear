@@ -162,9 +162,28 @@ namespace Ramz_Elktear.BusinessLayer.Services
             {
                 await _carColorService.AddCarColorAsync(new AddCarColor { CarId = car.Id, ColorId = color, IsActive = true });
             }
-            foreach (var Image in carDto.Images)
+            //foreach (var Image in carDto.Images)
+            //{
+            //    await _imageCarService.AddCarImageAsync(new AddImageCar 
+            //    {
+            //        CarId = car.Id, 
+            //        Image = Image,
+            //        paths = await GetPathByName("CarImages") 
+            //    });
+            //}
+
+            foreach (var colorImage in carDto.ColorImages)
             {
-                await _imageCarService.AddCarImageAsync(new AddImageCar { CarId = car.Id, Image = Image, paths = await GetPathByName("CarImages") });
+                foreach (var image in colorImage.Images)
+                {
+                    await _imageCarService.AddCarImageAsync(new AddImageCar
+                    {
+                        CarId = car.Id,
+                        ColorId = colorImage.ColorId,
+                        Image = image,
+                        paths = await GetPathByName("ColorImages")
+                    });
+                }
             }
             foreach (var Image in carDto.InsideCarImages)
             {
@@ -423,7 +442,7 @@ namespace Ramz_Elktear.BusinessLayer.Services
             carDto.ImageWithoutBackgroundUrl = (await _imageCarService.GetAllCarImageUrlsByPathAsync(car.Id, "ImageWithoutBackground")).FirstOrDefault();
             carDto.InsideCarImagesUrl = (await _imageCarService.GetAllCarImageUrlsByPathAsync(car.Id, "InsideCarImages")).ToList() ?? new List<string>();
             carDto.Specifications = (await _carSpecificationService.GetSpecificationsByCarIdAsync(car.Id)).ToList() ?? new List<SpecificationDTO>();
-
+            carDto.ColorImages = (await _imageCarService.GetAllCarImageUrlsByPathAsync(car.Id, "ColorImages")).ToList() ?? new List<string>();
             return carDto;
         }
         // Gets all cars (with pagination)

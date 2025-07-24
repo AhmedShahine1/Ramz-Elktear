@@ -31,5 +31,10 @@ namespace Ramz_Elktear.core.DTO.CarModels
         public string EnginePositionId { get; set; }
         public bool IsSpecial { get; set; }
         public bool IsActive { get; set; }
+        public List<ColorImageModel> ColorImages { get; set; } = new();
+
     }
+
+
+   
 }

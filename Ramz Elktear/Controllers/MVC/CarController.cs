@@ -66,6 +66,10 @@ namespace Ramz_Elktear.Web.Controllers
                 Text = c.Name
             }).ToList();
 
+
+           
+
+
             var transmissionTypes = await _transmissionTypeService.GetAllTransmissionTypesAsync();
             ViewData["TransmissionTypes"] = transmissionTypes.Select(t => new SelectListItem
             {
@@ -135,6 +139,7 @@ namespace Ramz_Elktear.Web.Controllers
                 Value = s.Id.ToString(),
                 Text = s.NameEn
             }).ToList();
+           
         }
 
         // GET: Car/Index

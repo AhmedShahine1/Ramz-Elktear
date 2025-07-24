@@ -11,12 +11,14 @@ namespace Ramz_Elktear.BusinessLayer.Services
     public class CarColorService : ICarColorService
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IFileHandling _fileHandling;
         private readonly IMapper _mapper;
 
-        public CarColorService(IUnitOfWork unitOfWork, IMapper mapper)
+        public CarColorService(IUnitOfWork unitOfWork, IMapper mapper, IFileHandling fileHandling)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
+            _fileHandling = fileHandling;
         }
 
         public async Task<IEnumerable<CarColorDTO>> GetAllCarColorsAsync()
@@ -28,7 +30,13 @@ namespace Ramz_Elktear.BusinessLayer.Services
         public async Task<IEnumerable<ColorDTO>> GetCarColorByCarIdAsync(string carId)
         {
             var carColor = await _unitOfWork.CarColorRepository.FindAllAsync(q => q.CarId == carId, include: a => a.Include(i => i.Color));
-            return carColor.Select(carcolor => _mapper.Map<ColorDTO>(carcolor.Color));
+            var CarColorDTO = carColor.Select(carcolor => _mapper.Map<ColorDTO>(carcolor.Color)).ToList();
+            foreach (var color in CarColorDTO)
+            {
+                var imageId = (await _unitOfWork.ImageCarRepository.FindAsync(a => a.CarId == carId && a.ColorsId == color.Id, isNoTracking: true)).ImageId;
+                color.image = await _fileHandling.GetFile(imageId);
+            }
+            return CarColorDTO;
         }
 
         public async Task<ColorDTO> AddCarColorAsync(AddCarColor carColorDto)

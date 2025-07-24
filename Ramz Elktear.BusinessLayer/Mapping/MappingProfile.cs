@@ -354,7 +354,8 @@ namespace Ramz_Elktear.BusinessLayer.Mapping
                 .ForMember(dest => dest.EnginePositionId, opt => opt.MapFrom(src => src.EnginePositionId))
                 .ForMember(dest => dest.Kilometers, opt => opt.MapFrom(src => src.Kilometers))
                 .ForMember(dest => dest.IsSpecial, opt => opt.MapFrom(src => src.IsSpecial));
-            
+
+
             CreateMap<Car, UpdateCarDTO>()
                 .ForMember(dest => dest.NameAr, opt => opt.MapFrom(src => src.NameAr))
                 .ForMember(dest => dest.NameEn, opt => opt.MapFrom(src => src.NameEn))
@@ -376,6 +377,7 @@ namespace Ramz_Elktear.BusinessLayer.Mapping
                 .ForMember(dest => dest.EnginePositionId, opt => opt.MapFrom(src => src.EnginePositionId))
                 .ForMember(dest => dest.Kilometers, opt => opt.MapFrom(src => src.Kilometers))
                 .ForMember(dest => dest.IsSpecial, opt => opt.MapFrom(src => src.IsSpecial));
+             
 
             // Mapping from CarDTO to Car
             CreateMap<CarDTO, Car>()

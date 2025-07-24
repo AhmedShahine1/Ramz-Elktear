@@ -8,5 +8,6 @@ namespace Ramz_Elktear.core.DTO.ImageCarModels
         public string CarId { get; set; }
         public IFormFile Image { get; set; }
         public Paths paths { get; set; }
+        public string? ColorId { get; set; }
     }
 }

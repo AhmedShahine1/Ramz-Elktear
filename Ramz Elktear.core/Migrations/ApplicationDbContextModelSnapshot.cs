@@ -671,6 +671,9 @@ namespace Ramz_Elktear.core.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<string>("ColorsId")
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<string>("ImageId")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
@@ -678,6 +681,8 @@ namespace Ramz_Elktear.core.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("CarId");
+
+                    b.HasIndex("ColorsId");
 
                     b.HasIndex("ImageId");
 
@@ -1764,6 +1769,10 @@ namespace Ramz_Elktear.core.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Ramz_Elktear.core.Entities.Color.Colors", "Colors")
+                        .WithMany("CarImages")
+                        .HasForeignKey("ColorsId");
+
                     b.HasOne("Ramz_Elktear.core.Entities.Files.Images", "Image")
                         .WithMany()
                         .HasForeignKey("ImageId")
@@ -1771,6 +1780,8 @@ namespace Ramz_Elktear.core.Migrations
                         .IsRequired();
 
                     b.Navigation("Car");
+
+                    b.Navigation("Colors");
 
                     b.Navigation("Image");
                 });
@@ -2049,6 +2060,8 @@ namespace Ramz_Elktear.core.Migrations
             modelBuilder.Entity("Ramz_Elktear.core.Entities.Color.Colors", b =>
                 {
                     b.Navigation("CarColors");
+
+                    b.Navigation("CarImages");
                 });
 
             modelBuilder.Entity("Ramz_Elktear.core.Entities.Files.Paths", b =>

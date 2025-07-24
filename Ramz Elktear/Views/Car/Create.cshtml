@@ -1,8 +1,68 @@
-﻿@model AddCar
+﻿
+
+
+@model AddCar
 @{
     ViewData["Title"] = @Localizer["CreateCar", "Car"];
 }
 
+<style>
+    .color-picker {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    .color-option {
+        width: 40px;
+        height: 40px;
+        border-radius: 20px;
+        cursor: pointer;
+        border: 2px solid transparent;
+        position: relative;
+    }
+
+        .color-option.selected {
+            border: 3px solid #000;
+        }
+
+        .color-option::after {
+            content: attr(data-name);
+            position: absolute;
+            bottom: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 10px;
+            color: #333;
+        }
+
+
+    .custom-upload-box {
+        border: 2px dashed #ccc;
+        border-radius: 8px;
+        padding: 30px;
+        text-align: center;
+        color: #666;
+        cursor: pointer;
+        transition: border-color 0.3s;
+        background-color: #f9f9f9;
+    }
+
+        .custom-upload-box:hover {
+            border-color: #007bff;
+            background-color: #f1faff;
+        }
+
+        .custom-upload-box i {
+            font-size: 36px;
+            color: #888;
+            margin-bottom: 10px;
+        }
+
+        .custom-upload-box input[type="file"] {
+            display: none;
+        }
+</style>
 <div class="card" dir="@(CultureInfo.CurrentCulture.TextInfo.IsRightToLeft ? "rtl" : "ltr")">
     <div class="card-header">
         <h3 class="mb-0">
@@ -14,316 +74,245 @@
     </div>
     <div class="card-body">
         <form asp-action="Create" enctype="multipart/form-data">
-            <div class="row">
-                <!-- Left Column -->
-                <div class="col-md-6">
-                    <div class="mb-3">
-                        <label class="form-label @(CultureInfo.CurrentCulture.TextInfo.IsRightToLeft ? "text-right" : "")">
-                            @Localizer["NameArabic", "Car"] *
-                        </label>
-                        <input type="text"
-                               class="form-control @(CultureInfo.CurrentCulture.TextInfo.IsRightToLeft ? "text-right" : "")"
-                               asp-for="NameAr"
-                               placeholder="@Localizer["CarNameArPlaceholder", "Car"]"
-                               required />
-                        <span class="text-danger" asp-validation-for="NameAr"></span>
-                    </div>
+            <ul class="nav nav-tabs mb-3" id="carFormTabs" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" style="width:100px" id="general-tab" data-bs-toggle="tab" data-bs-target="#general" type="button" role="tab">
+                        @Localizer["General"]
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" style="width:100px" id="images-tab" data-bs-toggle="tab" data-bs-target="#images" type="button" role="tab">
+                        @Localizer["Images"]
+                    </button>
+                </li>
+            </ul>
 
-                    <div class="mb-3">
-                        <label class="form-label @(CultureInfo.CurrentCulture.TextInfo.IsRightToLeft ? "text-right" : "")">
-                            @Localizer["NameEnglish", "Car"] *
-                        </label>
-                        <input type="text"
-                               class="form-control"
-                               asp-for="NameEn"
-                               placeholder="@Localizer["CarNameEnPlaceholder", "Car"]"
-                               required />
-                        <span class="text-danger" asp-validation-for="NameEn"></span>
-                    </div>
 
-                    <div class="mb-3">
-                        <label class="form-label @(CultureInfo.CurrentCulture.TextInfo.IsRightToLeft ? "text-right" : "")">
-                            @Localizer["DescriptionArabic", "Car"]
-                        </label>
-                        <textarea class="form-control @(CultureInfo.CurrentCulture.TextInfo.IsRightToLeft ? "text-right" : "")"
-                                  asp-for="DescrptionAr"
-                                  rows="3"
-                                  placeholder="@Localizer["CarDescriptionArPlaceholder", "Car"]"></textarea>
-                        <span class="text-danger" asp-validation-for="DescrptionAr"></span>
-                    </div>
+            <div class="tab-content" id="carFormTabsContent">
+                <!-- General Tab -->
+                <div class="tab-pane fade show active" id="general" role="tabpanel" aria-labelledby="general-tab">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label @(CultureInfo.CurrentCulture.TextInfo.IsRightToLeft ? "text-right" : "")">
+                                    @Localizer["NameArabic", "Car"] *
+                                </label>
+                                <input type="text" class="form-control @(CultureInfo.CurrentCulture.TextInfo.IsRightToLeft ? "text-right" : "")" asp-for="NameAr" required />
+                                <span class="text-danger" asp-validation-for="NameAr"></span>
+                            </div>
 
-                    <div class="mb-3">
-                        <label class="form-label @(CultureInfo.CurrentCulture.TextInfo.IsRightToLeft ? "text-right" : "")">
-                            @Localizer["DescriptionEnglish", "Car"]
-                        </label>
-                        <textarea class="form-control"
-                                  asp-for="DescrptionEn"
-                                  rows="3"
-                                  placeholder="@Localizer["CarDescriptionEnPlaceholder", "Car"]"></textarea>
-                        <span class="text-danger" asp-validation-for="DescrptionEn"></span>
-                    </div>
+                            <div class="mb-3">
+                                <label class="form-label">@Localizer["NameEnglish", "Car"] *</label>
+                                <input type="text" class="form-control" asp-for="NameEn" required />
+                                <span class="text-danger" asp-validation-for="NameEn"></span>
+                            </div>
 
-                    <div class="mb-3">
-                        <label class="form-label @(CultureInfo.CurrentCulture.TextInfo.IsRightToLeft ? "text-right" : "")">
-                            @Localizer["CarImage", "Car"] *
-                        </label>
-                        <input type="file"
-                               class="form-control"
-                               asp-for="Image"
-                               accept="image/*" />
-                        <span class="text-danger" asp-validation-for="Image"></span>
-                        <div id="imagePreviewContainer"></div>
-                    </div>
+                            <div class="mb-3">
+                                <label class="form-label">@Localizer["DescriptionArabic", "Car"]</label>
+                                <textarea class="form-control" asp-for="DescrptionAr"></textarea>
+                                <span class="text-danger" asp-validation-for="DescrptionAr"></span>
+                            </div>
 
-                    <div class="mb-3">
-                        <label class="form-label @(CultureInfo.CurrentCulture.TextInfo.IsRightToLeft ? "text-right" : "")">
-                            @Localizer["ImageWithoutBackground", "Car"] *
-                        </label>
-                        <input type="file"
-                               class="form-control"
-                               asp-for="ImageWithoutBackground"
-                               accept="image/*" />
-                        <span class="text-danger" asp-validation-for="ImageWithoutBackground"></span>
-                        <div id="bgImagePreviewContainer"></div>
-                    </div>
+                            <div class="mb-3">
+                                <label class="form-label">@Localizer["DescriptionEnglish", "Car"]</label>
+                                <textarea class="form-control" asp-for="DescrptionEn"></textarea>
+                                <span class="text-danger" asp-validation-for="DescrptionEn"></span>
+                            </div>
 
-                    <div class="mb-3">
-                        <label class="form-label @(CultureInfo.CurrentCulture.TextInfo.IsRightToLeft ? "text-right" : "")">
-                            @Localizer["OutsideCarImages", "Car"] *
-                        </label>
-                        <input type="file"
-                               class="form-control"
-                               asp-for="Images"
-                               multiple
-                               accept="image/*" />
-                        <span class="text-danger" asp-validation-for="Images"></span>
-                        <div id="outsideImagePreviewContainer"></div>
-                    </div>
+                            <div class="mb-3">
+                                <label class="form-label">@Localizer["SellingPrice", "Car"] *</label>
+                                <input type="number" class="form-control" asp-for="SellingPrice" required />
+                                <span class="text-danger" asp-validation-for="SellingPrice"></span>
+                            </div>
 
-                    <div class="mb-3">
-                        <label class="form-label @(CultureInfo.CurrentCulture.TextInfo.IsRightToLeft ? "text-right" : "")">
-                            @Localizer["InsideCarImages", "Car"] *
-                        </label>
-                        <input type="file"
-                               class="form-control"
-                               asp-for="InsideCarImages"
-                               multiple
-                               accept="image/*" />
-                        <span class="text-danger" asp-validation-for="InsideCarImages"></span>
-                        <div id="insideImagePreviewContainer"></div>
-                    </div>
-                </div>
+                          @*   <div class="mb-3">
+                                <label class="form-label">@Localizer["Color", "Car"] *</label>
+                                <select class="form-control" asp-for="ColorId" asp-items="ViewBag.Colors" multiple></select>
+                                <span class="text-danger" asp-validation-for="ColorId"></span>
+                            </div> *@
 
-                <!-- Right Column -->
-                <div class="col-md-6">
-                    <div class="mb-3">
-                        <label class="form-label @(CultureInfo.CurrentCulture.TextInfo.IsRightToLeft ? "text-right" : "")">
-                            @Localizer["SellingPrice", "Car"] *
-                        </label>
-                        <input type="number"
-                               class="form-control"
-                               asp-for="SellingPrice"
-                               placeholder="@Localizer["SellingPricePlaceholder", "Car"]"
-                               required />
-                        <span class="text-danger" asp-validation-for="SellingPrice"></span>
-                    </div>
+                            <div class="mb-3">
+                                <label class="form-label">@Localizer["Specifications", "Car"] *</label>
+                                <select class="form-control" asp-for="SpecificationsId" asp-items="ViewBag.Specifications" multiple></select>
+                                <span class="text-danger" asp-validation-for="SpecificationsId"></span>
+                            </div>
 
-                    <div class="mb-3">
-                        <label class="form-label @(CultureInfo.CurrentCulture.TextInfo.IsRightToLeft ? "text-right" : "")">
-                            @Localizer["Specifications", "Car"] *
-                        </label>
-                        <select class="form-control"
-                                asp-for="SpecificationsId"
-                                asp-items="ViewBag.Specifications"
-                                multiple></select>
-                        <span class="text-danger" asp-validation-for="SpecificationsId"></span>
-                    </div>
+                            <div class="form-check mb-3">
+                                <input type="checkbox" class="form-check-input" asp-for="IsActive" />
+                                <label class="form-check-label">@Localizer["IsActive", "Car"]</label>
+                            </div>
+                        </div>
 
-                    <div class="mb-3">
-                        <label class="form-label @(CultureInfo.CurrentCulture.TextInfo.IsRightToLeft ? "text-right" : "")">
-                            @Localizer["Color", "Car"] *
-                        </label>
-                        <select class="form-control"
-                                asp-for="ColorId"
-                                asp-items="ViewBag.Colors"
-                                multiple></select>
-                        <span class="text-danger" asp-validation-for="ColorId"></span>
-                    </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label">@Localizer["Brand", "Car"] *</label>
+                                <select class="form-control" asp-for="BrandId" asp-items="ViewBag.Brands" required></select>
+                                <span class="text-danger" asp-validation-for="BrandId"></span>
+                            </div>
 
-                    <div class="mb-3">
-                        <label class="form-label @(CultureInfo.CurrentCulture.TextInfo.IsRightToLeft ? "text-right" : "")">
-                            @Localizer["Brand", "Car"] *
-                        </label>
-                        <select class="form-control"
-                                asp-for="BrandId"
-                                asp-items="ViewBag.Brands"
-                                required>
-                            <option value="">@Localizer["SelectBrand", "Car"]</option>
-                        </select>
-                        <span class="text-danger" asp-validation-for="BrandId"></span>
-                    </div>
+                            <div class="mb-3">
+                                <label class="form-label">@Localizer["TransmissionType", "Car"] *</label>
+                                <select class="form-control" asp-for="TransmissionTypeId" asp-items="ViewBag.TransmissionTypes" required></select>
+                                <span class="text-danger" asp-validation-for="TransmissionTypeId"></span>
+                            </div>
 
-                </div>
-            </div>
+                            <div class="mb-3">
+                                <label class="form-label">@Localizer["FuelType", "Car"] *</label>
+                                <select class="form-control" asp-for="FuelTypeId" asp-items="ViewBag.FuelTypes" required></select>
+                                <span class="text-danger" asp-validation-for="FuelTypeId"></span>
+                            </div>
 
-            <div class="row">
-                <!-- Additional Details -->
-                <div class="col-md-6">
-                    <div class="mb-3">
-                        <label class="form-label @(CultureInfo.CurrentCulture.TextInfo.IsRightToLeft ? "text-right" : "")">
-                            @Localizer["TransmissionType", "Car"] *
-                        </label>
-                        <select class="form-control"
-                                asp-for="TransmissionTypeId"
-                                asp-items="ViewBag.TransmissionTypes"
-                                required>
-                            <option value="">@Localizer["SelectTransmissionType", "Car"]</option>
-                        </select>
-                        <span class="text-danger" asp-validation-for="TransmissionTypeId"></span>
-                    </div>
+                            <div class="mb-3">
+                                <label class="form-label">@Localizer["EngineSize", "Car"] *</label>
+                                <select class="form-control" asp-for="EngineSizeId" asp-items="ViewBag.EngineSizes" required></select>
+                                <span class="text-danger" asp-validation-for="EngineSizeId"></span>
+                            </div>
 
-                    <div class="mb-3">
-                        <label class="form-label @(CultureInfo.CurrentCulture.TextInfo.IsRightToLeft ? "text-right" : "")">
-                            @Localizer["FuelType", "Car"] *
-                        </label>
-                        <select class="form-control"
-                                asp-for="FuelTypeId"
-                                asp-items="ViewBag.FuelTypes"
-                                required>
-                            <option value="">@Localizer["SelectFuelType", "Car"]</option>
-                        </select>
-                        <span class="text-danger" asp-validation-for="FuelTypeId"></span>
-                    </div>
+                            <div class="mb-3">
+                                <label class="form-label">@Localizer["EnginePosition", "Car"] *</label>
+                                <select class="form-control" asp-for="EnginePositionId" asp-items="ViewBag.EnginePositions" required></select>
+                                <span class="text-danger" asp-validation-for="EnginePositionId"></span>
+                            </div>
 
-                    <div class="mb-3">
-                        <label class="form-label @(CultureInfo.CurrentCulture.TextInfo.IsRightToLeft ? "text-right" : "")">
-                            @Localizer["EngineSize", "Car"] *
-                        </label>
-                        <select class="form-control"
-                                asp-for="EngineSizeId"
-                                asp-items="ViewBag.EngineSizes"
-                                required>
-                            <option value="">@Localizer["SelectEngineSize", "Car"]</option>
-                        </select>
-                        <span class="text-danger" asp-validation-for="EngineSizeId"></span>
-                    </div>
+                            <div class="mb-3">
+                                <label class="form-label">@Localizer["ModelYear", "Car"] *</label>
+                                <select class="form-control" asp-for="ModelYearId" asp-items="ViewBag.ModelYears" required></select>
+                                <span class="text-danger" asp-validation-for="ModelYearId"></span>
+                            </div>
 
-                    <div class="mb-3">
-                        <label class="form-label @(CultureInfo.CurrentCulture.TextInfo.IsRightToLeft ? "text-right" : "")">
-                            @Localizer["ModelYear", "Car"] *
-                        </label>
-                        <select class="form-control"
-                                asp-for="ModelYearId"
-                                asp-items="ViewBag.ModelYears"
-                                required>
-                            <option value="">@Localizer["SelectModelYear", "Car"]</option>
-                        </select>
-                        <span class="text-danger" asp-validation-for="ModelYearId"></span>
-                    </div>
+                            <div class="mb-3">
+                                <label class="form-label">@Localizer["Origin", "Car"] *</label>
+                                <select class="form-control" asp-for="OriginId" asp-items="ViewBag.Origins" required></select>
+                                <span class="text-danger" asp-validation-for="OriginId"></span>
+                            </div>
 
-                    <div class="mb-3">
-                        <div class="form-check">
-                            <input type="checkbox"
-                                   class="form-check-input"
-                                   asp-for="IsActive" />
-                            <label class="form-check-label @(CultureInfo.CurrentCulture.TextInfo.IsRightToLeft ? "text-right" : "")">
-                                @Localizer["IsActive", "Car"]
-                            </label>
+                            <div class="mb-3">
+                                <label class="form-label">@Localizer["Subcategory", "Car"] *</label>
+                                <select class="form-control" asp-for="SubCategoryId" asp-items="ViewBag.SubCategories" required></select>
+                                <span class="text-danger" asp-validation-for="SubCategoryId"></span>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">@Localizer["Option", "Car"] *</label>
+                                <select class="form-control" asp-for="OptionId" asp-items="ViewBag.Options" required></select>
+                                <span class="text-danger" asp-validation-for="OptionId"></span>
+                            </div>
+
+                            <div class="form-check mb-3">
+                                <input type="checkbox" class="form-check-input" asp-for="IsSpecial" />
+                                <label class="form-check-label">@Localizer["IsSpecial", "Car"]</label>
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                <div class="col-md-6">
-                    <div class="mb-3">
-                        <label class="form-label @(CultureInfo.CurrentCulture.TextInfo.IsRightToLeft ? "text-right" : "")">
-                            @Localizer["EnginePosition", "Car"] *
-                        </label>
-                        <select class="form-control"
-                                asp-for="EnginePositionId"
-                                asp-items="ViewBag.EnginePositions"
-                                required>
-                            <option value="">@Localizer["SelectEnginePosition", "Car"]</option>
-                        </select>
-                        <span class="text-danger" asp-validation-for="EnginePositionId"></span>
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="form-label @(CultureInfo.CurrentCulture.TextInfo.IsRightToLeft ? "text-right" : "")">
-                            @Localizer["Origin", "Car"] *
-                        </label>
-                        <select class="form-control"
-                                asp-for="OriginId"
-                                asp-items="ViewBag.Origins"
-                                required>
-                            <option value="">@Localizer["SelectOrigin", "Car"]</option>
-                        </select>
-                        <span class="text-danger" asp-validation-for="OriginId"></span>
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="form-label @(CultureInfo.CurrentCulture.TextInfo.IsRightToLeft ? "text-right" : "")">
-                            @Localizer["Subcategory", "Car"] *
-                        </label>
-                        <select class="form-control"
-                                asp-for="SubCategoryId"
-                                asp-items="ViewBag.SubCategories"
-                                required>
-                            <option value="">@Localizer["SelectSubcategory", "Car"]</option>
-                        </select>
-                        <span class="text-danger" asp-validation-for="SubCategoryId"></span>
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="form-label @(CultureInfo.CurrentCulture.TextInfo.IsRightToLeft ? "text-right" : "")">
-                            @Localizer["Option", "Car"] *
-                        </label>
-                        <select class="form-control"
-                                asp-for="OptionId"
-                                asp-items="ViewBag.Options"
-                                required>
-                            <option value="">@Localizer["SelectOption", "Car"]</option>
-                        </select>
-                        <span class="text-danger" asp-validation-for="OptionId"></span>
-                    </div>
-
-                    <div class="mb-3">
-                        <div class="form-check">
-                            <input type="checkbox"
-                                   class="form-check-input"
-                                   asp-for="IsSpecial" />
-                            <label class="form-check-label @(CultureInfo.CurrentCulture.TextInfo.IsRightToLeft ? "text-right" : "")">
-                                @Localizer["IsSpecial", "Car"]
+                <!-- Images Tab -->
+                <div class="tab-pane fade" id="images" role="tabpanel" aria-labelledby="images-tab">
+                    <div class="row">
+                        <div class="col-12 mb-4">
+                            <label class="form-label">@Localizer["Color", "Car"] *</label>
+                            <div class="color-picker d-flex flex-wrap gap-2" id="colorPicker">
+                                @foreach (var item in ViewBag.Colors as List<SelectListItem>)
+                                {
+                                    var isChecked = Model.ColorId?.Contains(item.Value) ?? false;
+                                    <label class="color-option @(isChecked ? "selected" : "")"
+                                           style="background-color:@item.Text"
+                                           data-color-id="@item.Value"
+                                           data-name="@item.Text">
+                                        <input type="checkbox" name="ColorId" value="@item.Value" @(isChecked ? "checked" : "") hidden />
+                                    </label>
+                                }
+                            </div>
+                            <span class="text-danger" asp-validation-for="ColorId"></span>
+                        </div>
+                        <div class="col-12 mb-4">
+                            <label class="form-label">@Localizer["ColorVariationImages", "Car"]</label>
+                            <div id="colorVariationImages" class="row g-3">
+                              @*   @foreach (var item in ViewBag.Colors as List<SelectListItem>)
+                                {
+                                    <div class="col-md-4">
+                                        <div class="mb-2">
+                                            <label class="form-label d-block">@item.Text</label>
+                                            <input class="form-control" type="file" name="ColorImages[@item.Value]" accept="image/*" />
+                                        </div>
+                                    </div>
+                                } *@
+                                @foreach (var (item, index) in (ViewBag.Colors as List<SelectListItem>).Select((value, i) => (value, i)))
+                                {
+                                    <div class="col-md-4">
+                                        <div class="mb-2">
+                                            <label class="form-label d-block">@item.Text</label>
+                                            <input type="hidden" name="ColorImages[@index].ColorId" value="@item.Value" />
+                                            <input class="form-control" type="file" name="ColorImages[@index].Images" accept="image/*" />
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                       
+                        <div class="col-md-6 mb-4">
+                            <label class="form-label">@Localizer["CarImage", "Car"] *</label>
+                            <label class="custom-upload-box w-100">
+                                <i class="bi bi-cloud-upload"></i><br />
+                                Click or drag file to upload
+                                <input type="file" asp-for="Image" accept="image/*" />
                             </label>
+                            <span class="text-danger" asp-validation-for="Image"></span>
+                        </div>
+
+                        <div class="col-md-6 mb-4">
+                            <label class="form-label">@Localizer["ImageWithoutBackground", "Car"] *</label>
+                            <label class="custom-upload-box w-100">
+                                <i class="bi bi-cloud-upload"></i><br />
+                                Click or drag file to upload
+                                <input type="file" asp-for="ImageWithoutBackground" accept="image/*" />
+                            </label>
+                            <span class="text-danger" asp-validation-for="ImageWithoutBackground"></span>
+                        </div>
+
+                        <div class="col-md-6 mb-4">
+                            <label class="form-label">@Localizer["OutsideCarImages", "Car"] *</label>
+                            <label class="custom-upload-box w-100">
+                                <i class="bi bi-cloud-upload"></i><br />
+                                Click or drag file to upload
+                                <input type="file" asp-for="Images" accept="image/*" />
+                            </label>
+                            <span class="text-danger" asp-validation-for="Images"></span>
+                        </div>
+
+                        <div class="col-md-6 mb-4">
+                            <label class="form-label">@Localizer["InsideCarImages", "Car"] *</label>
+                            <label class="custom-upload-box w-100">
+                                <i class="bi bi-cloud-upload"></i><br />
+                                Click or drag file to upload
+                                <input type="file" asp-for="InsideCarImages" accept="image/*" />
+                            </label>
+                            <span class="text-danger" asp-validation-for="InsideCarImages"></span>
                         </div>
                     </div>
                 </div>
+
             </div>
 
             <!-- Submit Buttons -->
-            <div class="row">
-                <div class="col-12">
-                    <div class="d-flex @(CultureInfo.CurrentCulture.TextInfo.IsRightToLeft ? "justify-content-start" : "justify-content-end") gap-2 mt-3">
-                        <a href="@Url.Action("Index")" class="btn btn-secondary">
-                            <i class="bx bx-arrow-back"></i>
-                            <span class="text-truncate">@Localizer["Cancel", "Common"]</span>
-                        </a>
-                        <button type="submit" class="btn btn-primary">
-                            <i class="bx bx-check"></i>
-                            <span class="text-truncate">@Localizer["CreateCar", "Car"]</span>
-                        </button>
-                    </div>
-                </div>
+            <div class="d-flex justify-content-end gap-2 mt-3">
+                <a href="@Url.Action("Index")" class="btn btn-secondary">
+                    <i class="bx bx-arrow-back"></i> @Localizer["Cancel", "Common"]
+                </a>
+                <button type="submit" class="btn btn-primary">
+                    <i class="bx bx-check"></i> @Localizer["CreateCar", "Car"]
+                </button>
             </div>
         </form>
     </div>
 </div>
 
 @section Scripts {
+    
     <script>
         function handleImageValidationAndPreview(input, previewContainerId, isMultiple = false) {
             let files = input.files;
             let previewContainer = document.getElementById(previewContainerId);
-            previewContainer.innerHTML = ""; // Clear previous previews
 
             if (files.length > 0) {
                 Array.from(files).forEach(file => {
@@ -332,20 +321,15 @@
                         let width = img.width;
                         let height = img.height;
                         let aspectRatio = width / height;
-
                         if (Math.abs(aspectRatio - (16 / 9)) > 0.01) {
                             alert("@Localizer["ImageAspectRatioError", "Car"]");
-                            input.value = ""; // Clear the file input
+                            input.value = "";
                         } else {
                             let reader = new FileReader();
                             reader.onload = function () {
                                 let imgElement = document.createElement("img");
                                 imgElement.src = reader.result;
-                                imgElement.style = "width: 100px; height: 100px; margin: 5px; display: inline-block; border: 1px solid #ddd; padding: 3px;";
-
-                                if (!isMultiple) {
-                                    previewContainer.innerHTML = ""; // Replace single image
-                                }
+                                imgElement.style = "width: 100px; height: 100px; margin: 5px; border: 1px solid #ddd; padding: 3px;";
                                 previewContainer.appendChild(imgElement);
                             };
                             reader.readAsDataURL(file);
@@ -356,20 +340,33 @@
             }
         }
 
-        document.getElementById("Image").addEventListener("change", function () {
+        document.getElementById("Image")?.addEventListener("change", function () {
             handleImageValidationAndPreview(this, "imagePreviewContainer");
         });
 
-        document.getElementById("ImageWithoutBackground").addEventListener("change", function () {
+        document.getElementById("ImageWithoutBackground")?.addEventListener("change", function () {
             handleImageValidationAndPreview(this, "bgImagePreviewContainer");
         });
 
-        document.getElementById("Images").addEventListener("change", function () {
+        document.getElementById("Images")?.addEventListener("change", function () {
             handleImageValidationAndPreview(this, "outsideImagePreviewContainer", true);
         });
 
-        document.getElementById("InsideCarImages").addEventListener("change", function () {
+        document.getElementById("InsideCarImages")?.addEventListener("change", function () {
             handleImageValidationAndPreview(this, "insideImagePreviewContainer", true);
         });
+
+
+
+              document.querySelectorAll("#colorPicker .color-option").forEach(option => {
+            const checkbox = option.querySelector("input");
+            if (checkbox.checked) option.classList.add("selected");
+
+            option.addEventListener("click", () => {
+                checkbox.checked = !checkbox.checked;
+                option.classList.toggle("selected", checkbox.checked);
+            });
+        });
+
     </script>
 }

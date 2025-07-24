@@ -196,7 +196,6 @@
         function handleImageValidationAndPreview(input, previewContainerId, isMultiple = false) {
             let files = input.files;
             let previewContainer = document.getElementById(previewContainerId);
-            previewContainer.innerHTML = ""; // Clear previous previews
 
             if (files.length > 0) {
                 Array.from(files).forEach(file => {
@@ -217,7 +216,6 @@
                                 imgElement.style = "width: 100px; height: 100px; margin: 5px; display: inline-block; border: 1px solid #ddd; padding: 3px;";
 
                                 if (!isMultiple) {
-                                    previewContainer.innerHTML = ""; // Replace single image
                                 }
                                 previewContainer.appendChild(imgElement);
                             };

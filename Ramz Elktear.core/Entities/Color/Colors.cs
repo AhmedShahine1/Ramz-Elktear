@@ -1,4 +1,6 @@
-﻿using Ramz_Elktear.core.Entities.Files;
+﻿using Ramz_Elktear.core.Entities.Cars;
+using Ramz_Elktear.core.Entities.Files;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Ramz_Elktear.core.Entities.Color
 {
@@ -20,6 +22,11 @@ namespace Ramz_Elktear.core.Entities.Color
         public bool IsActive { get; set; }
 
         public virtual ICollection<CarColor> CarColors { get; set; }
+
+
+        [InverseProperty("Colors")]
+        public virtual ICollection<ImageCar> CarImages { get; set; }
+
     }
 
 }

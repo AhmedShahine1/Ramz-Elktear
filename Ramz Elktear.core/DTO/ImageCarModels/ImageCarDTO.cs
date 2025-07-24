@@ -3,6 +3,7 @@
     public class ImageCarDTO
     {
         public string CarId { get; set; }
+        public string ColorId { get; set; }
         public string ImageId { get; set; }
         public string ImageUrl { get; set; }  // URL of the image
     }
