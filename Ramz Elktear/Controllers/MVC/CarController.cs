@@ -1,14 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Http;
 using Ramz_Elktear.BusinessLayer.Interfaces;
 using Ramz_Elktear.core.DTO.CarModels;
-using Ramz_Elktear.core.DTO.BrandModels;
-using Ramz_Elktear.core.DTO.ColorModels;
-using Ramz_Elktear.core.DTO.FuelTypeModels;
-using Ramz_Elktear.core.DTO.OfferModels;
-using Ramz_Elktear.core.DTO.TransmissionTypeModels;
-using System.Threading.Tasks;
-using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Authorization;
 using System.Drawing;
@@ -162,10 +154,15 @@ namespace Ramz_Elktear.Web.Controllers
             if (file == null || file.Length == 0)
                 return false;
 
-            using (var image = Image.FromStream(file.OpenReadStream()))
+            try
             {
+                using var image = Image.FromStream(file.OpenReadStream());
                 double aspectRatio = (double)image.Width / image.Height;
                 return Math.Abs(aspectRatio - (16.0 / 9.0)) < 0.01;
+            }
+            catch
+            {
+                return false; 
             }
         }
 

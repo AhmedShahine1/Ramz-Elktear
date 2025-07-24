@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using DevExpress.XtraRichEdit.Model;
+//using DevExpress.XtraRichEdit.Model;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Ramz_Elktear.BusinessLayer.Interfaces;
