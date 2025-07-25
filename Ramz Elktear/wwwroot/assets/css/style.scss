@@ -277,11 +277,6 @@
 .navbar-nav {
   display: flex;
   align-items: center;
-  gap: 1rem;
-}
-
-.navbar-nav.ms-auto {
-  margin-left: auto !important;
 }
 
 .nav-item {
@@ -411,11 +406,12 @@
   transform: translateX(-4px);
 }
 
-[dir="rtl"] .navbar-nav.ms-auto {
-  margin-left: 0 !important;
-  margin-right: auto !important;
+ .navbar-nav.ms-auto {
+  margin-right: 0px !important;
 }
-
+ .navbar-nav.me-auto {
+  margin-left: 0px !important;
+}
 /* ===== MOBILE RESPONSIVE ===== */
 @media (max-width: 1199.98px) {
   .layout-menu {
