@@ -1,7 +1,4 @@
-﻿
-
-
-@model AddCar
+﻿@model AddCar
 @{
     ViewData["Title"] = @Localizer["CreateCar", "Car"];
 }
@@ -36,7 +33,6 @@
             color: #333;
         }
 
-
     .custom-upload-box {
         border: 2px dashed #ccc;
         border-radius: 8px;
@@ -62,7 +58,37 @@
         .custom-upload-box input[type="file"] {
             display: none;
         }
+
+    .image-preview-container {
+        margin-top: 10px;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        background-color: #f8f9fa;
+        min-height: 50px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    .preview-image {
+        width: 100px;
+        height: 100px;
+        object-fit: cover;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        padding: 3px;
+    }
+
+    .no-preview {
+        color: #666;
+        font-style: italic;
+        text-align: center;
+        width: 100%;
+        padding: 20px;
+    }
 </style>
+
 <div class="card" dir="@(CultureInfo.CurrentCulture.TextInfo.IsRightToLeft ? "rtl" : "ltr")">
     <div class="card-header">
         <h3 class="mb-0">
@@ -86,7 +112,6 @@
                     </button>
                 </li>
             </ul>
-
 
             <div class="tab-content" id="carFormTabsContent">
                 <!-- General Tab -->
@@ -124,12 +149,6 @@
                                 <input type="number" class="form-control" asp-for="SellingPrice" required />
                                 <span class="text-danger" asp-validation-for="SellingPrice"></span>
                             </div>
-
-                          @*   <div class="mb-3">
-                                <label class="form-label">@Localizer["Color", "Car"] *</label>
-                                <select class="form-control" asp-for="ColorId" asp-items="ViewBag.Colors" multiple></select>
-                                <span class="text-danger" asp-validation-for="ColorId"></span>
-                            </div> *@
 
                             <div class="mb-3">
                                 <label class="form-label">@Localizer["Specifications", "Car"] *</label>
@@ -225,18 +244,10 @@
                             </div>
                             <span class="text-danger" asp-validation-for="ColorId"></span>
                         </div>
+
                         <div class="col-12 mb-4">
                             <label class="form-label">@Localizer["ColorVariationImages", "Car"]</label>
                             <div id="colorVariationImages" class="row g-3">
-                              @*   @foreach (var item in ViewBag.Colors as List<SelectListItem>)
-                                {
-                                    <div class="col-md-4">
-                                        <div class="mb-2">
-                                            <label class="form-label d-block">@item.Text</label>
-                                            <input class="form-control" type="file" name="ColorImages[@item.Value]" accept="image/*" />
-                                        </div>
-                                    </div>
-                                } *@
                                 @foreach (var (item, index) in (ViewBag.Colors as List<SelectListItem>).Select((value, i) => (value, i)))
                                 {
                                     <div class="col-md-4">
@@ -249,7 +260,7 @@
                                 }
                             </div>
                         </div>
-                       
+
                         <div class="col-md-6 mb-4">
                             <label class="form-label">@Localizer["CarImage", "Car"] *</label>
                             <label class="custom-upload-box w-100">
@@ -257,6 +268,9 @@
                                 Click or drag file to upload
                                 <input type="file" asp-for="Image" accept="image/*" />
                             </label>
+                            <div id="imagePreviewContainer" class="image-preview-container">
+                                <div class="no-preview">No image selected</div>
+                            </div>
                             <span class="text-danger" asp-validation-for="Image"></span>
                         </div>
 
@@ -267,6 +281,9 @@
                                 Click or drag file to upload
                                 <input type="file" asp-for="ImageWithoutBackground" accept="image/*" />
                             </label>
+                            <div id="bgImagePreviewContainer" class="image-preview-container">
+                                <div class="no-preview">No image selected</div>
+                            </div>
                             <span class="text-danger" asp-validation-for="ImageWithoutBackground"></span>
                         </div>
 
@@ -275,8 +292,11 @@
                             <label class="custom-upload-box w-100">
                                 <i class="bi bi-cloud-upload"></i><br />
                                 Click or drag file to upload
-                                <input type="file" asp-for="Images" accept="image/*" />
+                                <input type="file" asp-for="Images" accept="image/*" multiple />
                             </label>
+                            <div id="outsideImagePreviewContainer" class="image-preview-container">
+                                <div class="no-preview">No images selected</div>
+                            </div>
                             <span class="text-danger" asp-validation-for="Images"></span>
                         </div>
 
@@ -285,13 +305,15 @@
                             <label class="custom-upload-box w-100">
                                 <i class="bi bi-cloud-upload"></i><br />
                                 Click or drag file to upload
-                                <input type="file" asp-for="InsideCarImages" accept="image/*" />
+                                <input type="file" asp-for="InsideCarImages" accept="image/*" multiple />
                             </label>
+                            <div id="insideImagePreviewContainer" class="image-preview-container">
+                                <div class="no-preview">No images selected</div>
+                            </div>
                             <span class="text-danger" asp-validation-for="InsideCarImages"></span>
                         </div>
                     </div>
                 </div>
-
             </div>
 
             <!-- Submit Buttons -->
@@ -308,38 +330,80 @@
 </div>
 
 @section Scripts {
-    
     <script>
+        function clearPreviewContainer(previewContainer) {
+            previewContainer.innerHTML = '';
+        }
+
+        function addNoPreviewMessage(previewContainer, message = "No images selected") {
+            const noPreviewDiv = document.createElement("div");
+            noPreviewDiv.className = "no-preview";
+            noPreviewDiv.textContent = message;
+            previewContainer.appendChild(noPreviewDiv);
+        }
+
         function handleImageValidationAndPreview(input, previewContainerId, isMultiple = false) {
             let files = input.files;
             let previewContainer = document.getElementById(previewContainerId);
 
-            if (files.length > 0) {
-                Array.from(files).forEach(file => {
-                    let img = new Image();
-                    img.onload = function () {
-                        let width = img.width;
-                        let height = img.height;
-                        let aspectRatio = width / height;
-                        if (Math.abs(aspectRatio - (16 / 9)) > 0.01) {
-                            alert("@Localizer["ImageAspectRatioError", "Car"]");
-                            input.value = "";
-                        } else {
-                            let reader = new FileReader();
-                            reader.onload = function () {
-                                let imgElement = document.createElement("img");
-                                imgElement.src = reader.result;
-                                imgElement.style = "width: 100px; height: 100px; margin: 5px; border: 1px solid #ddd; padding: 3px;";
-                                previewContainer.appendChild(imgElement);
-                            };
-                            reader.readAsDataURL(file);
-                        }
-                    };
-                    img.src = URL.createObjectURL(file);
-                });
+            // Clear previous previews
+            clearPreviewContainer(previewContainer);
+
+            if (files.length === 0) {
+                addNoPreviewMessage(previewContainer);
+                return;
             }
+
+            let validFiles = [];
+
+            Array.from(files).forEach((file, index) => {
+                let img = new Image();
+                img.onload = function () {
+                    let width = img.width;
+                    let height = img.height;
+                    let aspectRatio = width / height;
+
+                    if (Math.abs(aspectRatio - (16 / 9)) > 0.01) {
+                        alert(`@Localizer["ImageAspectRatioError", "Car"] (File: ${file.name})`);
+                        // Remove this file from input
+                        let fileList = Array.from(input.files);
+                        fileList.splice(fileList.indexOf(file), 1);
+
+                        // Create new FileList (this is tricky in vanilla JS)
+                        let dt = new DataTransfer();
+                        fileList.forEach(f => dt.items.add(f));
+                        input.files = dt.files;
+
+                        // Refresh preview
+                        handleImageValidationAndPreview(input, previewContainerId, isMultiple);
+                        return;
+                    } else {
+                        validFiles.push(file);
+                        let reader = new FileReader();
+                        reader.onload = function () {
+                            let imgElement = document.createElement("img");
+                            imgElement.src = reader.result;
+                            imgElement.className = "preview-image";
+                            imgElement.title = file.name;
+                            previewContainer.appendChild(imgElement);
+                        };
+                        reader.readAsDataURL(file);
+                    }
+
+                    // Clean up object URL
+                    URL.revokeObjectURL(img.src);
+                };
+
+                img.onerror = function() {
+                    alert(`Invalid image file: ${file.name}`);
+                    URL.revokeObjectURL(img.src);
+                };
+
+                img.src = URL.createObjectURL(file);
+            });
         }
 
+        // Add event listeners
         document.getElementById("Image")?.addEventListener("change", function () {
             handleImageValidationAndPreview(this, "imagePreviewContainer");
         });
@@ -356,9 +420,8 @@
             handleImageValidationAndPreview(this, "insideImagePreviewContainer", true);
         });
 
-
-
-              document.querySelectorAll("#colorPicker .color-option").forEach(option => {
+        // Color picker functionality
+        document.querySelectorAll("#colorPicker .color-option").forEach(option => {
             const checkbox = option.querySelector("input");
             if (checkbox.checked) option.classList.add("selected");
 
@@ -367,6 +430,5 @@
                 option.classList.toggle("selected", checkbox.checked);
             });
         });
-
     </script>
 }

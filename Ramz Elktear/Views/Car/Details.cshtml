@@ -39,6 +39,53 @@
 
 @section Styles {
     <link href="~/assets/css/car-details.css" rel="stylesheet" />
+    <style>
+        .color-swatch {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: inline-block;
+            margin: 0 5px;
+            border: 2px solid #dee2e6;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+            .color-swatch:hover {
+                transform: scale(1.1);
+                border-color: #007bff;
+            }
+
+            .color-swatch.active {
+                border-color: #007bff;
+                border-width: 3px;
+                transform: scale(1.1);
+            }
+
+                .color-swatch.active::after {
+                    content: '✓';
+                    position: absolute;
+                    top: 50%;
+                    left: 50%;
+                    transform: translate(-50%, -50%);
+                    color: white;
+                    font-weight: bold;
+                    text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
+                }
+
+        .color-info {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .color-name {
+            font-size: 0.9rem;
+            color: #6c757d;
+        }
+    </style>
 }
 
 <div class="container-fluid car-details-container" dir="@direction">
@@ -106,7 +153,7 @@
                                         <li class="nav-item">
                                             <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#exterior-images">
                                                 <i class="bi bi-car-front @tabIconMargin"></i>
-                                                @Localizer["ExteriorImages", "Car"] (@exteriorImages.Count)
+                                                @Localizer["ExteriorImages", "Car"] (<span id="exterior-count">@exteriorImages.Count</span>)
                                             </button>
                                         </li>
                                     }
@@ -128,7 +175,7 @@
                                     @if (exteriorImages?.Any() == true)
                                     {
                                         <div class="tab-pane fade show active" id="exterior-images">
-                                            <div class="row g-2">
+                                            <div class="row g-2" id="exterior-thumbnails">
                                                 @foreach (var imageUrl in exteriorImages)
                                                 {
                                                     <div class="col-6 col-md-4 col-lg-3">
@@ -229,18 +276,23 @@
                                             </div>
                                             <div class="info-content @textDirection">
                                                 <small class="info-label">@Localizer["Color", "Car"]</small>
-                                                <div class="color-swatches @(isRightToLeft ? "justify-content-end" : "justify-content-start")">
-                                                    @foreach (var color in Model.Color.Take(4))
-                                                    {
-                                                        <span class="color-swatch"
-                                                              style="background-color: @color.Value"
-                                                              title="@color.Value"
-                                                              data-bs-toggle="tooltip"></span>
-                                                    }
-                                                    @if (Model.Color.Count() > 4)
-                                                    {
-                                                        <small class="text-muted">+@(Model.Color.Count() - 4)</small>
-                                                    }
+                                                <div class="color-info @(isRightToLeft ? "justify-content-end" : "justify-content-start")">
+                                                    <div class="color-swatches d-flex flex-wrap">
+                                                        @foreach (var color in Model.Color)
+                                                        {
+                                                            <span class="color-swatch @(Model.Color.First() == color ? "active" : "")"
+                                                                  style="background-color: @color.Value"
+                                                                  title="@color.Name"
+                                                                  data-color-id="@color.Id"
+                                                                  data-color-name="@color.Name"
+                                                                  data-color-image="@color.image"
+                                                                  data-bs-toggle="tooltip"
+                                                                  onclick="selectColor(this)"></span>
+                                                        }
+                                                    </div>
+                                                    <div class="color-name ms-2" id="selected-color-name">
+                                                        @Model.Color.FirstOrDefault()?.Name
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -376,4 +428,123 @@
 
 @section Scripts {
     <script src="~/assets/js/car-details.js"></script>
+
+    <script>
+        // Store original exterior images
+        const originalExteriorImages = @Html.Raw(Json.Serialize(exteriorImages ?? new List<string>()));
+
+        // Color selection functionality
+        function selectColor(colorElement) {
+            // Remove active class from all color swatches
+            document.querySelectorAll('.color-swatch').forEach(swatch => {
+                swatch.classList.remove('active');
+            });
+
+            // Add active class to clicked color
+            colorElement.classList.add('active');
+
+            // Update color name display
+            const colorName = colorElement.getAttribute('data-color-name');
+            const selectedColorNameElement = document.getElementById('selected-color-name');
+            if (selectedColorNameElement) {
+                selectedColorNameElement.textContent = colorName;
+            }
+
+            // Get color image
+            const colorImage = colorElement.getAttribute('data-color-image');
+
+            // Update main image and thumbnails based on color
+            updateImagesForColor(colorImage);
+        }
+
+        function updateImagesForColor(colorImage) {
+            const mainImage = document.getElementById('mainImage');
+            const exteriorThumbnails = document.getElementById('exterior-thumbnails');
+            const exteriorCount = document.getElementById('exterior-count');
+
+            if (colorImage && colorImage !== '' && colorImage !== 'null') {
+                // Update main image to color-specific image
+                mainImage.src = colorImage;
+
+                // Create new thumbnail container for color image
+                const colorImageHTML = `
+                    <div class="col-6 col-md-4 col-lg-3">
+                        <div class="thumbnail-container">
+                            <img src="${colorImage}"
+                                 class="thumbnail-img"
+                                 alt="Color Image"
+                                 loading="lazy"
+                                 onclick="swapImage(this)"
+                                 tabindex="0"
+                                 onkeydown="handleThumbnailKeydown(event, this)" />
+                            <i class="bi bi-palette-fill thumbnail-badge text-primary"></i>
+                        </div>
+                    </div>
+                `;
+
+                // Add color image as first thumbnail and keep original images
+                let allImages = [colorImageHTML];
+                originalExteriorImages.forEach(imageUrl => {
+                    const isMainImage = imageUrl === '@Model.ImageUrl' || imageUrl === '@Model.ImageWithoutBackgroundUrl';
+                    allImages.push(`
+                        <div class="col-6 col-md-4 col-lg-3">
+                            <div class="thumbnail-container">
+                                <img src="${imageUrl}"
+                                     class="thumbnail-img"
+                                     alt="Car Thumbnail"
+                                     loading="lazy"
+                                     onclick="swapImage(this)"
+                                     tabindex="0"
+                                     onkeydown="handleThumbnailKeydown(event, this)" />
+                                ${isMainImage ? '<i class="bi bi-star-fill thumbnail-badge"></i>' : ''}
+                            </div>
+                        </div>
+                    `);
+                });
+
+                exteriorThumbnails.innerHTML = allImages.join('');
+                exteriorCount.textContent = allImages.length;
+            } else {
+                // Reset to original images if no color-specific image
+                mainImage.src = originalExteriorImages[0] || '/images/placeholder.jpg';
+
+                // Reset thumbnails to original
+                let originalHTML = '';
+                originalExteriorImages.forEach(imageUrl => {
+                    const isMainImage = imageUrl === '@Model.ImageUrl' || imageUrl === '@Model.ImageWithoutBackgroundUrl';
+                    originalHTML += `
+                        <div class="col-6 col-md-4 col-lg-3">
+                            <div class="thumbnail-container">
+                                <img src="${imageUrl}"
+                                     class="thumbnail-img"
+                                     alt="Car Thumbnail"
+                                     loading="lazy"
+                                     onclick="swapImage(this)"
+                                     tabindex="0"
+                                     onkeydown="handleThumbnailKeydown(event, this)" />
+                                ${isMainImage ? '<i class="bi bi-star-fill thumbnail-badge"></i>' : ''}
+                            </div>
+                        </div>
+                    `;
+                });
+
+                exteriorThumbnails.innerHTML = originalHTML;
+                exteriorCount.textContent = originalExteriorImages.length;
+            }
+        }
+
+        // Initialize tooltips
+        document.addEventListener('DOMContentLoaded', function() {
+            var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+            var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+                return new bootstrap.Tooltip(tooltipTriggerEl);
+            });
+
+            // Set first color as active by default
+            const firstColorSwatch = document.querySelector('.color-swatch');
+            if (firstColorSwatch && !firstColorSwatch.classList.contains('active')) {
+                selectColor(firstColorSwatch);
+            }
+        });
+    </script>
 }
