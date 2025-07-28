@@ -34,17 +34,12 @@ jobs:
       uses: djad442/simply-web-deploy-powershell@v1.0.2
       with:
         website-name: "controlPanal"
-        server-computer-name: ${{ secrets.DEPLOY_SERVER_NAME }}
+        server-computer-name: ${{ secrets.DEPLOY_SERVER_NAME }}  # Can be IP or hostname
         server-username: "${{ secrets.DEPLOY_USERNAME }}"
         server-password: "${{ secrets.DEPLOY_PASSWORD }}"
         source-path: "./publish"
         target-path: "C:\\inetpub\\wwwroot\\controlPanal"
         target-delete: true
-        auth-type: "NTLM"
-        app-pool-name: "controlPanal"
-        protocol: "https"
-        port: "8172"
-        skip-app-data: false
 
     - name: ✅ Done
       run: echo "✅ Deployed to IIS successfully"
