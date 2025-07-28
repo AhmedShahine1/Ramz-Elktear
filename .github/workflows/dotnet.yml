@@ -1,4 +1,4 @@
-name: Build & Deploy Ramz Elktear to IIS
+name: Build & Deploy Ramz Elktear to IIS (Self-Hosted)
 
 on:
   push:
@@ -7,7 +7,7 @@ on:
 
 jobs:
   build-and-deploy:
-    runs-on: windows-latest
+    runs-on: [self-hosted, windows]
 
     steps:
     - name: 🧾 Checkout code
