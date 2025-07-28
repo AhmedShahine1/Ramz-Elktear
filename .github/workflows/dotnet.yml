@@ -1,4 +1,4 @@
-name: Build & Deploy Ramz Elktear to IIS (Self-Hosted)
+name: Build & Deploy Ramz Elktear to Remote IIS (via msdeploy)
 
 on:
   push:
@@ -24,22 +24,18 @@ jobs:
     - name: 🔨 Build
       run: dotnet build "Ramz Elktear/Ramz Elktear.csproj" --no-restore --configuration Release
 
-    - name: ✅ Run Tests (optional)
-      run: echo "No test project configured"
-
     - name: 🚀 Publish App
       run: dotnet publish "Ramz Elktear/Ramz Elktear.csproj" --configuration Release --output ./publish
 
-    - name: 🌐 Deploy to IIS
-      uses: djad442/simply-web-deploy-powershell@v1.0.2
-      with:
-        website-name: "controlPanal"
-        server-computer-name: ${{ secrets.DEPLOY_SERVER_NAME }}  # Can be IP or hostname
-        server-username: "${{ secrets.DEPLOY_USERNAME }}"
-        server-password: "${{ secrets.DEPLOY_PASSWORD }}"
-        source-path: "./publish"
-        target-path: "C:\\inetpub\\wwwroot\\controlPanal"
-        target-delete: true
+    - name: 🌐 Deploy using MSDeploy
+      shell: powershell
+      run: |
+        $msdeploy = "C:\Program Files\IIS\Microsoft Web Deploy V3\msdeploy.exe"
+        & $msdeploy `
+          -verb:sync `
+          -source:contentPath="${{ github.workspace }}\publish" `
+          -dest:contentPath="controlPanal",computerName="https://92.205.63.170:8172/msdeploy.axd",userName="${{ secrets.DEPLOY_USERNAME }}",password="${{ secrets.DEPLOY_PASSWORD }}",authType="Basic" `
+          -allowUntrusted
 
     - name: ✅ Done
       run: echo "✅ Deployed to IIS successfully"
