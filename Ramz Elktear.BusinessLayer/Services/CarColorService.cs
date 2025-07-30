@@ -52,7 +52,17 @@ namespace Ramz_Elktear.BusinessLayer.Services
             await _unitOfWork.CarColorRepository.AddAsync(carColor);
             await _unitOfWork.SaveChangesAsync();
 
-            return GetCarColorByCarIdAsync(carColor.CarId).Result.FirstOrDefault();
+            // Get the color details without the image
+            var color = await _unitOfWork.ColorsRepository.FindAsync(c => c.Id == carColorDto.ColorId);
+            if (color == null)
+            {
+                throw new Exception("Color not found");
+            }
+
+            var colorDto = _mapper.Map<ColorDTO>(color);
+            colorDto.image = null;
+
+            return colorDto;
         }
 
         public async Task<ColorDTO> UpdateCarColorAsync(string carId, AddCarColor carColorDto)
