@@ -66,5 +66,16 @@ namespace Ramz_Elktear.BusinessLayer.Services
 
             return true;
         }
+
+        public async Task<bool> DeleteAllCarOffersAsync(string carId)
+        {
+            var carOffers = await _unitOfWork.CarOfferRepository.FindAllAsync(q => q.CarId == carId);
+            if (carOffers != null && carOffers.Any())
+            {
+                _unitOfWork.CarOfferRepository.DeleteRange(carOffers);
+                await _unitOfWork.SaveChangesAsync();
+            }
+            return true;
+        }
     }
 }

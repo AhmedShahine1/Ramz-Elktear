@@ -12,5 +12,6 @@ namespace Ramz_Elktear.BusinessLayer.Interfaces
         Task<ColorDTO> AddCarColorAsync(AddCarColor carColorDto);
         Task<ColorDTO> UpdateCarColorAsync(string carId, AddCarColor carColorDto);
         Task<bool> DeleteCarColorAsync(string carId , string colorId);
+        Task<bool> DeleteAllCarColorsAsync(string carId);
     }
 }

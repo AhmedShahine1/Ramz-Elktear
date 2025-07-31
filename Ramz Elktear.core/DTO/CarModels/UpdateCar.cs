@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Http;
-
 namespace Ramz_Elktear.core.DTO.CarModels
 {
     public class UpdateCarDTO
@@ -37,5 +36,8 @@ namespace Ramz_Elktear.core.DTO.CarModels
         public string EnginePositionId { get; set; }
         public bool IsSpecial { get; set; }
         public bool IsActive { get; set; }
+
+        // Add support for color images in updates
+        public List<ColorImageModel> ColorImages { get; set; } = new();
     }
 }

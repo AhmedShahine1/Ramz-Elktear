@@ -34,7 +34,4 @@ namespace Ramz_Elktear.core.DTO.CarModels
         public List<ColorImageModel> ColorImages { get; set; } = new();
 
     }
-
-
-   
 }

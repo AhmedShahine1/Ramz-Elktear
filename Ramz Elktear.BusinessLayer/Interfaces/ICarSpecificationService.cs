@@ -11,5 +11,6 @@ namespace Ramz_Elktear.BusinessLayer.Interfaces
         Task<IEnumerable<CarSpecificationDTO>> GetCarsBySpecificationIdAsync(string specificationId);
         Task<CarSpecificationDTO> AddCarSpecificationAsync(AddCarSpecification carSpecificationDto);
         Task<bool> DeleteCarSpecificationAsync(string carId, string specificationId);
+        Task<bool> DeleteAllCarSpecificationsAsync(string carId);
     }
 }

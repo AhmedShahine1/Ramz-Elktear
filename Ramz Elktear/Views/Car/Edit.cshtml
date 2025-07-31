@@ -3,244 +3,724 @@
     ViewData["Title"] = @Localizer["UpdateCar", "Car"];
 }
 
-<h3>@Localizer["UpdateCar", "Car"]</h3>
+<style>
+    .color-picker {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
 
-<form asp-action="Edit" enctype="multipart/form-data">
-    <input type="hidden" asp-for="Id" />
-    <div class="row">
-        <!-- Left Column -->
-        <div class="col-md-6">
-            <div class="mb-3">
-                <label class="form-label text-truncate d-block">@Localizer["NameArabic", "Car"] @Localizer["RequiredField", "Common"]</label>
-                <input type="text" class="form-control" asp-for="NameAr" required />
-                <span class="text-danger" asp-validation-for="NameAr"></span>
-            </div>
+    .color-option {
+        width: 40px;
+        height: 40px;
+        border-radius: 20px;
+        cursor: pointer;
+        border: 2px solid transparent;
+        position: relative;
+    }
 
-            <div class="mb-3">
-                <label class="form-label text-truncate d-block">@Localizer["NameEnglish", "Car"] @Localizer["RequiredField", "Common"]</label>
-                <input type="text" class="form-control" asp-for="NameEn" required />
-                <span class="text-danger" asp-validation-for="NameEn"></span>
-            </div>
+        .color-option.selected {
+            border: 3px solid #000;
+        }
 
-            <div class="mb-3">
-                <label class="form-label text-truncate d-block">@Localizer["DescriptionArabic", "Car"]</label>
-                <textarea class="form-control" asp-for="DescrptionAr"></textarea>
-                <span class="text-danger" asp-validation-for="DescrptionAr"></span>
-            </div>
+        .color-option::after {
+            content: attr(data-name);
+            position: absolute;
+            bottom: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 10px;
+            color: #333;
+        }
 
-            <div class="mb-3">
-                <label class="form-label text-truncate d-block">@Localizer["DescriptionEnglish", "Car"]</label>
-                <textarea class="form-control" asp-for="DescrptionEn"></textarea>
-                <span class="text-danger" asp-validation-for="DescrptionEn"></span>
-            </div>
+    .custom-upload-box {
+        border: 2px dashed #ccc;
+        border-radius: 8px;
+        padding: 30px;
+        text-align: center;
+        color: #666;
+        cursor: pointer;
+        transition: border-color 0.3s;
+        background-color: #f9f9f9;
+    }
 
-            <div class="mb-3">
-                <label class="form-label text-truncate d-block">@Localizer["CarImage", "Car"] @Localizer["RequiredField", "Common"]</label>
-                <input type="file" class="form-control" asp-for="Image" />
-                <span class="text-danger" asp-validation-for="Image"></span>
-                <div id="imagePreviewContainer"></div>
-            </div>
+        .custom-upload-box:hover {
+            border-color: #007bff;
+            background-color: #f1faff;
+        }
 
-            <div class="mb-3">
-                <label class="form-label text-truncate d-block">@Localizer["ImageWithoutBackground", "Car"] @Localizer["RequiredField", "Common"]</label>
-                <input type="file" class="form-control" asp-for="ImageWithoutBackground" />
-                <span class="text-danger" asp-validation-for="ImageWithoutBackground"></span>
-                <div id="bgImagePreviewContainer"></div>
-            </div>
+        .custom-upload-box i {
+            font-size: 36px;
+            color: #888;
+            margin-bottom: 10px;
+        }
 
-            <div class="mb-3">
-                <label class="form-label text-truncate d-block">@Localizer["AdditionalImagesOutside", "Car"] @Localizer["RequiredField", "Common"]</label>
-                <input type="file" class="form-control" asp-for="Images" multiple />
-                <span class="text-danger" asp-validation-for="Images"></span>
-                <div id="outsideImagePreviewContainer"></div>
-            </div>
+        .custom-upload-box input[type="file"] {
+            display: none;
+        }
 
-            <div class="mb-3">
-                <label class="form-label text-truncate d-block">@Localizer["InsideCarImages", "Car"] @Localizer["RequiredField", "Common"]</label>
-                <input type="file" class="form-control" asp-for="InsideCarImages" multiple />
-                <span class="text-danger" asp-validation-for="InsideCarImages"></span>
-                <div id="insideImagePreviewContainer"></div>
-            </div>
-        </div>
+    .image-preview-container {
+        margin-top: 10px;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        background-color: #f8f9fa;
+        min-height: 50px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
 
-        <!-- Right Column -->
-        <div class="col-md-6">
-            <div class="mb-3">
-                <label class="form-label text-truncate d-block">@Localizer["SellingPrice", "Car"] @Localizer["RequiredField", "Common"]</label>
-                <input type="number" class="form-control" asp-for="SellingPrice" required />
-                <span class="text-danger" asp-validation-for="SellingPrice"></span>
-            </div>
+    .preview-image {
+        width: 100px;
+        height: 100px;
+        object-fit: cover;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        padding: 3px;
+        position: relative;
+    }
 
-            <div class="mb-3">
-                <label class="form-label text-truncate d-block">@Localizer["InstallmentPrice", "Car"] @Localizer["RequiredField", "Common"]</label>
-                <input type="number" class="form-control" asp-for="InstallmentPrice" required />
-                <span class="text-danger" asp-validation-for="InstallmentPrice"></span>
-            </div>
+    .preview-image-container {
+        position: relative;
+        display: inline-block;
+    }
 
-            <div class="mb-3">
-                <label class="form-label text-truncate d-block">@Localizer["QuantityInStock", "Car"] @Localizer["RequiredField", "Common"]</label>
-                <input type="number" class="form-control" asp-for="QuantityInStock" required />
-                <span class="text-danger" asp-validation-for="QuantityInStock"></span>
-            </div>
+    .remove-image-btn {
+        position: absolute;
+        top: -5px;
+        right: -5px;
+        background: red;
+        color: white;
+        border: none;
+        border-radius: 50%;
+        width: 20px;
+        height: 20px;
+        font-size: 12px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
 
-            <div class="mb-3">
-                <label class="form-label text-truncate d-block">@Localizer["Kilometers", "Car"] @Localizer["RequiredField", "Common"]</label>
-                <input type="number" class="form-control" asp-for="Kilometers" required />
-                <span class="text-danger" asp-validation-for="Kilometers"></span>
-            </div>
+    .no-preview {
+        color: #666;
+        font-style: italic;
+        text-align: center;
+        width: 100%;
+        padding: 20px;
+    }
 
-            <div class="mb-3">
-                <label class="form-label text-truncate d-block">@Localizer["Specifications", "Car"] @Localizer["RequiredField", "Common"]</label>
-                <select class="form-control" asp-for="SpecificationsId" asp-items="ViewBag.Specifications" multiple></select>
-                <span class="text-danger" asp-validation-for="SpecificationsId"></span>
-            </div>
+    .color-variation-section {
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        padding: 15px;
+        margin-bottom: 15px;
+        background-color: #f8f9fa;
+    }
 
-            <div class="mb-3">
-                <label class="form-label text-truncate d-block">@Localizer["Color", "Car"] @Localizer["RequiredField", "Common"]</label>
-                <select class="form-control" asp-for="ColorId" asp-items="ViewBag.Colors" multiple></select>
-                <span class="text-danger" asp-validation-for="ColorId"></span>
-            </div>
+    .color-variation-header {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 10px;
+    }
 
-            <div class="mb-3">
-                <label class="form-label text-truncate d-block">@Localizer["Brand", "Car"] @Localizer["RequiredField", "Common"]</label>
-                <select class="form-control" asp-for="BrandId" asp-items="ViewBag.Brands" required></select>
-                <span class="text-danger" asp-validation-for="BrandId"></span>
-            </div>
+    .color-swatch {
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        border: 2px solid #fff;
+        box-shadow: 0 0 0 1px #ccc;
+    }
 
-            <div class="mb-3">
-                <label class="form-label text-truncate d-block">@Localizer["CarCode", "Car"]</label>
-                <input type="text" class="form-control" asp-for="CarCode" />
-                <span class="text-danger" asp-validation-for="CarCode"></span>
-            </div>
+    .existing-image {
+        position: relative;
+        display: inline-block;
+        margin: 5px;
+    }
 
-            <div class="mb-3">
-                <label class="form-label text-truncate d-block">@Localizer["CarSKU", "Car"]</label>
-                <input type="text" class="form-control" asp-for="CarSKU" />
-                <span class="text-danger" asp-validation-for="CarSKU"></span>
-            </div>
-        </div>
+        .existing-image img {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 3px;
+        }
+
+    .card {
+        margin-bottom: 20px;
+    }
+
+    .card-header {
+        background-color: #f8f9fa;
+        border-bottom: 1px solid #dee2e6;
+    }
+
+    .form-tabs {
+        border-bottom: 1px solid #dee2e6;
+    }
+
+    .nav-tabs .nav-link {
+        border: 1px solid transparent;
+        border-top-left-radius: 0.375rem;
+        border-top-right-radius: 0.375rem;
+    }
+
+        .nav-tabs .nav-link.active {
+            background-color: #fff;
+            border-color: #dee2e6 #dee2e6 #fff;
+        }
+</style>
+
+<div class="card" dir="@(CultureInfo.CurrentCulture.TextInfo.IsRightToLeft ? "rtl" : "ltr")">
+    <div class="card-header">
+        <h3 class="mb-0">
+            <span class="text-truncate">@Localizer["UpdateCar", "Car"]</span>
+        </h3>
+        <p class="text-muted mb-0">
+            <small>@Localizer["RequiredFieldsNote", "Common"]</small>
+        </p>
     </div>
+    <div class="card-body">
+        <form asp-action="Edit" enctype="multipart/form-data">
+            <input type="hidden" asp-for="Id" />
 
-    <div class="row">
-        <!-- Additional Details -->
-        <div class="col-md-6">
-            <div class="mb-3">
-                <label class="form-label text-truncate d-block">@Localizer["TransmissionType", "Car"] @Localizer["RequiredField", "Common"]</label>
-                <select class="form-control" asp-for="TransmissionTypeId" asp-items="ViewBag.TransmissionTypes" required></select>
-                <span class="text-danger" asp-validation-for="TransmissionTypeId"></span>
-            </div>
+            <ul class="nav nav-tabs mb-3" id="carFormTabs" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" style="width:100px" id="general-tab" data-bs-toggle="tab" data-bs-target="#general" type="button" role="tab">
+                        @Localizer["General"]
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" style="width:100px" id="images-tab" data-bs-toggle="tab" data-bs-target="#images" type="button" role="tab">
+                        @Localizer["Images"]
+                    </button>
+                </li>
+            </ul>
 
-            <div class="mb-3">
-                <label class="form-label text-truncate d-block">@Localizer["FuelType", "Car"] @Localizer["RequiredField", "Common"]</label>
-                <select class="form-control" asp-for="FuelTypeId" asp-items="ViewBag.FuelTypes" required></select>
-                <span class="text-danger" asp-validation-for="FuelTypeId"></span>
-            </div>
+            <div class="tab-content" id="carFormTabsContent">
+                <!-- General Tab -->
+                <div class="tab-pane fade show active" id="general" role="tabpanel" aria-labelledby="general-tab">
+                    <div class="row">
+                        <!-- Left Column -->
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label text-truncate d-block">@Localizer["NameArabic", "Car"] @Localizer["RequiredField", "Common"]</label>
+                                <input type="text" class="form-control" asp-for="NameAr" required />
+                                <span class="text-danger" asp-validation-for="NameAr"></span>
+                            </div>
 
-            <div class="mb-3">
-                <label class="form-label text-truncate d-block">@Localizer["EngineSize", "Car"] @Localizer["RequiredField", "Common"]</label>
-                <select class="form-control" asp-for="EngineSizeId" asp-items="ViewBag.EngineSizes" required></select>
-                <span class="text-danger" asp-validation-for="EngineSizeId"></span>
-            </div>
+                            <div class="mb-3">
+                                <label class="form-label text-truncate d-block">@Localizer["NameEnglish", "Car"] @Localizer["RequiredField", "Common"]</label>
+                                <input type="text" class="form-control" asp-for="NameEn" required />
+                                <span class="text-danger" asp-validation-for="NameEn"></span>
+                            </div>
 
-            <div class="mb-3">
-                <label class="form-label text-truncate d-block">@Localizer["ModelYear", "Car"] @Localizer["RequiredField", "Common"]</label>
-                <select class="form-control" asp-for="ModelYearId" asp-items="ViewBag.ModelYears" required></select>
-                <span class="text-danger" asp-validation-for="ModelYearId"></span>
-            </div>
-            <div class="mb-3">
-                <div class="form-check">
-                    <input type="checkbox" class="form-check-input" asp-for="IsActive" />
-                    <label class="form-check-label text-truncate d-block">@Localizer["IsActive", "Car"]</label>
+                            <div class="mb-3">
+                                <label class="form-label text-truncate d-block">@Localizer["DescriptionArabic", "Car"]</label>
+                                <textarea class="form-control" asp-for="DescrptionAr"></textarea>
+                                <span class="text-danger" asp-validation-for="DescrptionAr"></span>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label text-truncate d-block">@Localizer["DescriptionEnglish", "Car"]</label>
+                                <textarea class="form-control" asp-for="DescrptionEn"></textarea>
+                                <span class="text-danger" asp-validation-for="DescrptionEn"></span>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label text-truncate d-block">@Localizer["SellingPrice", "Car"] @Localizer["RequiredField", "Common"]</label>
+                                <input type="number" class="form-control" asp-for="SellingPrice" required />
+                                <span class="text-danger" asp-validation-for="SellingPrice"></span>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">@Localizer["InstallmentPriceIncludingTax", "Car"] *</label>
+                                <input type="number" class="form-control" asp-for="InstallmentPrice" required step="0.01" min="0" />
+                                <small class="form-text text-muted">@Localizer["InstallmentPriceNote", "Car"]</small>
+                                <span class="text-danger" asp-validation-for="InstallmentPrice"></span>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label text-truncate d-block">@Localizer["InstallmentPrice", "Car"] @Localizer["RequiredField", "Common"]</label>
+                                <input type="number" class="form-control" asp-for="InstallmentPrice" required />
+                                <span class="text-danger" asp-validation-for="InstallmentPrice"></span>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label text-truncate d-block">@Localizer["QuantityInStock", "Car"] @Localizer["RequiredField", "Common"]</label>
+                                <input type="number" class="form-control" asp-for="QuantityInStock" required />
+                                <span class="text-danger" asp-validation-for="QuantityInStock"></span>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label text-truncate d-block">@Localizer["Kilometers", "Car"] @Localizer["RequiredField", "Common"]</label>
+                                <input type="number" class="form-control" asp-for="Kilometers" required />
+                                <span class="text-danger" asp-validation-for="Kilometers"></span>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label text-truncate d-block">@Localizer["Specifications", "Car"] @Localizer["RequiredField", "Common"]</label>
+                                <select class="form-control" asp-for="SpecificationsId" asp-items="ViewBag.Specifications" multiple></select>
+                                <span class="text-danger" asp-validation-for="SpecificationsId"></span>
+                            </div>
+
+                            <div class="form-check mb-3">
+                                <input type="checkbox" class="form-check-input" asp-for="IsActive" />
+                                <label class="form-check-label">@Localizer["IsActive", "Car"]</label>
+                            </div>
+                        </div>
+
+                        <!-- Right Column -->
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label text-truncate d-block">@Localizer["Brand", "Car"] @Localizer["RequiredField", "Common"]</label>
+                                <select class="form-control" asp-for="BrandId" asp-items="ViewBag.Brands" required></select>
+                                <span class="text-danger" asp-validation-for="BrandId"></span>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label text-truncate d-block">@Localizer["CarCode", "Car"]</label>
+                                <input type="text" class="form-control" asp-for="CarCode" />
+                                <span class="text-danger" asp-validation-for="CarCode"></span>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label text-truncate d-block">@Localizer["CarSKU", "Car"]</label>
+                                <input type="text" class="form-control" asp-for="CarSKU" />
+                                <span class="text-danger" asp-validation-for="CarSKU"></span>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label text-truncate d-block">@Localizer["TransmissionType", "Car"] @Localizer["RequiredField", "Common"]</label>
+                                <select class="form-control" asp-for="TransmissionTypeId" asp-items="ViewBag.TransmissionTypes" required></select>
+                                <span class="text-danger" asp-validation-for="TransmissionTypeId"></span>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label text-truncate d-block">@Localizer["FuelType", "Car"] @Localizer["RequiredField", "Common"]</label>
+                                <select class="form-control" asp-for="FuelTypeId" asp-items="ViewBag.FuelTypes" required></select>
+                                <span class="text-danger" asp-validation-for="FuelTypeId"></span>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label text-truncate d-block">@Localizer["EngineSize", "Car"] @Localizer["RequiredField", "Common"]</label>
+                                <select class="form-control" asp-for="EngineSizeId" asp-items="ViewBag.EngineSizes" required></select>
+                                <span class="text-danger" asp-validation-for="EngineSizeId"></span>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label text-truncate d-block">@Localizer["ModelYear", "Car"] @Localizer["RequiredField", "Common"]</label>
+                                <select class="form-control" asp-for="ModelYearId" asp-items="ViewBag.ModelYears" required></select>
+                                <span class="text-danger" asp-validation-for="ModelYearId"></span>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label text-truncate d-block">@Localizer["EnginePosition", "Car"] @Localizer["RequiredField", "Common"]</label>
+                                <select class="form-control" asp-for="EnginePositionId" asp-items="ViewBag.EnginePositions" required></select>
+                                <span class="text-danger" asp-validation-for="EnginePositionId"></span>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label text-truncate d-block">@Localizer["Origin", "Car"] @Localizer["RequiredField", "Common"]</label>
+                                <select class="form-control" asp-for="OriginId" asp-items="ViewBag.Origins" required></select>
+                                <span class="text-danger" asp-validation-for="OriginId"></span>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label text-truncate d-block">@Localizer["Subcategory", "Car"] @Localizer["RequiredField", "Common"]</label>
+                                <select class="form-control" asp-for="SubCategoryId" asp-items="ViewBag.SubCategories" required></select>
+                                <span class="text-danger" asp-validation-for="SubCategoryId"></span>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label text-truncate d-block">@Localizer["Option", "Car"] @Localizer["RequiredField", "Common"]</label>
+                                <select class="form-control" asp-for="OptionId" asp-items="ViewBag.Options" required></select>
+                                <span class="text-danger" asp-validation-for="OptionId"></span>
+                            </div>
+
+                            <div class="form-check mb-3">
+                                <input type="checkbox" class="form-check-input" asp-for="IsSpecial" />
+                                <label class="form-check-label">@Localizer["IsSpecial", "Car"]</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Images Tab -->
+                <div class="tab-pane fade" id="images" role="tabpanel" aria-labelledby="images-tab">
+                    <div class="row">
+                        <div class="col-12 mb-4">
+                            <label class="form-label">@Localizer["Color", "Car"] *</label>
+                            <div class="color-picker d-flex flex-wrap gap-2" id="colorPicker">
+                                @foreach (var item in ViewBag.Colors as List<SelectListItem>)
+                                {
+                                    var isChecked = Model.ColorId?.Contains(item.Value) ?? false;
+                                    <label class="color-option @(isChecked ? "selected" : "")"
+                                           style="background-color:@item.Text"
+                                           data-color-id="@item.Value"
+                                           data-name="@item.Text">
+                                        <input type="checkbox" name="ColorId" value="@item.Value" @(isChecked ? "checked" : "") hidden />
+                                    </label>
+                                }
+                            </div>
+                            <span class="text-danger" asp-validation-for="ColorId"></span>
+                        </div>
+
+                        <div class="col-12 mb-4">
+                            <label class="form-label">@Localizer["ColorVariationImages", "Car"]</label>
+                            <div id="colorVariationImagesContainer">
+                                <!-- Dynamic color image sections will be generated here -->
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 mb-4">
+                            <label class="form-label text-truncate d-block">@Localizer["CarImage", "Car"] @Localizer["RequiredField", "Common"]</label>
+                            @if (!string.IsNullOrEmpty(Model.ImageURL))
+                            {
+                                <div class="existing-image mb-2">
+                                    <img src="@Model.ImageURL" alt="Current Image" />
+                                    <small class="text-muted d-block">Current Image</small>
+                                </div>
+                            }
+                            <label class="custom-upload-box w-100">
+                                <i class="bi bi-cloud-upload"></i><br />
+                                Click or drag file to upload new image
+                                <input type="file" asp-for="Image" accept="image/*" />
+                            </label>
+                            <div id="imagePreviewContainer" class="image-preview-container">
+                                <div class="no-preview">No new image selected</div>
+                            </div>
+                            <span class="text-danger" asp-validation-for="Image"></span>
+                        </div>
+
+                        <div class="col-md-6 mb-4">
+                            <label class="form-label text-truncate d-block">@Localizer["ImageWithoutBackground", "Car"] @Localizer["RequiredField", "Common"]</label>
+                            @if (!string.IsNullOrEmpty(Model.ImageWithoutBackgroundURL))
+                            {
+                                <div class="existing-image mb-2">
+                                    <img src="@Model.ImageWithoutBackgroundURL" alt="Current Background-free Image" />
+                                    <small class="text-muted d-block">Current Background-free Image</small>
+                                </div>
+                            }
+                            <label class="custom-upload-box w-100">
+                                <i class="bi bi-cloud-upload"></i><br />
+                                Click or drag file to upload new image
+                                <input type="file" asp-for="ImageWithoutBackground" accept="image/*" />
+                            </label>
+                            <div id="bgImagePreviewContainer" class="image-preview-container">
+                                <div class="no-preview">No new image selected</div>
+                            </div>
+                            <span class="text-danger" asp-validation-for="ImageWithoutBackground"></span>
+                        </div>
+
+                        <div class="col-md-6 mb-4">
+                            <label class="form-label text-truncate d-block">@Localizer["AdditionalImagesOutside", "Car"] @Localizer["RequiredField", "Common"]</label>
+                            @if (Model.ImagesURL != null && Model.ImagesURL.Any())
+                            {
+                                <div class="existing-images mb-2">
+                                    <small class="text-muted d-block mb-2">Current Outside Images:</small>
+                                    <div class="d-flex flex-wrap gap-2">
+                                        @foreach (var imageUrl in Model.ImagesURL)
+                                        {
+                                            <div class="existing-image">
+                                                <img src="@imageUrl" alt="Current Outside Image" />
+                                            </div>
+                                        }
+                                    </div>
+                                </div>
+                            }
+                            <label class="custom-upload-box w-100">
+                                <i class="bi bi-cloud-upload"></i><br />
+                                Click or drag files to upload new images
+                                <input type="file" asp-for="Images" accept="image/*" multiple />
+                            </label>
+                            <div id="outsideImagePreviewContainer" class="image-preview-container">
+                                <div class="no-preview">No new images selected</div>
+                            </div>
+                            <span class="text-danger" asp-validation-for="Images"></span>
+                        </div>
+
+                        <div class="col-md-6 mb-4">
+                            <label class="form-label text-truncate d-block">@Localizer["InsideCarImages", "Car"] @Localizer["RequiredField", "Common"]</label>
+                            @if (Model.InsideCarImagesURL != null && Model.InsideCarImagesURL.Any())
+                            {
+                                <div class="existing-images mb-2">
+                                    <small class="text-muted d-block mb-2">Current Inside Images:</small>
+                                    <div class="d-flex flex-wrap gap-2">
+                                        @foreach (var imageUrl in Model.InsideCarImagesURL)
+                                        {
+                                            <div class="existing-image">
+                                                <img src="@imageUrl" alt="Current Inside Image" />
+                                            </div>
+                                        }
+                                    </div>
+                                </div>
+                            }
+                            <label class="custom-upload-box w-100">
+                                <i class="bi bi-cloud-upload"></i><br />
+                                Click or drag files to upload new images
+                                <input type="file" asp-for="InsideCarImages" accept="image/*" multiple />
+                            </label>
+                            <div id="insideImagePreviewContainer" class="image-preview-container">
+                                <div class="no-preview">No new images selected</div>
+                            </div>
+                            <span class="text-danger" asp-validation-for="InsideCarImages"></span>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <div class="col-md-6">
-            <div class="mb-3">
-                <label class="form-label text-truncate d-block">@Localizer["EnginePosition", "Car"] @Localizer["RequiredField", "Common"]</label>
-                <select class="form-control" asp-for="EnginePositionId" asp-items="ViewBag.EnginePositions" required></select>
-                <span class="text-danger" asp-validation-for="EnginePositionId"></span>
+            <!-- Submit Button -->
+            <div class="d-flex justify-content-end gap-2 mt-3">
+                <a href="@Url.Action("Index")" class="btn btn-secondary">
+                    <i class="bx bx-arrow-back"></i> @Localizer["Cancel", "Common"]
+                </a>
+                <button type="submit" class="btn btn-primary">
+                    <i class="bx bx-check"></i> @Localizer["Edit", "Common"]
+                </button>
             </div>
-
-            <div class="mb-3">
-                <label class="form-label text-truncate d-block">@Localizer["Origin", "Car"] @Localizer["RequiredField", "Common"]</label>
-                <select class="form-control" asp-for="OriginId" asp-items="ViewBag.Origins" required></select>
-                <span class="text-danger" asp-validation-for="OriginId"></span>
-            </div>
-
-            <div class="mb-3">
-                <label class="form-label text-truncate d-block">@Localizer["Subcategory", "Car"] @Localizer["RequiredField", "Common"]</label>
-                <select class="form-control" asp-for="SubCategoryId" asp-items="ViewBag.SubCategories" required></select>
-                <span class="text-danger" asp-validation-for="SubCategoryId"></span>
-            </div>
-
-            <div class="mb-3">
-                <label class="form-label text-truncate d-block">@Localizer["Option", "Car"] @Localizer["RequiredField", "Common"]</label>
-                <select class="form-control" asp-for="OptionId" asp-items="ViewBag.Options" required></select>
-                <span class="text-danger" asp-validation-for="OptionId"></span>
-            </div>
-            <div class="mb-3">
-                <div class="form-check">
-                    <input type="checkbox" class="form-check-input" asp-for="IsSpecial" />
-                    <label class="form-check-label text-truncate d-block">@Localizer["IsSpecial", "Car"]</label>
-                </div>
-            </div>
-        </div>
+        </form>
     </div>
+</div>
 
-    <!-- Submit Button -->
-    <button type="submit" class="btn btn-primary mt-3">@Localizer["Edit", "Common"]</button>
-</form>
 @section Scripts {
-    <script>
+    <script>    let colorImageCounter = 0;
+        let selectedColors = new Set();
+
+        function clearPreviewContainer(previewContainer) {
+            previewContainer.innerHTML = '';
+        }
+
+        function addNoPreviewMessage(previewContainer, message = "No new images selected") {
+            const noPreviewDiv = document.createElement("div");
+            noPreviewDiv.className = "no-preview";
+            noPreviewDiv.textContent = message;
+            previewContainer.appendChild(noPreviewDiv);
+        }
+
+        function createImagePreview(file, container, onRemove = null) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const previewContainer = document.createElement("div");
+                previewContainer.className = "preview-image-container";
+
+                const imgElement = document.createElement("img");
+                imgElement.src = e.target.result;
+                imgElement.className = "preview-image";
+                imgElement.title = file.name;
+
+                if (onRemove) {
+                    const removeBtn = document.createElement("button");
+                    removeBtn.className = "remove-image-btn";
+                    removeBtn.innerHTML = "×";
+                    removeBtn.type = "button";
+                    removeBtn.onclick = onRemove;
+                    previewContainer.appendChild(removeBtn);
+                }
+
+                previewContainer.appendChild(imgElement);
+                container.appendChild(previewContainer);
+            };
+            reader.readAsDataURL(file);
+        }
+
         function handleImageValidationAndPreview(input, previewContainerId, isMultiple = false) {
             let files = input.files;
             let previewContainer = document.getElementById(previewContainerId);
 
-            if (files.length > 0) {
-                Array.from(files).forEach(file => {
-                    let img = new Image();
-                    img.onload = function () {
-                        let width = img.width;
-                        let height = img.height;
-                        let aspectRatio = width / height;
+            clearPreviewContainer(previewContainer);
 
-                        if (Math.abs(aspectRatio - (16 / 9)) > 0.01) {
-                            alert("@Localizer["AspectRatioError", "Car"]");
-                            input.value = ""; // Clear the file input
-                        } else {
-                            let reader = new FileReader();
-                            reader.onload = function () {
-                                let imgElement = document.createElement("img");
-                                imgElement.src = reader.result;
-                                imgElement.style = "width: 100px; height: 100px; margin: 5px; display: inline-block; border: 1px solid #ddd; padding: 3px;";
+            if (files.length === 0) {
+                addNoPreviewMessage(previewContainer);
+                return;
+            }
 
-                                if (!isMultiple) {
-                                }
-                                previewContainer.appendChild(imgElement);
-                            };
-                            reader.readAsDataURL(file);
-                        }
-                    };
-                    img.src = URL.createObjectURL(file);
-                });
+            Array.from(files).forEach((file, index) => {
+                let img = new Image();
+                img.onload = function () {
+                    let width = img.width;
+                    let height = img.height;
+                    let aspectRatio = width / height;
+
+                    if (Math.abs(aspectRatio - (16 / 9)) > 0.01) {
+                        alert(`@Localizer["AspectRatioError", "Car"] (File: ${file.name})`);
+                        let fileList = Array.from(input.files);
+                        fileList.splice(fileList.indexOf(file), 1);
+
+                        let dt = new DataTransfer();
+                        fileList.forEach(f => dt.items.add(f));
+                        input.files = dt.files;
+
+                        handleImageValidationAndPreview(input, previewContainerId, isMultiple);
+                        return;
+                    } else {
+                        createImagePreview(file, previewContainer);
+                    }
+
+                    URL.revokeObjectURL(img.src);
+                };
+
+                img.onerror = function() {
+                    alert(`Invalid image file: ${file.name}`);
+                    URL.revokeObjectURL(img.src);
+                };
+
+                img.src = URL.createObjectURL(file);
+            });
+        }
+
+        function handleColorImageValidationAndPreview(input, previewContainerId, colorId) {
+            let files = input.files;
+            let previewContainer = document.getElementById(previewContainerId);
+
+            clearPreviewContainer(previewContainer);
+
+            if (files.length === 0) {
+                addNoPreviewMessage(previewContainer);
+                return;
+            }
+
+            Array.from(files).forEach((file, index) => {
+                let img = new Image();
+                img.onload = function () {
+                    let width = img.width;
+                    let height = img.height;
+                    let aspectRatio = width / height;
+
+                    if (Math.abs(aspectRatio - (16 / 9)) > 0.01) {
+                        alert(`@Localizer["AspectRatioError", "Car"] (File: ${file.name})`);
+                        let fileList = Array.from(input.files);
+                        fileList.splice(fileList.indexOf(file), 1);
+
+                        let dt = new DataTransfer();
+                        fileList.forEach(f => dt.items.add(f));
+                        input.files = dt.files;
+
+                        handleColorImageValidationAndPreview(input, previewContainerId, colorId);
+                        return;
+                    } else {
+                        createImagePreview(file, previewContainer, () => {
+                            let fileList = Array.from(input.files);
+                            fileList.splice(index, 1);
+                            let dt = new DataTransfer();
+                            fileList.forEach(f => dt.items.add(f));
+                            input.files = dt.files;
+                            handleColorImageValidationAndPreview(input, previewContainerId, colorId);
+                        });
+                    }
+
+                    URL.revokeObjectURL(img.src);
+                };
+
+                img.onerror = function() {
+                    alert(`Invalid image file: ${file.name}`);
+                    URL.revokeObjectURL(img.src);
+                };
+
+                img.src = URL.createObjectURL(file);
+            });
+        }
+
+        function createColorImageSection(colorId, colorName, colorHex) {
+            // Check if section already exists to prevent duplicates
+            const existingSection = document.getElementById(`color-section-${colorId}`);
+            if (existingSection) {
+                return; // Section already exists, don't create another one
+            }
+
+            const container = document.getElementById('colorVariationImagesContainer');
+
+            const sectionDiv = document.createElement('div');
+            sectionDiv.className = 'color-variation-section';
+            sectionDiv.id = `color-section-${colorId}`;
+
+            sectionDiv.innerHTML = `
+                <div class="color-variation-header">
+                    <div class="color-swatch" style="background-color: ${colorHex}"></div>
+                    <label class="form-label mb-0">${colorName} Images</label>
+                </div>
+                <input type="hidden" name="ColorImages[${colorImageCounter}].ColorId" value="${colorId}" />
+                <input class="form-control mb-2" type="file" name="ColorImages[${colorImageCounter}].Images" accept="image/*" multiple
+                       id="colorImages_${colorId}" />
+                <div id="colorPreview_${colorId}" class="image-preview-container">
+                    <div class="no-preview">No images selected</div>
+                </div>
+            `;
+
+            container.appendChild(sectionDiv);
+
+            document.getElementById(`colorImages_${colorId}`).addEventListener('change', function() {
+                handleColorImageValidationAndPreview(this, `colorPreview_${colorId}`, colorId);
+            });
+
+            colorImageCounter++;
+        }
+
+        function removeColorImageSection(colorId) {
+            const section = document.getElementById(`color-section-${colorId}`);
+            if (section) {
+                section.remove();
             }
         }
 
-        document.getElementById("Image").addEventListener("change", function () {
+        // Initialize already selected colors on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll("#colorPicker .color-option").forEach(option => {
+                const checkbox = option.querySelector("input");
+                const colorId = option.getAttribute("data-color-id");
+                const colorName = option.getAttribute("data-name");
+                const colorHex = option.style.backgroundColor;
+
+                // Handle pre-selected colors
+                if (checkbox.checked) {
+                    option.classList.add("selected");
+                    selectedColors.add(colorId);
+                    createColorImageSection(colorId, colorName, colorHex);
+                }
+            });
+        });
+
+        // Add event listeners
+        document.getElementById("Image")?.addEventListener("change", function () {
             handleImageValidationAndPreview(this, "imagePreviewContainer");
         });
 
-        document.getElementById("ImageWithoutBackground").addEventListener("change", function () {
+        document.getElementById("ImageWithoutBackground")?.addEventListener("change", function () {
             handleImageValidationAndPreview(this, "bgImagePreviewContainer");
         });
 
-        document.getElementById("Images").addEventListener("change", function () {
+        document.getElementById("Images")?.addEventListener("change", function () {
             handleImageValidationAndPreview(this, "outsideImagePreviewContainer", true);
         });
 
-        document.getElementById("InsideCarImages").addEventListener("change", function () {
+        document.getElementById("InsideCarImages")?.addEventListener("change", function () {
             handleImageValidationAndPreview(this, "insideImagePreviewContainer", true);
+        });
+
+        // Color picker functionality with dynamic color image sections
+        document.querySelectorAll("#colorPicker .color-option").forEach(option => {
+            const checkbox = option.querySelector("input");
+            const colorId = option.getAttribute("data-color-id");
+            const colorName = option.getAttribute("data-name");
+            const colorHex = option.style.backgroundColor;
+
+            option.addEventListener("click", (e) => {
+                // Prevent double firing
+                e.preventDefault();
+                e.stopPropagation();
+
+                checkbox.checked = !checkbox.checked;
+                option.classList.toggle("selected", checkbox.checked);
+
+                if (checkbox.checked) {
+                    selectedColors.add(colorId);
+                    createColorImageSection(colorId, colorName, colorHex);
+                } else {
+                    selectedColors.delete(colorId);
+                    removeColorImageSection(colorId);
+                }
+            });
         });
     </script>
 }

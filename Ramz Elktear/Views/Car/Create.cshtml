@@ -78,6 +78,29 @@
         border: 1px solid #ddd;
         border-radius: 5px;
         padding: 3px;
+        position: relative;
+    }
+
+    .preview-image-container {
+        position: relative;
+        display: inline-block;
+    }
+
+    .remove-image-btn {
+        position: absolute;
+        top: -5px;
+        right: -5px;
+        background: red;
+        color: white;
+        border: none;
+        border-radius: 50%;
+        width: 20px;
+        height: 20px;
+        font-size: 12px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
 
     .no-preview {
@@ -86,6 +109,29 @@
         text-align: center;
         width: 100%;
         padding: 20px;
+    }
+
+    .color-variation-section {
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        padding: 15px;
+        margin-bottom: 15px;
+        background-color: #f8f9fa;
+    }
+
+    .color-variation-header {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 10px;
+    }
+
+    .color-swatch {
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        border: 2px solid #fff;
+        box-shadow: 0 0 0 1px #ccc;
     }
 </style>
 
@@ -149,7 +195,12 @@
                                 <input type="number" class="form-control" asp-for="SellingPrice" required />
                                 <span class="text-danger" asp-validation-for="SellingPrice"></span>
                             </div>
-
+                            <div class="mb-3">
+                                <label class="form-label">@Localizer["InstallmentPriceIncludingTax", "Car"] *</label>
+                                <input type="number" class="form-control" asp-for="InstallmentPrice" required step="0.01" min="0" />
+                                <small class="form-text text-muted">@Localizer["InstallmentPriceNote", "Car"]</small>
+                                <span class="text-danger" asp-validation-for="InstallmentPrice"></span>
+                            </div>
                             <div class="mb-3">
                                 <label class="form-label">@Localizer["Specifications", "Car"] *</label>
                                 <select class="form-control" asp-for="SpecificationsId" asp-items="ViewBag.Specifications" multiple></select>
@@ -247,17 +298,8 @@
 
                         <div class="col-12 mb-4">
                             <label class="form-label">@Localizer["ColorVariationImages", "Car"]</label>
-                            <div id="colorVariationImages" class="row g-3">
-                                @foreach (var (item, index) in (ViewBag.Colors as List<SelectListItem>).Select((value, i) => (value, i)))
-                                {
-                                    <div class="col-md-4">
-                                        <div class="mb-2">
-                                            <label class="form-label d-block">@item.Text</label>
-                                            <input type="hidden" name="ColorImages[@index].ColorId" value="@item.Value" />
-                                            <input class="form-control" type="file" name="ColorImages[@index].Images" accept="image/*" />
-                                        </div>
-                                    </div>
-                                }
+                            <div id="colorVariationImagesContainer">
+                                <!-- Dynamic color image sections will be generated here -->
                             </div>
                         </div>
 
@@ -330,7 +372,9 @@
 </div>
 
 @section Scripts {
-    <script>
+    <script>    let colorImageCounter = 0;
+        let selectedColors = new Set();
+
         function clearPreviewContainer(previewContainer) {
             previewContainer.innerHTML = '';
         }
@@ -340,6 +384,32 @@
             noPreviewDiv.className = "no-preview";
             noPreviewDiv.textContent = message;
             previewContainer.appendChild(noPreviewDiv);
+        }
+
+        function createImagePreview(file, container, onRemove = null) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const previewContainer = document.createElement("div");
+                previewContainer.className = "preview-image-container";
+
+                const imgElement = document.createElement("img");
+                imgElement.src = e.target.result;
+                imgElement.className = "preview-image";
+                imgElement.title = file.name;
+
+                if (onRemove) {
+                    const removeBtn = document.createElement("button");
+                    removeBtn.className = "remove-image-btn";
+                    removeBtn.innerHTML = "×";
+                    removeBtn.type = "button";
+                    removeBtn.onclick = onRemove;
+                    previewContainer.appendChild(removeBtn);
+                }
+
+                previewContainer.appendChild(imgElement);
+                container.appendChild(previewContainer);
+            };
+            reader.readAsDataURL(file);
         }
 
         function handleImageValidationAndPreview(input, previewContainerId, isMultiple = false) {
@@ -379,15 +449,7 @@
                         return;
                     } else {
                         validFiles.push(file);
-                        let reader = new FileReader();
-                        reader.onload = function () {
-                            let imgElement = document.createElement("img");
-                            imgElement.src = reader.result;
-                            imgElement.className = "preview-image";
-                            imgElement.title = file.name;
-                            previewContainer.appendChild(imgElement);
-                        };
-                        reader.readAsDataURL(file);
+                        createImagePreview(file, previewContainer);
                     }
 
                     // Clean up object URL
@@ -402,6 +464,123 @@
                 img.src = URL.createObjectURL(file);
             });
         }
+
+        function handleColorImageValidationAndPreview(input, previewContainerId, colorId) {
+            let files = input.files;
+            let previewContainer = document.getElementById(previewContainerId);
+
+            // Clear previous previews
+            clearPreviewContainer(previewContainer);
+
+            if (files.length === 0) {
+                addNoPreviewMessage(previewContainer);
+                return;
+            }
+
+            Array.from(files).forEach((file, index) => {
+                let img = new Image();
+                img.onload = function () {
+                    let width = img.width;
+                    let height = img.height;
+                    let aspectRatio = width / height;
+
+                    if (Math.abs(aspectRatio - (16 / 9)) > 0.01) {
+                        alert(`@Localizer["ImageAspectRatioError", "Car"] (File: ${file.name})`);
+                        // Remove this file from input
+                        let fileList = Array.from(input.files);
+                        fileList.splice(fileList.indexOf(file), 1);
+
+                        // Create new FileList
+                        let dt = new DataTransfer();
+                        fileList.forEach(f => dt.items.add(f));
+                        input.files = dt.files;
+
+                        // Refresh preview
+                        handleColorImageValidationAndPreview(input, previewContainerId, colorId);
+                        return;
+                    } else {
+                        createImagePreview(file, previewContainer, () => {
+                            // Remove image functionality
+                            let fileList = Array.from(input.files);
+                            fileList.splice(index, 1);
+                            let dt = new DataTransfer();
+                            fileList.forEach(f => dt.items.add(f));
+                            input.files = dt.files;
+                            handleColorImageValidationAndPreview(input, previewContainerId, colorId);
+                        });
+                    }
+
+                    URL.revokeObjectURL(img.src);
+                };
+
+                img.onerror = function() {
+                    alert(`Invalid image file: ${file.name}`);
+                    URL.revokeObjectURL(img.src);
+                };
+
+                img.src = URL.createObjectURL(file);
+            });
+        }
+
+        function createColorImageSection(colorId, colorName, colorHex) {
+            // Check if section already exists to prevent duplicates
+            const existingSection = document.getElementById(`color-section-${colorId}`);
+            if (existingSection) {
+                return; // Section already exists, don't create another one
+            }
+
+            const container = document.getElementById('colorVariationImagesContainer');
+
+            const sectionDiv = document.createElement('div');
+            sectionDiv.className = 'color-variation-section';
+            sectionDiv.id = `color-section-${colorId}`;
+
+            sectionDiv.innerHTML = `
+                <div class="color-variation-header">
+                    <div class="color-swatch" style="background-color: ${colorHex}"></div>
+                    <label class="form-label mb-0">${colorName} Images</label>
+                </div>
+                <input type="hidden" name="ColorImages[${colorImageCounter}].ColorId" value="${colorId}" />
+                <input class="form-control mb-2" type="file" name="ColorImages[${colorImageCounter}].Images" accept="image/*" multiple
+                       id="colorImages_${colorId}" />
+                <div id="colorPreview_${colorId}" class="image-preview-container">
+                    <div class="no-preview">No images selected</div>
+                </div>
+            `;
+
+            container.appendChild(sectionDiv);
+
+            // Add event listener for the new file input
+            document.getElementById(`colorImages_${colorId}`).addEventListener('change', function() {
+                handleColorImageValidationAndPreview(this, `colorPreview_${colorId}`, colorId);
+            });
+
+            colorImageCounter++;
+        }
+
+        function removeColorImageSection(colorId) {
+            const section = document.getElementById(`color-section-${colorId}`);
+            if (section) {
+                section.remove();
+            }
+        }
+
+        // Initialize already selected colors on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll("#colorPicker .color-option").forEach(option => {
+                const checkbox = option.querySelector("input");
+                const colorId = option.getAttribute("data-color-id");
+                const colorName = option.getAttribute("data-name");
+                const colorHex = option.style.backgroundColor;
+
+                // Handle pre-selected colors
+                if (checkbox.checked) {
+                    option.classList.add("selected");
+                    selectedColors.add(colorId);
+                    createColorImageSection(colorId, colorName, colorHex);
+                }
+            });
+        });
 
         // Add event listeners
         document.getElementById("Image")?.addEventListener("change", function () {
@@ -420,14 +599,28 @@
             handleImageValidationAndPreview(this, "insideImagePreviewContainer", true);
         });
 
-        // Color picker functionality
+        // Color picker functionality with dynamic color image sections
         document.querySelectorAll("#colorPicker .color-option").forEach(option => {
             const checkbox = option.querySelector("input");
-            if (checkbox.checked) option.classList.add("selected");
+            const colorId = option.getAttribute("data-color-id");
+            const colorName = option.getAttribute("data-name");
+            const colorHex = option.style.backgroundColor;
 
-            option.addEventListener("click", () => {
+            option.addEventListener("click", (e) => {
+                // Prevent double firing
+                e.preventDefault();
+                e.stopPropagation();
+
                 checkbox.checked = !checkbox.checked;
                 option.classList.toggle("selected", checkbox.checked);
+
+                if (checkbox.checked) {
+                    selectedColors.add(colorId);
+                    createColorImageSection(colorId, colorName, colorHex);
+                } else {
+                    selectedColors.delete(colorId);
+                    removeColorImageSection(colorId);
+                }
             });
         });
     </script>

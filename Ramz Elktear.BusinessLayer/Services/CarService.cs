@@ -162,16 +162,6 @@ namespace Ramz_Elktear.BusinessLayer.Services
             {
                 await _carColorService.AddCarColorAsync(new AddCarColor { CarId = car.Id, ColorId = color, IsActive = true });
             }
-            //foreach (var Image in carDto.Images)
-            //{
-            //    await _imageCarService.AddCarImageAsync(new AddImageCar 
-            //    {
-            //        CarId = car.Id, 
-            //        Image = Image,
-            //        paths = await GetPathByName("CarImages") 
-            //    });
-            //}
-
             foreach (var colorImage in carDto.ColorImages)
             {
                 foreach (var image in colorImage.Images)
@@ -203,7 +193,6 @@ namespace Ramz_Elktear.BusinessLayer.Services
             var car = await _unitOfWork.CarRepository.GetByIdAsync(carDto.Id);
             if (car == null) throw new ArgumentException("Car not found");
 
-            // Map updated properties
             car.NameAr = carDto.NameAr;
             car.NameEn = carDto.NameEn;
             car.DescrptionAr = carDto.DescrptionAr;
@@ -214,90 +203,121 @@ namespace Ramz_Elktear.BusinessLayer.Services
             car.SellingPrice = carDto.SellingPrice;
             car.InstallmentPrice = carDto.InstallmentPrice;
             car.QuantityInStock = carDto.QuantityInStock;
+            car.SubCategoryId = carDto.SubCategoryId;
+            car.BrandId = carDto.BrandId;
+            car.OptionId = carDto.OptionId;
+            car.TransmissionTypeId = carDto.TransmissionTypeId;
+            car.FuelTypeId = carDto.FuelTypeId;
+            car.EngineSizeId = carDto.EngineSizeId;
+            car.OriginId = carDto.OriginId;
+            car.ModelYearId = carDto.ModelYearId;
+            car.EnginePositionId = carDto.EnginePositionId;
             car.IsSpecial = carDto.IsSpecial;
             car.IsActive = carDto.IsActive;
-            // Handle updating main car image
+
+            // Handle main car image (similar to AddCar)
             if (carDto.Image != null)
             {
                 await UpdateCarImage(car, carDto.Image);
             }
 
-            // Handle updating main car Image Without Background
+            // Update car in database first
+            _unitOfWork.CarRepository.Update(car);
+            await _unitOfWork.SaveChangesAsync();
+
+            // Clear all existing related data and add new ones (similar to AddCar approach)
+
+            // 1. Clear and re-add ImageWithoutBackground
+            await _imageCarService.DeleteAllCarImagesByPathAsync(car.Id, "ImageWithoutBackground");
             if (carDto.ImageWithoutBackground != null)
             {
-                await _imageCarService.AddCarImageAsync(new AddImageCar { CarId = car.Id, Image = carDto.ImageWithoutBackground, paths = await GetPathByName("ImageWithoutBackground") });
+                await _imageCarService.AddCarImageAsync(new AddImageCar
+                {
+                    CarId = car.Id,
+                    Image = carDto.ImageWithoutBackground,
+                    paths = await GetPathByName("ImageWithoutBackground")
+                });
             }
 
-            // Compare and update images
-            var existingImages = (await _imageCarService.GetAllCarImageUrlsByPathAsync(car.Id, "CarImages")).ToList();
-            var removedImages = existingImages.Where(img => !carDto.ImagesURL.Contains(img)).ToList();
-            foreach (var image in removedImages)
+            // 2. Clear and re-add additional car images
+            await _imageCarService.DeleteAllCarImagesByPathAsync(car.Id, "CarImages");
+            foreach (var image in carDto.Images)
             {
-                await _imageCarService.DeleteCarImageAsync(image);
-            }
-            foreach (var newImage in carDto.Images)
-            {
-                await _imageCarService.AddCarImageAsync(new AddImageCar { CarId = car.Id, Image = newImage, paths = await GetPathByName("CarImages") });
-            }
-
-            // Update Inside Car Images
-            var existingInsideImages = (await _imageCarService.GetAllCarImageUrlsByPathAsync(car.Id, "InsideCarImages")).ToList();
-            var removedInsideImages = existingInsideImages.Where(img => !carDto.InsideCarImagesURL.Contains(img)).ToList();
-            foreach (var image in removedInsideImages)
-            {
-                await _imageCarService.DeleteCarImageAsync(image);
-            }
-            foreach (var newImage in carDto.InsideCarImages)
-            {
-                await _imageCarService.AddCarImageAsync(new AddImageCar { CarId = car.Id, Image = newImage, paths = await GetPathByName("InsideCarImages") });
+                await _imageCarService.AddCarImageAsync(new AddImageCar
+                {
+                    CarId = car.Id,
+                    Image = image,
+                    paths = await GetPathByName("CarImages")
+                });
             }
 
-            // Update Colors
-            var existingColors = await _carColorService.GetCarColorByCarIdAsync(car.Id);
-            var removedColors = existingColors.Where(c => !carDto.ColorId.Contains(c.Id)).ToList();
-            var newColors = carDto.ColorId.Where(c => !existingColors.Any(ec => ec.Id == c)).ToList();
-            foreach (var color in removedColors)
+            // 3. Clear and re-add inside car images
+            await _imageCarService.DeleteAllCarImagesByPathAsync(car.Id, "InsideCarImages");
+            foreach (var image in carDto.InsideCarImages)
             {
-                await _carColorService.DeleteCarColorAsync(carDto.Id,color.Id);
-            }
-            foreach (var color in newColors)
-            {
-                await _carColorService.AddCarColorAsync(new AddCarColor { CarId = car.Id, ColorId = color, IsActive = true });
-            }
-
-            // Update Offers
-            var existingOffers = await _carOfferService.GetAllOffersForCarAsync(car.Id);
-            var removedOffers = existingOffers.Where(o => !carDto.OfferId.Contains(o.Id)).ToList();
-            var newOffers = carDto.OfferId.Where(o => !existingOffers.Any(eo => eo.Id == o)).ToList();
-            foreach (var offer in removedOffers)
-            {
-                await _carOfferService.DeleteCarOfferAsync(offer.Id,carDto.Id);
-            }
-            foreach (var offer in newOffers)
-            {
-                await _carOfferService.AddCarOfferAsync(new AddCarOffer { CarId = car.Id, OfferId = offer });
+                await _imageCarService.AddCarImageAsync(new AddImageCar
+                {
+                    CarId = car.Id,
+                    Image = image,
+                    paths = await GetPathByName("InsideCarImages")
+                });
             }
 
-            // Update Specifications
-            var existingSpecifications = await _carSpecificationService.GetSpecificationsByCarIdAsync(car.Id);
-            var removedSpecifications = existingSpecifications.Where(s => !carDto.SpecificationsId.Contains(s.Id)).ToList();
-            var newSpecifications = carDto.SpecificationsId.Where(s => !existingSpecifications.Any(es => es.Id == s)).ToList();
-            foreach (var spec in removedSpecifications)
+            // 4. Clear and re-add colors
+            await _carColorService.DeleteAllCarColorsAsync(car.Id);
+            foreach (var colorId in carDto.ColorId)
             {
-                await _carSpecificationService.DeleteCarSpecificationAsync(carDto.Id,spec.Id);
-            }
-            foreach (var spec in newSpecifications)
-            {
-                await _carSpecificationService.AddCarSpecificationAsync(new AddCarSpecification { CarId = car.Id, SpecificationId = spec });
+                await _carColorService.AddCarColorAsync(new AddCarColor
+                {
+                    CarId = car.Id,
+                    ColorId = colorId,
+                    IsActive = true
+                });
             }
 
-            // Save changes
-            _unitOfWork.CarRepository.Update(car);
+            // 5. Clear and re-add color images
+            await _imageCarService.DeleteAllCarImagesByPathAsync(car.Id, "ColorImages");
+            foreach (var colorImage in carDto.ColorImages)
+            {
+                foreach (var image in colorImage.Images)
+                {
+                    await _imageCarService.AddCarImageAsync(new AddImageCar
+                    {
+                        CarId = car.Id,
+                        ColorId = colorImage.ColorId,
+                        Image = image,
+                        paths = await GetPathByName("ColorImages")
+                    });
+                }
+            }
+
+            // 6. Clear and re-add offers
+            await _carOfferService.DeleteAllCarOffersAsync(car.Id);
+            foreach (var offerId in carDto.OfferId)
+            {
+                await _carOfferService.AddCarOfferAsync(new AddCarOffer
+                {
+                    CarId = car.Id,
+                    OfferId = offerId
+                });
+            }
+
+            // 7. Clear and re-add specifications
+            await _carSpecificationService.DeleteAllCarSpecificationsAsync(car.Id);
+            foreach (var specId in carDto.SpecificationsId)
+            {
+                await _carSpecificationService.AddCarSpecificationAsync(new AddCarSpecification
+                {
+                    CarId = car.Id,
+                    SpecificationId = specId
+                });
+            }
+
+            // Save all changes
             await _unitOfWork.SaveChangesAsync();
 
             return _mapper.Map<CarDTO>(car);
         }
-
         private async Task UpdateCarImage(Car car, IFormFile newImage)
         {
             var path = await GetPathByName("CarImages");

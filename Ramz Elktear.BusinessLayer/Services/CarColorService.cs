@@ -33,8 +33,22 @@ namespace Ramz_Elktear.BusinessLayer.Services
             var CarColorDTO = carColor.Select(carcolor => _mapper.Map<ColorDTO>(carcolor.Color)).ToList();
             foreach (var color in CarColorDTO)
             {
-                var imageId = (await _unitOfWork.ImageCarRepository.FindAsync(a => a.CarId == carId && a.ColorsId == color.Id, isNoTracking: true)).ImageId;
-                color.image = await _fileHandling.GetFile(imageId);
+                var imageEntities = await _unitOfWork.ImageCarRepository.FindAllAsync(
+                    a => a.CarId == carId && a.ColorsId == color.Id,
+                    isNoTracking: true);
+
+                color.images ??= new List<string>();
+
+                color.images.Clear();
+
+                foreach (var imageEntity in imageEntities)
+                {
+                    var imageData = await _fileHandling.GetFile(imageEntity.ImageId);
+                    if (!string.IsNullOrEmpty(imageData))
+                    {
+                        color.images.Add(imageData);
+                    }
+                }
             }
             return CarColorDTO;
         }
@@ -60,7 +74,7 @@ namespace Ramz_Elktear.BusinessLayer.Services
             }
 
             var colorDto = _mapper.Map<ColorDTO>(color);
-            colorDto.image = null;
+            colorDto.images = null;
 
             return colorDto;
         }
@@ -87,6 +101,17 @@ namespace Ramz_Elktear.BusinessLayer.Services
 
             _unitOfWork.CarColorRepository.Delete(carColor);
             await _unitOfWork.SaveChangesAsync();
+            return true;
+        }
+
+        public async Task<bool> DeleteAllCarColorsAsync(string carId)
+        {
+            var carColors = await _unitOfWork.CarColorRepository.FindAllAsync(q => q.CarId == carId);
+            if (carColors != null && carColors.Any())
+            {
+                _unitOfWork.CarColorRepository.DeleteRange(carColors);
+                await _unitOfWork.SaveChangesAsync();
+            }
             return true;
         }
     }

@@ -57,10 +57,6 @@ namespace Ramz_Elktear.BusinessLayer.Services
         }
 
 
-        
-
-
-
         public async Task<ImageCarDTO> GetCarImageByIdAsync(string imageCarId)
         {
             var imageCar = await _unitOfWork.ImageCarRepository.GetByIdAsync(imageCarId);
@@ -115,6 +111,32 @@ namespace Ramz_Elktear.BusinessLayer.Services
             {
                 throw new Exception("An error occurred while deleting the car image: " + ex.Message, ex);
             }
+        }
+
+        public async Task<bool> DeleteAllCarImagesByPathAsync(string carId, string pathName)
+        {
+            var images = await _unitOfWork.ImageCarRepository.FindAllAsync(x =>
+                x.CarId == carId && x.Image.path.Name == pathName,
+                include: q => q.Include(a => a.Image).ThenInclude(a => a.path));
+
+            if (images != null && images.Any())
+            {
+                foreach (var image in images)
+                {
+                    await _fileHandling.DeleteFile(image.ImageId);
+                }
+
+                _unitOfWork.ImageCarRepository.DeleteRange(images);
+                await _unitOfWork.SaveChangesAsync();
+            }
+            return true;
+        }
+
+        public async Task<IEnumerable<ImageCar>> GetAllCarImagesByPathAsync(string carId, string pathName)
+        {
+            return await _unitOfWork.ImageCarRepository.FindAllAsync(x =>
+                x.CarId == carId && x.Image.path.Name == pathName,
+                include: q => q.Include(a => a.Image).ThenInclude(a => a.path));
         }
 
         private async Task<Paths> GetPathByName(string name)

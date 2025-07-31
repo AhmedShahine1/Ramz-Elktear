@@ -85,6 +85,22 @@
             font-size: 0.9rem;
             color: #6c757d;
         }
+
+        .color-image-indicator {
+            position: absolute;
+            top: -2px;
+            right: -2px;
+            background: #007bff;
+            color: white;
+            border-radius: 50%;
+            width: 16px;
+            height: 16px;
+            font-size: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
     </style>
 }
 
@@ -93,7 +109,8 @@
     <section class="hero-section">
         <div class="container">
             <div class="row align-items-center">
-                <div class="col-md-6">
+                <!-- Car Information Section -->
+                <div class="col-md-6 mb-4 mb-md-0">
                     <h1 class="hero-title">
                         @(isRightToLeft? Model.NameAr: Model.NameEn)
                     </h1>
@@ -101,10 +118,23 @@
                         @(isRightToLeft? Model.DescrptionAr: Model.DescrptionEn)
                     </p>
                 </div>
+
+                <!-- Price Cards Section -->
                 <div class="col-md-6 @textAlign">
-                    <div class="price-card">
-                        <small class="price-label">@Localizer["SellingPrice", "Car"]</small>
-                        <div class="price-value">@Model.SellingPrice.ToString("C", saudiCulture)</div>
+                    <div class="price-cards-container">
+                        <!-- Selling Price Card -->
+                        <div class="price-card mb-3">
+                            <small class="price-label">@Localizer["SellingPrice", "Car"]</small>
+                            <div class="price-value">@Model.SellingPrice.ToString("C", saudiCulture)</div>
+                            <div class="price-type-badge cash-badge">@Localizer["CashPrice", "Car"]</div>
+                        </div>
+
+                        <!-- Installment Price Card -->
+                        <div class="price-card">
+                            <small class="price-label">@Localizer["InstallmentPriceIncludingTax", "Car"]</small>
+                            <div class="price-value installment-price">@Model.InstallmentPrice.ToString("C", saudiCulture)</div>
+                            <div class="price-type-badge installment-badge">@Localizer["InstallmentPriceIncludingTax", "Car"]</div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -285,9 +315,14 @@
                                                                   title="@color.Name"
                                                                   data-color-id="@color.Id"
                                                                   data-color-name="@color.Name"
-                                                                  data-color-image="@color.image"
+                                                                  data-color-images="@string.Join(",", color.images ?? new List<string>())"
                                                                   data-bs-toggle="tooltip"
-                                                                  onclick="selectColor(this)"></span>
+                                                                  onclick="selectColor(this)">
+                                                                @if (color.images?.Any() == true)
+                                                                {
+                                                                    <span class="color-image-indicator">@color.images.Count</span>
+                                                                }
+                                                            </span>
                                                         }
                                                     </div>
                                                     <div class="color-name ms-2" id="selected-color-name">
@@ -450,40 +485,47 @@
                 selectedColorNameElement.textContent = colorName;
             }
 
-            // Get color image
-            const colorImage = colorElement.getAttribute('data-color-image');
+            // Get color images (now multiple images)
+            const colorImagesStr = colorElement.getAttribute('data-color-images');
+            const colorImages = colorImagesStr ? colorImagesStr.split(',').filter(img => img.trim() !== '') : [];
 
             // Update main image and thumbnails based on color
-            updateImagesForColor(colorImage);
+            updateImagesForColor(colorImages);
         }
 
-        function updateImagesForColor(colorImage) {
+        function updateImagesForColor(colorImages) {
             const mainImage = document.getElementById('mainImage');
             const exteriorThumbnails = document.getElementById('exterior-thumbnails');
             const exteriorCount = document.getElementById('exterior-count');
 
-            if (colorImage && colorImage !== '' && colorImage !== 'null') {
-                // Update main image to color-specific image
-                mainImage.src = colorImage;
+            if (colorImages && colorImages.length > 0) {
+                // Update main image to first color-specific image
+                mainImage.src = colorImages[0];
 
-                // Create new thumbnail container for color image
-                const colorImageHTML = `
-                    <div class="col-6 col-md-4 col-lg-3">
-                        <div class="thumbnail-container">
-                            <img src="${colorImage}"
-                                 class="thumbnail-img"
-                                 alt="Color Image"
-                                 loading="lazy"
-                                 onclick="swapImage(this)"
-                                 tabindex="0"
-                                 onkeydown="handleThumbnailKeydown(event, this)" />
-                            <i class="bi bi-palette-fill thumbnail-badge text-primary"></i>
-                        </div>
-                    </div>
-                `;
+                // Create thumbnails for all color images + original images
+                let allImages = [];
 
-                // Add color image as first thumbnail and keep original images
-                let allImages = [colorImageHTML];
+                // Add color images first
+                colorImages.forEach((imageUrl, index) => {
+                    if (imageUrl && imageUrl.trim() !== '') {
+                        allImages.push(`
+                            <div class="col-6 col-md-4 col-lg-3">
+                                <div class="thumbnail-container">
+                                    <img src="${imageUrl.trim()}"
+                                         class="thumbnail-img"
+                                         alt="Color Image ${index + 1}"
+                                         loading="lazy"
+                                         onclick="swapImage(this)"
+                                         tabindex="0"
+                                         onkeydown="handleThumbnailKeydown(event, this)" />
+                                    <i class="bi bi-palette-fill thumbnail-badge text-primary"></i>
+                                </div>
+                            </div>
+                        `);
+                    }
+                });
+
+                // Add original images
                 originalExteriorImages.forEach(imageUrl => {
                     const isMainImage = imageUrl === '@Model.ImageUrl' || imageUrl === '@Model.ImageWithoutBackgroundUrl';
                     allImages.push(`
@@ -505,7 +547,7 @@
                 exteriorThumbnails.innerHTML = allImages.join('');
                 exteriorCount.textContent = allImages.length;
             } else {
-                // Reset to original images if no color-specific image
+                // Reset to original images if no color-specific images
                 mainImage.src = originalExteriorImages[0] || '/images/placeholder.jpg';
 
                 // Reset thumbnails to original

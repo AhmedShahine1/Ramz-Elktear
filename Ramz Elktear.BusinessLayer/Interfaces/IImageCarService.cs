@@ -1,4 +1,5 @@
 ﻿using Ramz_Elktear.core.DTO.ImageCarModels;
+using Ramz_Elktear.core.Entities.Cars;
 
 namespace Ramz_Elktear.BusinessLayer.Interfaces
 {
@@ -9,5 +10,7 @@ namespace Ramz_Elktear.BusinessLayer.Interfaces
         Task<ImageCarDTO> GetCarImageByIdAsync(string imageCarId);
         Task<ImageCarDTO> AddCarImageAsync(AddImageCar imageCarDto);
         Task<bool> DeleteCarImageAsync(string imageCarId);
+        Task<bool> DeleteAllCarImagesByPathAsync(string carId, string pathName);
+        Task<IEnumerable<ImageCar>> GetAllCarImagesByPathAsync(string carId, string pathName);
     }
 }

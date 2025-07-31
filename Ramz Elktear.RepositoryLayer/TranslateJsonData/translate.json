@@ -3645,6 +3645,126 @@
     ]
   },
   {
+    "ResourceKey": "InstallmentPriceIncludingTax",
+    "ResourceGroup": "Car",
+    "Description": "Installment price including all applicable taxes",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Installment Price (Including Tax)"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "سعر شامل الضريبة"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "InstallmentPriceNote",
+    "ResourceGroup": "Car",
+    "Description": "Helper text for installment price field",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Enter the installment price including all applicable taxes"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "أدخل السعر شامل جميع الضرائب المطبقة"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "SellingPrice",
+    "ResourceGroup": "Car",
+    "Description": "Regular selling price of the car",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Selling Price"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "سعر البيع"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "InstallmentPrice",
+    "ResourceGroup": "Car",
+    "Description": "Short label for installment pricing",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Installment"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "تقسيط"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "CashPrice",
+    "ResourceGroup": "Car",
+    "Description": "Label for cash payment option",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Cash"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "كاش"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "PricePerMonth",
+    "ResourceGroup": "Car",
+    "Description": "Monthly payment indicator",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Per Month"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "شهرياً"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "StartingFrom",
+    "ResourceGroup": "Car",
+    "Description": "Price starting indicator",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Starting From"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "يبدأ من"
+      }
+    ]
+  },
+  {
+    "ResourceKey": "TaxIncluded",
+    "ResourceGroup": "Car",
+    "Description": "Tax included indicator",
+    "Values": [
+      {
+        "CultureCode": "en",
+        "Value": "Tax Included"
+      },
+      {
+        "CultureCode": "ar",
+        "Value": "شامل الضريبة"
+      }
+    ]
+  },
+  {
     "ResourceKey": "CreateCar",
     "ResourceGroup": "Car",
     "Description": "Create car page title and button text",
@@ -9287,7 +9407,7 @@
       }
     ]
   },
-    {
+  {
     "ResourceKey": "SubCategory",
     "ResourceGroup": "Car",
     "Description": "Sub-category section title",
